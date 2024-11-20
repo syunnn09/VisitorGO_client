@@ -6,17 +6,38 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FFCACD872CEB725E00334C38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */; };
+		FFCACD882CEB725E00334C38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD832CEB725E00334C38 /* Assets.xcassets */; };
+		FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD842CEB725E00334C38 /* ContentView.swift */; };
+		FFCACD8A2CEB725E00334C38 /* VisitorGOApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD852CEB725E00334C38 /* VisitorGOApp.swift */; };
+		FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD8C2CEB728600334C38 /* CreatePostView.swift */; };
+		FFCACD902CEB72D800334C38 /* Locate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD8F2CEB72D800334C38 /* Locate.swift */; };
+		FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD912CEB733900334C38 /* LocationRegisterView.swift */; };
+		FFCACD952CEB753100334C38 /* MapViewHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD942CEB753100334C38 /* MapViewHelper.swift */; };
+		FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD962CEB758100334C38 /* CreateGameResultView.swift */; };
+		FFCACD992CEB75DF00334C38 /* EditLocaleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD982CEB75DF00334C38 /* EditLocaleView.swift */; };
+		FFCACD9B2CEB767B00334C38 /* Sports.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD9A2CEB767A00334C38 /* Sports.swift */; };
+		FFCACD9D2CEB848A00334C38 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD9C2CEB848A00334C38 /* HomeView.swift */; };
+		FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD9E2CEB876600334C38 /* SportsSelectView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		FFCACD702CEB71ED00334C38 /* VisitorGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitorGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		FFCACD832CEB725E00334C38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		FFCACD842CEB725E00334C38 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		FFCACD852CEB725E00334C38 /* VisitorGOApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisitorGOApp.swift; sourceTree = "<group>"; };
+		FFCACD8C2CEB728600334C38 /* CreatePostView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreatePostView.swift; sourceTree = "<group>"; };
+		FFCACD8F2CEB72D800334C38 /* Locate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locate.swift; sourceTree = "<group>"; };
+		FFCACD912CEB733900334C38 /* LocationRegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationRegisterView.swift; sourceTree = "<group>"; };
+		FFCACD942CEB753100334C38 /* MapViewHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewHelper.swift; sourceTree = "<group>"; };
+		FFCACD962CEB758100334C38 /* CreateGameResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGameResultView.swift; sourceTree = "<group>"; };
+		FFCACD982CEB75DF00334C38 /* EditLocaleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLocaleView.swift; sourceTree = "<group>"; };
+		FFCACD9A2CEB767A00334C38 /* Sports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sports.swift; sourceTree = "<group>"; };
+		FFCACD9C2CEB848A00334C38 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		FFCACD9E2CEB876600334C38 /* SportsSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsSelectView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		FFCACD722CEB71ED00334C38 /* VisitorGO */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = VisitorGO;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		FFCACD6D2CEB71ED00334C38 /* Frameworks */ = {
@@ -32,7 +53,7 @@
 		FFCACD672CEB71ED00334C38 = {
 			isa = PBXGroup;
 			children = (
-				FFCACD722CEB71ED00334C38 /* VisitorGO */,
+				FFCACD862CEB725E00334C38 /* VisitorGO */,
 				FFCACD712CEB71ED00334C38 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +64,58 @@
 				FFCACD702CEB71ED00334C38 /* VisitorGO.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		FFCACD822CEB725E00334C38 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		FFCACD862CEB725E00334C38 /* VisitorGO */ = {
+			isa = PBXGroup;
+			children = (
+				FFCACD822CEB725E00334C38 /* Preview Content */,
+				FFCACD832CEB725E00334C38 /* Assets.xcassets */,
+				FFCACD852CEB725E00334C38 /* VisitorGOApp.swift */,
+				FFCACD842CEB725E00334C38 /* ContentView.swift */,
+				FFCACD8B2CEB727400334C38 /* Views */,
+				FFCACD8E2CEB72A900334C38 /* Models */,
+				FFCACD932CEB74CC00334C38 /* Helper */,
+			);
+			path = VisitorGO;
+			sourceTree = "<group>";
+		};
+		FFCACD8B2CEB727400334C38 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				FFCACD9C2CEB848A00334C38 /* HomeView.swift */,
+				FFCACD8C2CEB728600334C38 /* CreatePostView.swift */,
+				FFCACD912CEB733900334C38 /* LocationRegisterView.swift */,
+				FFCACD962CEB758100334C38 /* CreateGameResultView.swift */,
+				FFCACD982CEB75DF00334C38 /* EditLocaleView.swift */,
+				FFCACD9E2CEB876600334C38 /* SportsSelectView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		FFCACD8E2CEB72A900334C38 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				FFCACD8F2CEB72D800334C38 /* Locate.swift */,
+				FFCACD9A2CEB767A00334C38 /* Sports.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		FFCACD932CEB74CC00334C38 /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				FFCACD942CEB753100334C38 /* MapViewHelper.swift */,
+			);
+			path = Helper;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +132,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				FFCACD722CEB71ED00334C38 /* VisitorGO */,
 			);
 			name = VisitorGO;
 			packageProductDependencies = (
@@ -109,6 +179,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFCACD872CEB725E00334C38 /* Preview Assets.xcassets in Resources */,
+				FFCACD882CEB725E00334C38 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +191,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFCACD992CEB75DF00334C38 /* EditLocaleView.swift in Sources */,
+				FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */,
+				FFCACD8A2CEB725E00334C38 /* VisitorGOApp.swift in Sources */,
+				FFCACD9D2CEB848A00334C38 /* HomeView.swift in Sources */,
+				FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */,
+				FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */,
+				FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */,
+				FFCACD952CEB753100334C38 /* MapViewHelper.swift in Sources */,
+				FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */,
+				FFCACD9B2CEB767B00334C38 /* Sports.swift in Sources */,
+				FFCACD902CEB72D800334C38 /* Locate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,7 +342,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -288,7 +372,8 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

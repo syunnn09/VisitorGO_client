@@ -1,0 +1,198 @@
+//
+//  LocationRegisterView.swift
+//  VisitorGO
+//
+//  Created by shusuke imamura on 2024/11/18.
+//
+
+import MapKit
+import SwiftUI
+
+struct LocationRegisterView: View {
+    @State var position: MapCameraPosition = .automatic
+    
+    @StateObject var viewModel = MapViewHelper()
+    @Binding var saveLocations: [Locate]
+    @State var expandMap = false
+    @State var showingSaved = false
+    @State var isEditing = false
+    @State var editingLocation: Locate?
+    @State var alias = ""
+    
+    @State var suggestion: Locate?
+    @State var changeCount = 0
+    
+    func createLocate(place: MKLocalSearchCompletion, coordinate: CLLocationCoordinate2D) -> Locate {
+        return Locate(name: place.title, place: place.subtitle, latitude: coordinate.latitude, longitude: coordinate.longitude)
+    }
+    
+    func saveLocate(place: MKLocalSearchCompletion, coordinate: CLLocationCoordinate2D) {
+        let locate = createLocate(place: place, coordinate: coordinate)
+        self.saveLocations.append(locate)
+        position = .automatic
+        suggestion = nil
+        changeCount = 0
+    }
+    
+    func getSaveLocation(completion: MKLocalSearchCompletion) -> Locate? {
+        for location in saveLocations {
+            if location.name == completion.title && location.place == completion.subtitle {
+                return location
+            }
+        }
+        return nil
+    }
+    
+    func isSaved(completion: MKLocalSearchCompletion) -> Bool {
+        return getSaveLocation(completion: completion) != nil
+    }
+    
+    func toggleSave(completion: MKLocalSearchCompletion) {
+        let location = getSaveLocation(completion: completion)
+        if location != nil {
+            self.saveLocations.remove(at: self.saveLocations.firstIndex(of: location!)!)
+        } else {
+            viewModel.searchLocation(locate: completion, completion: saveLocate)
+        }
+    }
+    
+    func showPosition(place: MKLocalSearchCompletion, coordinate: CLLocationCoordinate2D) {
+        suggestion = createLocate(place: place, coordinate: coordinate)
+        self.position = MapCameraPosition.region(
+            MKCoordinateRegion(
+                center: .init(latitude: coordinate.latitude, longitude: coordinate.longitude),
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            )
+        )
+    }
+    
+    func getPosition(completion: MKLocalSearchCompletion) {
+        viewModel.searchLocation(locate: completion, completion: showPosition)
+    }
+    
+    func removeSave(locate: Locate) {
+        self.saveLocations.remove(at: self.saveLocations.firstIndex(of: locate)!)
+    }
+    
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            VStack(alignment: .trailing) {
+                Map(position: $position) {
+                    ForEach(saveLocations) { locate in
+                        Marker(locate.alias, systemImage: locate.icon, coordinate: locate.coordinate)
+                    }
+                    if suggestion != nil {
+                        Marker(suggestion!.name, coordinate: suggestion!.coordinate)
+                    }
+                }.onMapCameraChange {
+                    if suggestion != nil {
+                        changeCount += 1
+                    }
+                    if changeCount > 2 && suggestion != nil {
+                        changeCount = 0
+                        suggestion = nil
+                    }
+                }
+                
+                if !expandMap {
+                    TextField("場所を検索", text: $viewModel.location)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.horizontal, 20)
+                        .onChange(of: viewModel.location) {
+                            viewModel.onSearchLocation()
+                            withAnimation {
+                                showingSaved = false
+                            }
+                        }
+                    
+                    Picker("", selection: $showingSaved) {
+                        Text("検索結果").tag(false)
+                        Text("保存済み").tag(true)
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal, 20)
+                    
+                    List {
+                        if !showingSaved {
+                            ForEach(viewModel.completions, id: \.self) { completion in
+                                HStack {
+                                    let isSaved = isSaved(completion: completion)
+                                    if isSaved {
+                                        Image(systemName: "bookmark.fill").foregroundStyle(.yellow)
+                                    } else {
+                                        Image(systemName: "bookmark")
+                                    }
+                                    
+                                    VStack(alignment: .leading) {
+                                        Text(completion.title)
+                                        Text(completion.subtitle)
+                                            .foregroundColor(Color.primary.opacity(0.5))
+                                    }
+                                    Spacer()
+                                }
+                                .onTapGesture {
+                                    getPosition(completion: completion)
+                                }
+                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                    Button("保存") {
+                                        toggleSave(completion: completion)
+                                    }.tint(.yellow)
+                                }
+                            }
+                        } else {
+                            ForEach(saveLocations) { locate in
+                                HStack {
+                                    Image(systemName: "bookmark.fill").foregroundStyle(.yellow)
+                                    VStack(alignment: .leading) {
+                                        Text(locate.alias)
+                                        Text(locate.place)
+                                            .foregroundStyle(.primary.opacity(0.5))
+                                    }
+                                    Spacer()
+                                }
+                                .onTapGesture {
+                                    self.editingLocation = locate
+                                    self.alias = locate.alias
+                                    self.isEditing = true
+                                }
+                                .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                                    Button("削除") {
+                                        removeSave(locate: locate)
+                                    }.tint(.yellow)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+            Button {
+                withAnimation(.easeInOut(duration: 0.7)) {
+                    expandMap.toggle()
+                }
+            } label: {
+                if expandMap {
+                    Image(systemName: "arrow.down.right.and.arrow.up.left")
+                } else {
+                    Image(systemName: "arrow.up.left.and.arrow.down.right")
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .padding(.trailing, 10)
+            .padding(.top, 50)
+        }
+        .navigationBarBackButtonHidden(expandMap)
+        .sheet(isPresented: $isEditing) {
+            EditLocaleView(locate: $editingLocation, alias: $alias)
+                .presentationDetents([.medium, .large])
+                .onChange(of: alias) {
+                    editingLocation?.changeAlias(alias: alias)
+                }
+        }
+    }
+}
+
+#Preview {
+    @Previewable @State var saveLocations: [Locate] = []
+    LocationRegisterView(saveLocations: $saveLocations)
+}
