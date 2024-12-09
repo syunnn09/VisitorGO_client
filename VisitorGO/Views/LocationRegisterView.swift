@@ -10,30 +10,41 @@ import SwiftUI
 
 struct LocationRegisterView: View {
     @State var position: MapCameraPosition = .automatic
-    
+
     @StateObject var viewModel = MapViewHelper()
     @Binding var saveLocations: [Locate]
     @State var expandMap = false
     @State var showingSaved = false
     @State var isEditing = false
     @State var editingLocation: Locate?
+//    @State var markers: [Marker] = []
+
     @State var alias = ""
-    
+    @State var icon = ""
+    @State var color: Color = .red
+
+    @State var showTooltip = false
+    @State var showedTooltip = false
+
     @State var suggestion: Locate?
     @State var changeCount = 0
-    
+
     func createLocate(place: MKLocalSearchCompletion, coordinate: CLLocationCoordinate2D) -> Locate {
         return Locate(name: place.title, place: place.subtitle, latitude: coordinate.latitude, longitude: coordinate.longitude)
     }
-    
+
     func saveLocate(place: MKLocalSearchCompletion, coordinate: CLLocationCoordinate2D) {
         let locate = createLocate(place: place, coordinate: coordinate)
         self.saveLocations.append(locate)
-        position = .automatic
-        suggestion = nil
-        changeCount = 0
+        self.makePosition()
+        self.suggestion = nil
+        self.changeCount = 0
+        if !showedTooltip {
+            showedTooltip = true
+            showTooltip = true
+        }
     }
-    
+
     func getSaveLocation(completion: MKLocalSearchCompletion) -> Locate? {
         for location in saveLocations {
             if location.name == completion.title && location.place == completion.subtitle {
@@ -42,22 +53,27 @@ struct LocationRegisterView: View {
         }
         return nil
     }
-    
+
     func isSaved(completion: MKLocalSearchCompletion) -> Bool {
         return getSaveLocation(completion: completion) != nil
     }
-    
+
     func toggleSave(completion: MKLocalSearchCompletion) {
         let location = getSaveLocation(completion: completion)
         if location != nil {
-            self.saveLocations.remove(at: self.saveLocations.firstIndex(of: location!)!)
+            self.removeSave(locate: location!)
         } else {
             viewModel.searchLocation(locate: completion, completion: saveLocate)
         }
     }
-    
+
     func showPosition(place: MKLocalSearchCompletion, coordinate: CLLocationCoordinate2D) {
         suggestion = createLocate(place: place, coordinate: coordinate)
+        self.createPosition(coordinate: coordinate)
+        self.changeCount = 0
+    }
+
+    func createPosition(coordinate: CLLocationCoordinate2D) {
         self.position = MapCameraPosition.region(
             MKCoordinateRegion(
                 center: .init(latitude: coordinate.latitude, longitude: coordinate.longitude),
@@ -65,21 +81,31 @@ struct LocationRegisterView: View {
             )
         )
     }
-    
+
     func getPosition(completion: MKLocalSearchCompletion) {
         viewModel.searchLocation(locate: completion, completion: showPosition)
     }
-    
+
+    func makePosition() {
+        if self.saveLocations.count == 1 {
+            self.createPosition(coordinate: self.saveLocations.first!.coordinate)
+        } else {
+            self.position = .automatic
+        }
+    }
+
     func removeSave(locate: Locate) {
         self.saveLocations.remove(at: self.saveLocations.firstIndex(of: locate)!)
+        self.makePosition()
     }
-    
+
     var body: some View {
         ZStack(alignment: .topTrailing) {
             VStack(alignment: .trailing) {
                 Map(position: $position) {
                     ForEach(saveLocations) { locate in
                         Marker(locate.alias, systemImage: locate.icon, coordinate: locate.coordinate)
+                            .tint(locate.color)
                     }
                     if suggestion != nil {
                         Marker(suggestion!.name, coordinate: suggestion!.coordinate)
@@ -93,7 +119,7 @@ struct LocationRegisterView: View {
                         suggestion = nil
                     }
                 }
-                
+
                 if !expandMap {
                     TextField("場所を検索", text: $viewModel.location)
                         .textFieldStyle(.roundedBorder)
@@ -104,14 +130,20 @@ struct LocationRegisterView: View {
                                 showingSaved = false
                             }
                         }
-                    
+
                     Picker("", selection: $showingSaved) {
                         Text("検索結果").tag(false)
                         Text("保存済み").tag(true)
+                            .popover(isPresented: $showTooltip, arrowEdge: .bottom) {
+                                Text("場所を編集することができます")
+                                    .font(.system(size: 15))
+                                    .padding(.horizontal)
+                                    .presentationCompactAdaptation(.popover)
+                            }
                     }
                     .pickerStyle(.segmented)
                     .padding(.horizontal, 20)
-                    
+
                     List {
                         if !showingSaved {
                             ForEach(viewModel.completions, id: \.self) { completion in
@@ -122,7 +154,7 @@ struct LocationRegisterView: View {
                                     } else {
                                         Image(systemName: "bookmark")
                                     }
-                                    
+
                                     VStack(alignment: .leading) {
                                         Text(completion.title)
                                         Text(completion.subtitle)
@@ -153,6 +185,8 @@ struct LocationRegisterView: View {
                                 .onTapGesture {
                                     self.editingLocation = locate
                                     self.alias = locate.alias
+                                    self.icon = locate.icon
+                                    self.color = locate.color
                                     self.isEditing = true
                                 }
                                 .swipeActions(edge: .leading, allowsFullSwipe: true) {
@@ -165,7 +199,7 @@ struct LocationRegisterView: View {
                     }
                 }
             }
-            
+
             Button {
                 withAnimation(.easeInOut(duration: 0.7)) {
                     expandMap.toggle()
@@ -183,10 +217,19 @@ struct LocationRegisterView: View {
         }
         .navigationBarBackButtonHidden(expandMap)
         .sheet(isPresented: $isEditing) {
-            EditLocaleView(locate: $editingLocation, alias: $alias)
+            EditLocaleView(locate: $editingLocation, alias: $alias, icon: $icon, color: $color)
                 .presentationDetents([.medium, .large])
                 .onChange(of: alias) {
-                    editingLocation?.changeAlias(alias: alias)
+                    if let index = saveLocations.firstIndex(of: editingLocation!) {
+                        saveLocations[index].alias = alias
+                    }
+                }
+                .onChange(of: icon) {
+                    editingLocation?.icon = icon
+                    
+                }
+                .onChange(of: color) {
+                    editingLocation?.color = color
                 }
         }
     }

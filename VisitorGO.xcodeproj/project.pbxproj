@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF39EEE62CF59160003EB0CF /* PaymentManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */; };
+		FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */; };
+		FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */; };
+		FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */; };
+		FF4DF5712CFF562E00B8AA67 /* TeamDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */; };
+		FFB993852CF8240D003BFA15 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993842CF8240D003BFA15 /* Utils.swift */; };
+		FFB993872CF966AE003BFA15 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993862CF966AE003BFA15 /* Payment.swift */; };
 		FFCACD872CEB725E00334C38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */; };
 		FFCACD882CEB725E00334C38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD832CEB725E00334C38 /* Assets.xcassets */; };
 		FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD842CEB725E00334C38 /* ContentView.swift */; };
@@ -23,6 +30,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FF39EEE02CF57C49003EB0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManageView.swift; sourceTree = "<group>"; };
+		FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFavoriteTeamView.swift; sourceTree = "<group>"; };
+		FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDataHelper.swift; sourceTree = "<group>"; };
+		FFB993842CF8240D003BFA15 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		FFB993862CF966AE003BFA15 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		FFCACD702CEB71ED00334C38 /* VisitorGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitorGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FFCACD832CEB725E00334C38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -77,6 +92,7 @@
 		FFCACD862CEB725E00334C38 /* VisitorGO */ = {
 			isa = PBXGroup;
 			children = (
+				FF39EEE02CF57C49003EB0CF /* Info.plist */,
 				FFCACD822CEB725E00334C38 /* Preview Content */,
 				FFCACD832CEB725E00334C38 /* Assets.xcassets */,
 				FFCACD852CEB725E00334C38 /* VisitorGOApp.swift */,
@@ -97,6 +113,10 @@
 				FFCACD962CEB758100334C38 /* CreateGameResultView.swift */,
 				FFCACD982CEB75DF00334C38 /* EditLocaleView.swift */,
 				FFCACD9E2CEB876600334C38 /* SportsSelectView.swift */,
+				FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */,
+				FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */,
+				FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */,
+				FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -105,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				FFCACD8F2CEB72D800334C38 /* Locate.swift */,
+				FFB993862CF966AE003BFA15 /* Payment.swift */,
 				FFCACD9A2CEB767A00334C38 /* Sports.swift */,
 			);
 			path = Models;
@@ -114,6 +135,8 @@
 			isa = PBXGroup;
 			children = (
 				FFCACD942CEB753100334C38 /* MapViewHelper.swift */,
+				FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */,
+				FFB993842CF8240D003BFA15 /* Utils.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -191,10 +214,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */,
+				FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */,
+				FF39EEE62CF59160003EB0CF /* PaymentManageView.swift in Sources */,
 				FFCACD992CEB75DF00334C38 /* EditLocaleView.swift in Sources */,
+				FFB993872CF966AE003BFA15 /* Payment.swift in Sources */,
 				FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */,
+				FF4DF5712CFF562E00B8AA67 /* TeamDataHelper.swift in Sources */,
 				FFCACD8A2CEB725E00334C38 /* VisitorGOApp.swift in Sources */,
 				FFCACD9D2CEB848A00334C38 /* HomeView.swift in Sources */,
+				FFB993852CF8240D003BFA15 /* Utils.swift in Sources */,
+				FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */,
 				FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */,
 				FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */,
 				FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */,
@@ -338,12 +368,14 @@
 				DEVELOPMENT_TEAM = B74ARS8PR4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VisitorGO/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -368,12 +400,14 @@
 				DEVELOPMENT_TEAM = B74ARS8PR4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VisitorGO/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

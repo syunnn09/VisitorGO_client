@@ -39,12 +39,13 @@ class MapViewHelper: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
     }
     
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        if self.searchQuery.isEmpty {
+            self.completions = .init()
+            return
+        }
+
         DispatchQueue.main.async {
-            if self.searchQuery.isEmpty {
-                self.completions = .init()
-            } else {
-                self.completions = completer.results
-            }
+            self.completions = completer.results
         }
     }
     
@@ -53,11 +54,11 @@ class MapViewHelper: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
         request.naturalLanguageQuery = locate.title + "," + locate.subtitle
         
         MKLocalSearch(request: request).start { (response, err) in
-            if let error = err {
-                print("MKLocalSearch Error: \(error)")
+            guard let response = response else {
+                print("MKLocalSearch Error: \(err!)")
                 return
             }
-            if let item = response?.mapItems.first {
+            if let item = response.mapItems.first {
                 DispatchQueue.main.async {
                     completion(locate, item.placemark.coordinate)
                 }

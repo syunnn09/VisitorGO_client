@@ -21,6 +21,9 @@ enum SelectTab: String {
     }
 }
 
+let baseURL = "http://192.168.0.101:58285"
+let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+
 struct ContentView: View {
     @State var selectSports = false
     @State var selectedTab: SelectTab = .home
@@ -59,7 +62,7 @@ struct ContentView: View {
                     .tag(SelectTab.post)
             }
 
-            CreatePostView(sports: .constant(.baseball))
+            ProfileView()
                 .tabItem {
                     HStack {
                         Image(systemName: SelectTab.prof.icon)
@@ -82,6 +85,7 @@ struct ContentView: View {
         }) {
             SportsSelectView(selection: $selectedSports, selectSports: $selectSports)
                 .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
         }
     }
 }

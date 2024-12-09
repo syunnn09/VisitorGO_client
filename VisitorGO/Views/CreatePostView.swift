@@ -51,6 +51,7 @@ struct CreatePostView: View {
     @State var selection: [PhotosPickerItem] = []
     @State var uiImages: [UIImage] = []
     @State var saveLocations: [Locate] = []
+    @State var payments: [Payment] = []
 
     @State var showTooltip = false
 
@@ -196,6 +197,20 @@ struct CreatePostView: View {
                             }
                             .frame(height: 300)
                             .padding(.horizontal, -20)
+                        }
+                    }
+
+                    HStack {
+                        NavigationLink {
+                            PaymentManageView(payments: $payments)
+                        } label: {
+                            HStack {
+                                Text("出費管理")
+                                HintTip(comment: "出費管理は公開されません")
+                                Spacer()
+                                Text("\(Payment.calcSum(payments))円")
+                                Image(systemName: "chevron.forward")
+                            }
                         }
                     }
                 }

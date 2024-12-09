@@ -6,6 +6,7 @@
 //
 
 import MapKit
+import SwiftUI
 import Foundation
 
 class Locate: Identifiable, Equatable, ObservableObject {
@@ -16,7 +17,8 @@ class Locate: Identifiable, Equatable, ObservableObject {
     var longitude: CLLocationDegrees
     
     @Published var alias: String
-    var icon: String = "mappin"
+    @Published var icon: String = "mappin"
+    @Published var color: Color = .red
     
     init(name: String, place: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         self.id = UUID()
@@ -26,11 +28,7 @@ class Locate: Identifiable, Equatable, ObservableObject {
         self.longitude = longitude
         self.alias = name
     }
-    
-    func changeAlias(alias: String) {
-        self.alias = alias
-    }
-    
+
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
