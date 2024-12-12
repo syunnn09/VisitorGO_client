@@ -10,10 +10,12 @@ import SwiftUI
 struct ProfileView: View {
     var body: some View {
         NavigationStack {
-            NavigationLink {
+            NavigationLink("プロフィール編集") {
                 EditProfileView()
-            } label: {
-                Text("プロフィール編集")
+            }
+
+            NavigationLink("ログイン") {
+                LoginView()
             }
         }
     }

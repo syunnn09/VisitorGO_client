@@ -8,10 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		FF39EEE62CF59160003EB0CF /* PaymentManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */; };
+		FF44F4102D08322C0014695A /* StadiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44F40F2D08322C0014695A /* StadiumView.swift */; };
 		FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */; };
 		FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */; };
 		FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */; };
 		FF4DF5712CFF562E00B8AA67 /* TeamDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */; };
+		FF5AF23C2D0A679100AAE954 /* APIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5AF23B2D0A679100AAE954 /* APIHelper.swift */; };
 		FFB993852CF8240D003BFA15 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993842CF8240D003BFA15 /* Utils.swift */; };
 		FFB993872CF966AE003BFA15 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993862CF966AE003BFA15 /* Payment.swift */; };
 		FFCACD872CEB725E00334C38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */; };
@@ -27,15 +29,23 @@
 		FFCACD9B2CEB767B00334C38 /* Sports.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD9A2CEB767A00334C38 /* Sports.swift */; };
 		FFCACD9D2CEB848A00334C38 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD9C2CEB848A00334C38 /* HomeView.swift */; };
 		FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD9E2CEB876600334C38 /* SportsSelectView.swift */; };
+		FFCF611C2D0731EC007D9D14 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF611B2D0731EB007D9D14 /* LoginView.swift */; };
+		FFCF611E2D07D8F6007D9D14 /* RegistUserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF611D2D07D8F6007D9D14 /* RegistUserView.swift */; };
+		FFCF61212D07DD1F007D9D14 /* VerificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF61202D07DD1F007D9D14 /* VerificationView.swift */; };
+		FFCF61232D07E98B007D9D14 /* SetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF61222D07E98B007D9D14 /* SetPasswordView.swift */; };
+		FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF61242D081299007D9D14 /* PostRowView.swift */; };
+		FFE1B80F2D0A73660019F5C9 /* RegistProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FF39EEE02CF57C49003EB0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManageView.swift; sourceTree = "<group>"; };
+		FF44F40F2D08322C0014695A /* StadiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadiumView.swift; sourceTree = "<group>"; };
 		FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFavoriteTeamView.swift; sourceTree = "<group>"; };
 		FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDataHelper.swift; sourceTree = "<group>"; };
+		FF5AF23B2D0A679100AAE954 /* APIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHelper.swift; sourceTree = "<group>"; };
 		FFB993842CF8240D003BFA15 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		FFB993862CF966AE003BFA15 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		FFCACD702CEB71ED00334C38 /* VisitorGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitorGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,6 +62,12 @@
 		FFCACD9A2CEB767A00334C38 /* Sports.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Sports.swift; sourceTree = "<group>"; };
 		FFCACD9C2CEB848A00334C38 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		FFCACD9E2CEB876600334C38 /* SportsSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportsSelectView.swift; sourceTree = "<group>"; };
+		FFCF611B2D0731EB007D9D14 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		FFCF611D2D07D8F6007D9D14 /* RegistUserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistUserView.swift; sourceTree = "<group>"; };
+		FFCF61202D07DD1F007D9D14 /* VerificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationView.swift; sourceTree = "<group>"; };
+		FFCF61222D07E98B007D9D14 /* SetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPasswordView.swift; sourceTree = "<group>"; };
+		FFCF61242D081299007D9D14 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
+		FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistProfileView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +133,9 @@
 				FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */,
 				FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */,
 				FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */,
+				FFCF61242D081299007D9D14 /* PostRowView.swift */,
+				FF44F40F2D08322C0014695A /* StadiumView.swift */,
+				FFCF611F2D07DCCE007D9D14 /* RegistUser */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -137,8 +156,21 @@
 				FFCACD942CEB753100334C38 /* MapViewHelper.swift */,
 				FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */,
 				FFB993842CF8240D003BFA15 /* Utils.swift */,
+				FF5AF23B2D0A679100AAE954 /* APIHelper.swift */,
 			);
 			path = Helper;
+			sourceTree = "<group>";
+		};
+		FFCF611F2D07DCCE007D9D14 /* RegistUser */ = {
+			isa = PBXGroup;
+			children = (
+				FFCF611B2D0731EB007D9D14 /* LoginView.swift */,
+				FFCF611D2D07D8F6007D9D14 /* RegistUserView.swift */,
+				FFCF61202D07DD1F007D9D14 /* VerificationView.swift */,
+				FFCF61222D07E98B007D9D14 /* SetPasswordView.swift */,
+				FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */,
+			);
+			path = RegistUser;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -220,6 +252,7 @@
 				FFCACD992CEB75DF00334C38 /* EditLocaleView.swift in Sources */,
 				FFB993872CF966AE003BFA15 /* Payment.swift in Sources */,
 				FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */,
+				FFCF61212D07DD1F007D9D14 /* VerificationView.swift in Sources */,
 				FF4DF5712CFF562E00B8AA67 /* TeamDataHelper.swift in Sources */,
 				FFCACD8A2CEB725E00334C38 /* VisitorGOApp.swift in Sources */,
 				FFCACD9D2CEB848A00334C38 /* HomeView.swift in Sources */,
@@ -227,10 +260,17 @@
 				FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */,
 				FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */,
 				FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */,
+				FF44F4102D08322C0014695A /* StadiumView.swift in Sources */,
 				FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */,
 				FFCACD952CEB753100334C38 /* MapViewHelper.swift in Sources */,
+				FFCF611E2D07D8F6007D9D14 /* RegistUserView.swift in Sources */,
 				FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */,
+				FFCF611C2D0731EC007D9D14 /* LoginView.swift in Sources */,
+				FFE1B80F2D0A73660019F5C9 /* RegistProfileView.swift in Sources */,
 				FFCACD9B2CEB767B00334C38 /* Sports.swift in Sources */,
+				FFCF61232D07E98B007D9D14 /* SetPasswordView.swift in Sources */,
+				FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */,
+				FF5AF23C2D0A679100AAE954 /* APIHelper.swift in Sources */,
 				FFCACD902CEB72D800334C38 /* Locate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -375,7 +415,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -407,7 +447,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

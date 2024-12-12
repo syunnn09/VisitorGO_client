@@ -21,7 +21,7 @@ enum SelectTab: String {
     }
 }
 
-let baseURL = "http://192.168.0.101:58285"
+let baseURL = "http://172.20.10.2:58285"
 let feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
 
 struct ContentView: View {

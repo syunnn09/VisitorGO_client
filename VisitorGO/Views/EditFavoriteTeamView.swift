@@ -81,9 +81,11 @@ struct SportsPicker: View {
                 .frame(width: 14, height: 10)
         }
         .padding(12)
-        .background(.white)
+        .background(isOpen ? .gray.opacity(0.1) : .white)
         .onTapGesture {
-            isOpen.toggle()
+            withAnimation {
+                isOpen.toggle()
+            }
         }
         .popover(isPresented: $isOpen, arrowEdge: .top) {
             VStack(alignment: .leading, spacing: 8) {
@@ -95,9 +97,11 @@ struct SportsPicker: View {
                             .bold(team.sports == selection!.sports)
                     }
                     .onTapGesture {
-                        selection = team
-                        isOpen = false
-                        teamDataHelper.selectedLeague = "全て"
+                        withAnimation {
+                            selection = team
+                            isOpen = false
+                            teamDataHelper.selectedLeague = "全て"
+                        }
                     }
                 }
             }
@@ -109,7 +113,7 @@ struct SportsPicker: View {
 }
 
 struct EditFavoriteTeamView: View {
-    @ObservedObject var teamDataHelper = TeamDataHelper.shared
+    @ObservedObject var teamDataHelper: TeamDataHelper
 
     var body: some View {
         ZStack {

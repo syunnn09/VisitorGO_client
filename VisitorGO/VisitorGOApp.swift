@@ -9,9 +9,26 @@ import SwiftUI
 
 @main
 struct VisitorGOApp: App {
+    @State var index: Int = 0
+    @State var verify: Bool = false
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                ContentView()
+                    .onOpenURL { url in
+                        switch (url.host) {
+                        case "verify":
+                            verify = true
+                        default:
+                            return
+                        }
+                    }
+
+                    .navigationDestination(isPresented: $verify) {
+                        SetPasswordView()
+                    }
+            }
         }
     }
 }
