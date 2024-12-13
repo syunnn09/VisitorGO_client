@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ProfileView: View {
+    var helper: APIHelper = .shared
+
     var body: some View {
         NavigationStack {
             NavigationLink("プロフィール編集") {
                 EditProfileView()
             }
 
-            NavigationLink("ログイン") {
-                LoginView()
+            if !helper.isLoggedIn {
+                NavigationLink("ログイン") {
+                    LoginView()
+                }
+            } else {
+                Button("ログアウト") {
+                    helper.logout()
+                }.buttonStyle(.borderedProminent)
             }
         }
     }

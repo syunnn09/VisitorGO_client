@@ -7,12 +7,41 @@
 
 import SwiftUI
 
-var token: String = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzQ1Nzc0MDcsImp0aSI6ImQwMjRkYjg5LTMzYWItNDM0OS05NzMzLWYwMTc2OGI2NWEyMyIsInVzZXJJZCI6M30.b25tLtL9mJWSIunXXhXlTiKCb2Ggas3xSPPI-_mJVKU"
-
 class APIHelper {
     static let shared = APIHelper()
+    let baseURL = "https://go-app-bm43.onrender.com"
+    var loginToken: String? = nil
+    var verifyToken: String? = nil
+    var isLoggedIn = false
 
-    func login(email: String, password: String) {
+    init() {
+        loadToken()
+        if self.loginToken != nil && self.loginToken != "" {
+            isLoggedIn = true
+        }
+        print(loginToken ?? "token not found")
+    }
+
+    func loadToken() {
+        self.loginToken = UserDefaults.standard.string(forKey: "token")
+    }
+
+    func setToken(token: String) {
+        UserDefaults.standard.set(token, forKey: "token")
+        self.loginToken = token
+    }
+
+    func logout() {
+        UserDefaults.standard.set(nil, forKey: "token")
+        self.isLoggedIn = false
+    }
+
+    func onError(_ reason: String, _ completion: @escaping (Bool) -> Void) {
+        print(reason)
+        completion(false)
+    }
+
+    func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
         struct Request: Encodable {
             var email: String
             var password: String
@@ -28,21 +57,21 @@ class APIHelper {
 
         let requestData = Request(email: email, password: password)
 
-        let url = URL(string: "https://go-app-bm43.onrender.com/api/auth/login")!
+        let url = URL(string: "\(baseURL)/api/auth/login")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         request.httpBody = try? JSONEncoder().encode(requestData)
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print("Error")
-                return
+            if error != nil { self.onError(String(describing: error), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("decode error", completion); return }
+            if decodeData.success {
+                self.setToken(token: decodeData.data!.token)
             }
-            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("decode error"); return }
-            guard let response = response as? HTTPURLResponse else { print("Response Error"); return }
-            print(response.statusCode)
             print(decodeData.message)
+            completion(decodeData.success)
         }.resume()
     }
 
@@ -52,12 +81,12 @@ class APIHelper {
             var message: String
         }
 
-        let url = URL(string: "https://go-app-bm43.onrender.com/api/sample/protectedHelloWorld")!
+        let url = URL(string: "\(baseURL)/api/sample/protectedHelloWorld")!
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("\(loginToken!)", forHTTPHeaderField: "Authorization")
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
                 print("sample@gmail.com")
@@ -71,10 +100,10 @@ class APIHelper {
         }.resume()
     }
 
-    func regist(email: String, password: String, name: String, bio: String) {
+    func regist(password: String, name: String, bio: String, completion: @escaping (Bool) -> Void) {
         struct Request: Codable {
             var name: String
-            var email: String
+            var token: String
             var password: String
             var description: String
             var profileImage: String?
@@ -84,25 +113,25 @@ class APIHelper {
             var success: Bool
         }
 
-        let requestData = Request(name: name, email: email, password: password, description: bio, profileImage: "http://172.20.10.8:58285/icon")
+        guard let token = verifyToken else { print("verify token error"); return }
 
-        let url = URL(string: "https://go-app-bm43.onrender.com/api/auth/register")!
+        let requestData = Request(name: name, token: token, password: password, description: bio, profileImage: "http://172.20.10.8:58285/icon")
+
+        let url = URL(string: "\(baseURL)/api/auth/register")!
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         request.httpBody = try? JSONEncoder().encode(requestData)
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil {
-                print("Error")
-                return
-            }
+            if error != nil { self.onError(String(describing: error), completion); return }
 
-            let decodeData = try? JSONDecoder().decode(Response.self, from: data!)
-            guard let response = response as? HTTPURLResponse else { print("Response Error"); return }
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("decode error", completion); return }
+            guard let response = response as? HTTPURLResponse else { self.onError("response error", completion); return }
             print(response.statusCode)
-            print(decodeData!.success)
-            print(decodeData!.message)
+            print(decodeData.success)
+            print(decodeData.message)
+            completion(decodeData.success)
         }.resume()
     }
 }

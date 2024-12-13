@@ -7,10 +7,28 @@
 
 import SwiftUI
 
+class ParameterParser {
+    var parameters: [String: String]
+
+    init(url: String) {
+        self.parameters = [:]
+        let parameters = url.split(separator: "?")[1].split(separator: "&")
+        for param in parameters {
+            self.parameters[String(param.split(separator: "=")[0])] = String(param.split(separator: "=")[1])
+        }
+    }
+
+    func get(_ key: String) -> String? {
+        return self.parameters[key]
+    }
+}
+
 @main
 struct VisitorGOApp: App {
+    var apiHelper: APIHelper = .shared
     @State var index: Int = 0
     @State var verify: Bool = false
+    @State var token: String = ""
 
     var body: some Scene {
         WindowGroup {
@@ -19,14 +37,19 @@ struct VisitorGOApp: App {
                     .onOpenURL { url in
                         switch (url.host) {
                         case "verify":
-                            verify = true
+                            let parser = ParameterParser(url: url.absoluteString)
+                            let token = parser.get("token")
+                            if (token != nil) {
+                                apiHelper.verifyToken = token
+                                verify = true
+                            }
                         default:
                             return
                         }
                     }
 
                     .navigationDestination(isPresented: $verify) {
-                        SetPasswordView()
+                        RegistProfileView()
                     }
             }
         }

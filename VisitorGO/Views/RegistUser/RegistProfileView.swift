@@ -9,20 +9,30 @@ import SwiftUI
 import PhotosUI
 
 struct RegistProfileView: View {
+    var helper: APIHelper = .shared
+
     @State var name: String = ""
     @State var bio: String = ""
     @State var pickerItem: PhotosPickerItem?
     @State var uiImage: UIImage?
     @State var password: String = ""
     @State var password2: String = ""
-    @State var sendRequest: Bool = false
-    let mail = "sample@gmail.com"
+    @State var isLoading: Bool = false
+    @State var completed: Bool = false
+
+    func onRegist(status: Bool) {
+        if status {
+            completed = true
+        } else {
+            isLoading = false
+        }
+    }
 
     var body: some View {
         NavigationStack {
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 24) {
-                    HeaderView(text: "プロフィール編集")
+                    HeaderView(text: "プロフィール設定")
 
                     VStack(spacing: 12) {
                         if uiImage != nil {
@@ -89,16 +99,19 @@ struct RegistProfileView: View {
                                 .textFieldStyle(.roundedBorder)
                         }
 
-                        Button("登録") {
-                            if password == password2 && !sendRequest {
-                                sendRequest = true
-                                APIHelper.shared.regist(email: mail, password: password, name: name, bio: bio)
+                        LoadingButton(isLoading: $isLoading, text: "登録") {
+                            if password == password2 && !isLoading {
+                                isLoading = true
+                                APIHelper.shared.regist(password: password, name: name, bio: bio) { status in
+                                    onRegist(status: status)
+                                }
                             }
-                        }.buttonStyle(BigButtonStyle())
+                        }
                     }
                     .padding([.horizontal, .bottom])
                 }
             }
+            .navigationBarBackButtonHidden()
         }
     }
 }

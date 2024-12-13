@@ -12,6 +12,8 @@ struct LoginView: View {
     @State var password: String = ""
     @State var isCreate = false
     @State var doLogin = false
+    @State var success = false
+    @State var isError = false
 
     var valid: Bool {
         !mail.isEmpty && !password.isEmpty
@@ -19,6 +21,15 @@ struct LoginView: View {
 
     var color: Color {
         valid ? .green : .gray
+    }
+
+    func onLogin(result: Bool) {
+        doLogin = false
+        if result {
+            success = true
+        } else {
+            isError = true
+        }
     }
 
     var body: some View {
@@ -33,6 +44,10 @@ struct LoginView: View {
 
                 HeaderView(text: "ログイン")
 
+                Text(isError ? "メールアドレスまたはパスワードが間違っています" : "")
+                    .foregroundStyle(.red)
+                    .frame(height: 30)
+
                 VStack(alignment: .leading) {
                     Text("メールアドレス")
                     TextField("", text: $mail)
@@ -44,13 +59,12 @@ struct LoginView: View {
                         .textFieldStyle(.roundedBorder)
                         .padding(.bottom, 16)
 
-                    Button("ログイン") {
+                    LoadingButton(isLoading: $doLogin, text: "ログイン", color: color) {
                         if valid {
                             doLogin = true
-                            APIHelper.shared.login(email: mail, password: password)
+                            APIHelper.shared.login(email: mail, password: password, completion: onLogin)
                         }
                     }
-                    .buttonStyle(BigButtonStyle(color: color))
                     .padding(.bottom, 40)
 
                     VStack(alignment: .leading) {
@@ -67,6 +81,10 @@ struct LoginView: View {
                 .padding(.horizontal, 40)
 
                 Spacer()
+            }
+            .navigationDestination(isPresented: $success) {
+                ContentView()
+                    .navigationBarBackButtonHidden()
             }
         }
     }
