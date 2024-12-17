@@ -44,21 +44,23 @@ struct LoginView: View {
 
                 HeaderView(text: "ログイン")
 
-                Text(isError ? "メールアドレスまたはパスワードが間違っています" : "")
-                    .foregroundStyle(.red)
-                    .frame(height: 30)
-
                 VStack(alignment: .leading) {
                     Text("メールアドレス")
                     TextField("", text: $mail)
                         .textFieldStyle(.roundedBorder)
                         .padding(.bottom, 16)
-
+                    
                     Text("パスワード")
                     SecureField("", text: $password)
                         .textFieldStyle(.roundedBorder)
-                        .padding(.bottom, 16)
+                }
+                .padding(.horizontal, 40)
 
+                Text(isError ? "メールアドレスまたはパスワードが間違っています" : "")
+                    .foregroundStyle(.red)
+                    .frame(height: 30)
+
+                VStack(alignment: .leading) {
                     LoadingButton(isLoading: $doLogin, text: "ログイン", color: color) {
                         if valid {
                             isError = false

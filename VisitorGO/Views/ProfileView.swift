@@ -16,21 +16,31 @@ struct Header: View {
     @ObservedObject var helper: APIHelper = .shared
     @Binding var selectedTab: TabType
     @Binding var height: CGFloat
+    @Binding var profile: UserData?
 
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 24) {
                     HStack(alignment: .bottom) {
-                        Image("nakaya")
-                            .resizable()
-                            .frame(width: 90, height: 90)
+                        AsyncImage(url: URL(string: profile?.profileImage ?? "")) { image in
+                            image.resizable()
+                                .clipShape(Circle())
+                                .frame(width: 90, height: 90)
+                        } placeholder: {
+                            ZStack {
+                                ProgressView()
+                                Circle()
+                                    .fill(Color.black.opacity(0.1))
+                                    .frame(width: 90, height: 90)
+                            }
+                        }
 
-                        Text("nakaya")
+                        Text(profile?.name ?? "")
                             .font(.title)
                     }
 
-                    Text("野球大好きです！\n\n⚾️推しチーム\n楽天\n阪神\nカープ")
+                    Text(profile?.description ?? "")
 
                     HStack {
                         NavigationLink("プロフィール編集") {
@@ -84,10 +94,13 @@ struct ProfileView: View {
     @State var offset: CGFloat = 0
     @State var defaultPos: CGFloat? = nil
     @State var pos: CGFloat = 0
+    @State var beforeOffset: CGFloat = 0
+    @State var index: Double = 1
+    @State var profile: UserData?
     @Namespace var ns
 
     func onUpdateOffset(new: CGFloat) {
-        if defaultPos == nil { defaultPos = new }
+        if defaultPos == nil { defaultPos = new; pos = 0 }
         offset = defaultPos! - new
     }
 
@@ -99,9 +112,16 @@ struct ProfileView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 VStack {
-                    Header(selectedTab: $selectedTab, height: $headerHeight)
+                    Text("").frame(height: 20)
+
+                    tabView
+                }
+                .zIndex(index)
+
+                VStack {
+                    Header(selectedTab: $selectedTab, height: $headerHeight, profile: $profile)
                         .offset(y: -offset)
-                    
+
                     VStack(alignment: .leading, spacing: 0) {
                         HStack {
                             ForEach(TabType.allCases, id: \.self) { type in
@@ -109,7 +129,7 @@ struct ProfileView: View {
                                     Text(type.rawValue)
                                         .font(.system(size: 22))
                                         .onTapGesture { withAnimation { selectedTab = type } }
-                                    
+
                                     if selectedTab == type {
                                         Text(type.rawValue)
                                             .opacity(0)
@@ -126,29 +146,35 @@ struct ProfileView: View {
                                 }
                             }
                         }.padding(.horizontal)
-                        
+
                         Divider()
                     }
                     .padding(.vertical)
                     .coordinateSpace(name: "header")
+                    .offset(y: offset >= topHeight - 30 ? -topHeight + 30 : -offset)
                     .background {
                         GeometryReader { geometry in
-                            Color.clear.onChange(of: geometry.frame(in: .named("header")).minY) { _, new in
-                                print("new: \(-new)")
-//                                pos = max(0, -new + 100)
-                                pos = new
-                                print("pos: \(pos)")
-                                print("offset: \(offset)")
-                            }
                             Color.clear.onChange(of: geometry.frame(in: .named("header"))) { _, new in
                                 tabBarHeight = new.height
                             }
                         }
                     }
-//                    .offset(y: pos)
                 }
-
-                tabView
+                .zIndex(2)
+                .onChange(of: selectedTab) {
+                    withAnimation {
+                        let temp = offset
+                        offset = beforeOffset
+                        beforeOffset = temp
+                    }
+                }
+            }
+        }
+        .onAppear {
+            APIHelper.shared.getUserData() { status, data  in
+                if status {
+                    self.profile = data
+                }
             }
         }
     }
@@ -164,14 +190,18 @@ struct ProfileView: View {
                             Divider()
                         }
                     }
+                    .background(.white)
+                    .padding(.top, topHeight)
                     .background {
                         GeometryReader { geo in
                             Color.clear.onChange(of: geo.frame(in: .global).minY) { _, new in
                                 onUpdateOffset(new: new)
                             }
+                            Color.clear.onChange(of: geo.frame(in: .global).minX) { _, new in
+                                index = new == 0 ? 1 : 3
+                            }
                         }
                     }
-                    .padding(.top, topHeight)
                 }
             }
         }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 class APIHelper: ObservableObject {
     static let shared = APIHelper()
@@ -41,6 +42,17 @@ class APIHelper: ObservableObject {
         completion(false)
     }
 
+    func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, UserData?) -> Void) {
+        print(reason)
+        Task {
+            await completion(false, nil)
+        }
+    }
+
+    func getURL(_ url: String) -> URL {
+        return URL(string: "\(baseURL)/\(url)")!
+    }
+
     func login(email: String, password: String, completion: @escaping (Bool) -> Void) {
         struct Request: Encodable {
             var email: String
@@ -57,7 +69,7 @@ class APIHelper: ObservableObject {
 
         let requestData = Request(email: email, password: password)
 
-        let url = URL(string: "\(baseURL)/api/auth/login")!
+        let url = getURL("api/auth/login")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -81,7 +93,7 @@ class APIHelper: ObservableObject {
             var message: String
         }
 
-        let url = URL(string: "\(baseURL)/api/sample/protectedHelloWorld")!
+        let url = getURL("api/sample/protectedHelloWorld")
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -117,7 +129,7 @@ class APIHelper: ObservableObject {
 
         let requestData = Request(name: name, token: token, password: password, description: bio, profileImage: "http://172.20.10.8:58285/icon")
 
-        let url = URL(string: "\(baseURL)/api/auth/register")!
+        let url = getURL("api/auth/register")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -133,5 +145,90 @@ class APIHelper: ObservableObject {
             print(decodeData.message)
             completion(decodeData.success)
         }.resume()
+    }
+
+    func uploadImage(_ image: UIImage, folder: String = "folder") {
+        guard let token = loginToken else { print("verify token error"); return }
+        guard let imageData = image.jpegData(compressionQuality: 1.0) else { print("image error"); return }
+
+        let boundary = UUID().uuidString
+
+        let url = getURL("api/upload/images")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("multipart/form-data", forHTTPHeaderField: "Content-Type")
+        request.addValue("accept", forHTTPHeaderField: "application/json")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        var data = Data()
+        data.append("\r\n--\(boundary)\r\n\r\n".data(using: .utf8)!)
+        data.append(imageData)
+        print(imageData)
+
+        URLSession.shared.uploadTask(with: request, from: data) { data, response, error in
+            if error != nil {
+                print("request error")
+                print(error!)
+                return
+            }
+            guard let response = response as? HTTPURLResponse else { print("response error"); return }
+            print(response.statusCode)
+        }.resume()
+    }
+
+    func getUserData(completion: @escaping @MainActor (Bool, UserData?) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var message: String
+            var data: UserData?
+        }
+
+        guard let token = loginToken else { print("token not found"); return }
+
+        let url = getURL("api/user/logined")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("decode error"); return }
+            print(decodeData.message)
+            print(decodeData.success)
+            Task {
+                await completion(decodeData.success, decodeData.data)
+            }
+        }.resume()
+    }
+}
+
+#Preview {
+    @Previewable @State var selectedPhoto: PhotosPickerItem?
+    @Previewable @State var profileString: String = ""
+
+    VStack {
+        Text(profileString)
+        Button("Profile API") {
+            APIHelper.shared.getUserData() { status, profile in
+                feedbackGenerator.impactOccurred()
+                if profile != nil {
+                    profileString = profile!.description
+                }
+            }
+        }.buttonStyle(.borderedProminent)
+
+        PhotosPicker(selection: $selectedPhoto, matching: .images) {
+            Text("Picker open")
+        }
+        .onChange(of: selectedPhoto) {
+            guard let image = selectedPhoto else { return }
+            Task {
+                guard let data = try? await image.loadTransferable(type: Data.self) else { return }
+                guard let uiImage = UIImage(data: data) else { return }
+                APIHelper.shared.uploadImage(uiImage, folder: "folder")
+            }
+        }
     }
 }

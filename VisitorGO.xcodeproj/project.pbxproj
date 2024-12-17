@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		FF39EEE62CF59160003EB0CF /* PaymentManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */; };
 		FF44F4102D08322C0014695A /* StadiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44F40F2D08322C0014695A /* StadiumView.swift */; };
+		FF4C8E962D11573800356DD5 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4C8E952D11573800356DD5 /* UserData.swift */; };
 		FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */; };
 		FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */; };
 		FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */; };
@@ -41,6 +42,7 @@
 		FF39EEE02CF57C49003EB0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManageView.swift; sourceTree = "<group>"; };
 		FF44F40F2D08322C0014695A /* StadiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadiumView.swift; sourceTree = "<group>"; };
+		FF4C8E952D11573800356DD5 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
 		FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFavoriteTeamView.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				FFCACD8F2CEB72D800334C38 /* Locate.swift */,
 				FFB993862CF966AE003BFA15 /* Payment.swift */,
 				FFCACD9A2CEB767A00334C38 /* Sports.swift */,
+				FF4C8E952D11573800356DD5 /* UserData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -267,6 +270,7 @@
 				FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */,
 				FFCF611C2D0731EC007D9D14 /* LoginView.swift in Sources */,
 				FFE1B80F2D0A73660019F5C9 /* RegistProfileView.swift in Sources */,
+				FF4C8E962D11573800356DD5 /* UserData.swift in Sources */,
 				FFCACD9B2CEB767B00334C38 /* Sports.swift in Sources */,
 				FFCF61232D07E98B007D9D14 /* SetPasswordView.swift in Sources */,
 				FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */,
