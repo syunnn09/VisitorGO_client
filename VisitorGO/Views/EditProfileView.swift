@@ -59,7 +59,11 @@ struct EditProfileView: View {
                                 image.resizable()
                                     .clipShape(Circle())
                             } placeholder: {
-                                Circle()
+                                ZStack {
+                                    ProgressView()
+                                    Circle()
+                                        .fill(Color.black.opacity(0.1))
+                                }
                             }
                             .frame(width: 120, height: 120)
                         }
@@ -82,7 +86,6 @@ struct EditProfileView: View {
                             }
                         }.onChange(of: uiImage) {
                             if uiImage != nil {
-//                                editImage = true
                                 profileImage = uiImage
                             }
                         }

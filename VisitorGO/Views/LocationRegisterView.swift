@@ -17,7 +17,6 @@ struct LocationRegisterView: View {
     @State var showingSaved = false
     @State var isEditing = false
     @State var editingLocation: Locate?
-//    @State var markers: [Marker] = []
 
     @State var alias = ""
     @State var icon = ""

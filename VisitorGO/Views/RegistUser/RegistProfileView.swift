@@ -43,6 +43,7 @@ struct RegistProfileView: View {
                         } else {
                             Circle()
                                 .frame(width: 120, height: 120)
+                                .foregroundStyle(.gray.opacity(0.5))
                         }
 
                         PhotosPicker(selection: $pickerItem) {

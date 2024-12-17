@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-class APIHelper {
+class APIHelper: ObservableObject {
     static let shared = APIHelper()
     let baseURL = "https://go-app-bm43.onrender.com"
     var loginToken: String? = nil
     var verifyToken: String? = nil
-    var isLoggedIn = false
+    @Published var isLoggedIn = false
 
     init() {
         loadToken()

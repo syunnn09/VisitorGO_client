@@ -61,6 +61,7 @@ struct LoginView: View {
 
                     LoadingButton(isLoading: $doLogin, text: "ログイン", color: color) {
                         if valid {
+                            isError = false
                             doLogin = true
                             APIHelper.shared.login(email: mail, password: password, completion: onLogin)
                         }

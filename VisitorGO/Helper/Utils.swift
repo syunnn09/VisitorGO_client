@@ -91,6 +91,5 @@ struct LoadingButton: View {
     @Previewable @State var isLoading = false
     LoadingButton(isLoading: $isLoading, text: "登録") {
         isLoading.toggle()
-    }
-        .padding()
+    }.padding()
 }
