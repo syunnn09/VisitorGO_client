@@ -33,6 +33,8 @@ struct BigButtonStyle: ButtonStyle {
 struct EditProfileView: View {
     @Environment(\.dismiss) var dismiss
     @StateObject var teamDataHelper: TeamDataHelper = .shared
+    @ObservedObject var userData: UserData
+    @ObservedObject var apiHelper: APIHelper = .shared
 
     @State var name: String = ""
     @State var bio: String = ""
@@ -40,7 +42,13 @@ struct EditProfileView: View {
     @State var uiImage: UIImage?
     @State var profileImage: UIImage?
     @State var editImage = false
-    let imageUrl = URL(string: "\(baseURL)/icon")
+    @State var imageUrl: URL?
+    @State var changeProfileImage = false
+    @State var isUpdating = false
+
+    init() {
+        userData = .shared
+    }
 
     var body: some View {
         NavigationStack {
@@ -82,6 +90,7 @@ struct EditProfileView: View {
                                 if let image = pickerItem {
                                     guard let data = try? await image.loadTransferable(type: Data.self) else { return }
                                     uiImage = UIImage(data: data)
+                                    changeProfileImage = true
                                 }
                             }
                         }.onChange(of: uiImage) {
@@ -144,15 +153,31 @@ struct EditProfileView: View {
                             }
                         }
 
-                        Button("更新") {
-                            dismiss()
-                        }.buttonStyle(BigButtonStyle())
+                        LoadingButton(isLoading: $isUpdating, text: "更新") {
+                            isUpdating = true
+                            feedbackGenerator.impactOccurred()
+
+                            apiHelper.updateProfile(bio: bio, name: name, updateImage: changeProfileImage, image: uiImage) { result in
+                                if result {
+                                    dismiss()
+                                } else {
+                                    isUpdating = false
+                                }
+                            }
+                        }
                     }
                     .padding([.horizontal, .bottom])
                 }
             }
             .onAppear {
                 reloadTeamData()
+                userData.getProfile { profile in
+                    if let profile = profile {
+                        name = profile.name
+                        bio = profile.description
+                        imageUrl = URL(string: profile.profileImage)!
+                    }
+                }
             }
         }
         .sheet(isPresented: $editImage) {

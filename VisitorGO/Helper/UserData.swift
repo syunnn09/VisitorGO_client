@@ -20,6 +20,15 @@ class UserData: ObservableObject {
         APIHelper.shared.getUserData(completion: setProfile)
     }
 
+    func getProfile(completion: @escaping @MainActor (Profile?) -> Void) {
+        if self.userProfile == nil {
+            getProfile()
+        }
+        Task {
+            await completion(userProfile)
+        }
+    }
+
     func setProfile(success: Bool, profile: Profile?) {
         if success && profile != nil {
             self.userProfile = profile

@@ -25,6 +25,13 @@ extension Array where Element: Equatable {
     }
 }
 
+extension UUID {
+    static func prefix(_ length: Int) -> String {
+        let id = UUID().uuidString
+        return String(id.prefix(length))
+    }
+}
+
 struct HeaderView: View {
     let text: String
 

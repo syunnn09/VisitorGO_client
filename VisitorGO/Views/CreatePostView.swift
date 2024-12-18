@@ -216,6 +216,7 @@ struct CreatePostView: View {
                 }
             }
             .padding()
+            .toolbar(.hidden)
         }
     }
 }

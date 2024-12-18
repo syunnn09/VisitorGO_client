@@ -18,16 +18,12 @@ struct Header: View {
     @Binding var selectedTab: TabType
     @Binding var height: CGFloat
 
-    var profile: Profile? {
-        return userData.userProfile
-    }
-
     var body: some View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 24) {
                     HStack(alignment: .bottom) {
-                        AsyncImage(url: URL(string: profile?.profileImage ?? "")) { image in
+                        AsyncImage(url: URL(string: userData.userProfile?.profileImage ?? "")) { image in
                             image.resizable()
                                 .clipShape(Circle())
                                 .frame(width: 90, height: 90)
@@ -40,11 +36,18 @@ struct Header: View {
                             }
                         }
 
-                        Text(profile?.name ?? "")
-                            .font(.title)
+                        VStack(alignment: .leading) {
+                            Text(userData.userProfile?.name ?? "")
+                                .font(.title)
+
+                            Text("@syunnn0909___september")
+                                .font(.caption)
+                                .foregroundStyle(.gray)
+                        }
+                        .padding(8)
                     }
 
-                    Text(profile?.description ?? "")
+                    Text(userData.userProfile?.description ?? "")
 
                     HStack {
                         NavigationLink("プロフィール編集") {
@@ -66,6 +69,7 @@ struct Header: View {
                         } else {
                             Button("ログアウト") {
                                 helper.logout()
+                                userData.setProfile(success: true, profile: nil)
                             }
                             .buttonStyle(.plain)
                             .padding(.horizontal)
@@ -78,7 +82,6 @@ struct Header: View {
 
                 Spacer()
             }
-
         }
         .background {
             GeometryReader { geometry in
@@ -102,10 +105,6 @@ struct ProfileView: View {
     @State var beforeOffset: CGFloat = 0
     @State var index: Double = 1
     @Namespace var ns
-
-    var profile: Profile? {
-        return userData.userProfile
-    }
 
     func onUpdateOffset(new: CGFloat) {
         if defaultPos == nil { defaultPos = new; pos = 0 }
@@ -177,6 +176,9 @@ struct ProfileView: View {
                     }
                 }
             }
+        }
+        .refreshable {
+            UserData.shared.getProfile()
         }
     }
 
