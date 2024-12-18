@@ -42,7 +42,7 @@ class APIHelper: ObservableObject {
         completion(false)
     }
 
-    func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, UserData?) -> Void) {
+    func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, Profile?) -> Void) {
         print(reason)
         Task {
             await completion(false, nil)
@@ -176,11 +176,11 @@ class APIHelper: ObservableObject {
         }.resume()
     }
 
-    func getUserData(completion: @escaping @MainActor (Bool, UserData?) -> Void) {
+    func getUserData(completion: @escaping @MainActor (Bool, Profile?) -> Void) {
         struct Response: Codable {
             var success: Bool
             var message: String
-            var data: UserData?
+            var data: Profile?
         }
 
         guard let token = loginToken else { print("token not found"); return }
@@ -195,8 +195,6 @@ class APIHelper: ObservableObject {
             if error != nil { self.onError(String(describing: error!), completion); return }
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("decode error"); return }
-            print(decodeData.message)
-            print(decodeData.success)
             Task {
                 await completion(decodeData.success, decodeData.data)
             }
@@ -211,7 +209,7 @@ class APIHelper: ObservableObject {
     VStack {
         Text(profileString)
         Button("Profile API") {
-            APIHelper.shared.getUserData() { status, profile in
+            APIHelper.shared.getUserData { status, profile in
                 feedbackGenerator.impactOccurred()
                 if profile != nil {
                     profileString = profile!.description

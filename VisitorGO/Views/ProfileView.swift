@@ -14,9 +14,13 @@ enum TabType: String, CaseIterable {
 
 struct Header: View {
     @ObservedObject var helper: APIHelper = .shared
+    @ObservedObject var userData: UserData = .shared
     @Binding var selectedTab: TabType
     @Binding var height: CGFloat
-    @Binding var profile: UserData?
+
+    var profile: Profile? {
+        return userData.userProfile
+    }
 
     var body: some View {
         VStack {
@@ -88,6 +92,7 @@ struct Header: View {
 
 struct ProfileView: View {
     @ObservedObject var helper: APIHelper = .shared
+    @ObservedObject var userData: UserData = .shared
     @State var selectedTab: TabType = .mine
     @State var headerHeight: CGFloat = 0
     @State var tabBarHeight: CGFloat = 0
@@ -96,8 +101,11 @@ struct ProfileView: View {
     @State var pos: CGFloat = 0
     @State var beforeOffset: CGFloat = 0
     @State var index: Double = 1
-    @State var profile: UserData?
     @Namespace var ns
+
+    var profile: Profile? {
+        return userData.userProfile
+    }
 
     func onUpdateOffset(new: CGFloat) {
         if defaultPos == nil { defaultPos = new; pos = 0 }
@@ -119,7 +127,7 @@ struct ProfileView: View {
                 .zIndex(index)
 
                 VStack {
-                    Header(selectedTab: $selectedTab, height: $headerHeight, profile: $profile)
+                    Header(selectedTab: $selectedTab, height: $headerHeight)
                         .offset(y: -offset)
 
                     VStack(alignment: .leading, spacing: 0) {
@@ -167,13 +175,6 @@ struct ProfileView: View {
                         offset = beforeOffset
                         beforeOffset = temp
                     }
-                }
-            }
-        }
-        .onAppear {
-            APIHelper.shared.getUserData() { status, data  in
-                if status {
-                    self.profile = data
                 }
             }
         }
