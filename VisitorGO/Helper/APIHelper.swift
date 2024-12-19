@@ -81,11 +81,12 @@ class APIHelper: ObservableObject {
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("decode error", completion); return }
             if decodeData.success {
                 self.setToken(token: decodeData.data!.token)
-            }
-            if decodeData.success {
                 UserData.shared.getProfile()
             }
-            completion(decodeData.success)
+            DispatchQueue.main.async {
+                self.isLoggedIn = decodeData.success
+                completion(decodeData.success)
+            }
         }.resume()
     }
 
@@ -141,7 +142,6 @@ class APIHelper: ObservableObject {
             if error != nil { self.onError(String(describing: error), completion); return }
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("decode error", completion); return }
-            guard let response = response as? HTTPURLResponse else { self.onError("response error", completion); return }
             completion(decodeData.success)
         }.resume()
     }
@@ -185,7 +185,6 @@ class APIHelper: ObservableObject {
                 print(error!)
                 return
             }
-            guard let response = response as? HTTPURLResponse else { print("response error"); return }
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("decode error"); return }
             Task {
                 await completion(decodeData.success, decodeData.data?.urls)

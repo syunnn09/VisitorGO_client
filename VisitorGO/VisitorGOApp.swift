@@ -33,26 +33,24 @@ struct VisitorGOApp: App {
 
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                ContentView()
-                    .onOpenURL { url in
-                        switch (url.host) {
-                        case "verify":
-                            let parser = ParameterParser(url: url.absoluteString)
-                            let token = parser.get("token")
-                            if (token != nil) {
-                                apiHelper.verifyToken = token
-                                verify = true
-                            }
-                        default:
-                            return
+            ContentView()
+                .onOpenURL { url in
+                    switch (url.host) {
+                    case "verify":
+                        let parser = ParameterParser(url: url.absoluteString)
+                        let token = parser.get("token")
+                        if (token != nil) {
+                            apiHelper.verifyToken = token
+                            verify = true
                         }
+                    default:
+                        return
                     }
-
-                    .navigationDestination(isPresented: $verify) {
-                        RegistProfileView()
-                    }
-            }
+                }
+            
+                .fullScreenCover(isPresented: $verify) {
+                    RegistProfileView()
+                }
         }
     }
 }

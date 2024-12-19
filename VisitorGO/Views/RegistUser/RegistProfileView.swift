@@ -9,6 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct RegistProfileView: View {
+    @Environment(\.dismiss) var dismiss
     var helper: APIHelper = .shared
 
     @State var name: String = ""
@@ -107,7 +108,11 @@ struct RegistProfileView: View {
                                     onRegist(status: status)
                                 }
                             }
-                        }
+                        }.padding(.bottom)
+
+                        Button("戻る") {
+                            dismiss()
+                        }.buttonStyle(BigButtonStyle(color: .gray))
                     }
                     .padding([.horizontal, .bottom])
                 }

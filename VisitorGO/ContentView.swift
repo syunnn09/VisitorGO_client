@@ -11,12 +11,14 @@ enum SelectTab: String {
     case home = "ホーム"
     case post = "投稿"
     case prof = "プロフィール"
+    case snack = "スナックバー"
 
     var icon: String {
         switch (self) {
             case .home: return "house"
             case .post: return "pencil"
             case .prof: return "person.crop.circle"
+            case .snack: return "snowboard"
         }
     }
 }
@@ -31,61 +33,74 @@ struct ContentView: View {
     @State var selectedSports: Sports? = nil
 
     var body: some View {
-        TabView(selection: $selectedTab) {
-            HomeView()
-                .tabItem {
-                    HStack {
-                        Image(systemName: SelectTab.home.icon)
-                        Text("ホーム")
-                    }
-                }
-                .tag(SelectTab.home)
-
-            if selectedSports != nil {
-                CreatePostView(sports: $selectedSports)
+        ZStack {
+            TabView(selection: $selectedTab) {
+                HomeView()
                     .tabItem {
                         HStack {
-                            Image(systemName: SelectTab.post.icon)
-                            Text("投稿")
+                            Image(systemName: SelectTab.home.icon)
+                            Text("ホーム")
                         }
                     }
-                    .tag(SelectTab.post)
-            } else {
-                Color.gray
-                    .ignoresSafeArea(edges: .all)
+                    .tag(SelectTab.home)
+                
+                if selectedSports != nil {
+                    CreatePostView(sports: $selectedSports)
+                        .tabItem {
+                            HStack {
+                                Image(systemName: SelectTab.post.icon)
+                                Text("投稿")
+                            }
+                        }
+                        .tag(SelectTab.post)
+                } else {
+                    Color.gray
+                        .ignoresSafeArea(edges: .all)
+                        .tabItem {
+                            HStack {
+                                Image(systemName: SelectTab.post.icon)
+                                Text("投稿")
+                            }
+                        }
+                        .tag(SelectTab.post)
+                }
+                
+                ProfileView()
                     .tabItem {
                         HStack {
-                            Image(systemName: SelectTab.post.icon)
-                            Text("投稿")
+                            Image(systemName: SelectTab.prof.icon)
+                            Text("プロフィール")
                         }
                     }
-                    .tag(SelectTab.post)
+                    .tag(SelectTab.prof)
+                
+                SnackBarPreview()
+                    .tabItem {
+                        HStack {
+                            Image(systemName: SelectTab.snack.icon)
+                            Text(SelectTab.snack.rawValue)
+                        }
+                    }
+                    .tag(SelectTab.snack)
+            }
+            .onChange(of: selectedTab) { _, new in
+                if selectedTab == SelectTab.post {
+                    selectSports = true
+                } else {
+                    beforeTab = new
+                }
+            }
+            .sheet(isPresented: $selectSports, onDismiss: {
+                if selectedSports == nil {
+                    selectedTab = beforeTab
+                }
+            }) {
+                SportsSelectView(selection: $selectedSports, selectSports: $selectSports)
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
             }
 
-            ProfileView()
-                .tabItem {
-                    HStack {
-                        Image(systemName: SelectTab.prof.icon)
-                        Text("プロフィール")
-                    }
-                }
-                .tag(SelectTab.prof)
-        }
-        .onChange(of: selectedTab) { _, new in
-            if selectedTab == SelectTab.post {
-                selectSports = true
-            } else {
-                beforeTab = new
-            }
-        }
-        .sheet(isPresented: $selectSports, onDismiss: {
-            if selectedSports == nil {
-                selectedTab = beforeTab
-            }
-        }) {
-            SportsSelectView(selection: $selectedSports, selectSports: $selectSports)
-                .presentationDetents([.medium])
-                .presentationDragIndicator(.visible)
+            Snackbar()
         }
     }
 }

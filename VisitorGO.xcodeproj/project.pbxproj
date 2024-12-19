@@ -16,6 +16,8 @@
 		FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */; };
 		FF4DF5712CFF562E00B8AA67 /* TeamDataHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */; };
 		FF5AF23C2D0A679100AAE954 /* APIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF5AF23B2D0A679100AAE954 /* APIHelper.swift */; };
+		FF67FAF42D14057200B0046E /* PostHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF67FAF32D14057200B0046E /* PostHelper.swift */; };
+		FF6CDA012D13AB5900FFFFD6 /* SnackbarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6CDA002D13AB5900FFFFD6 /* SnackbarManager.swift */; };
 		FFB993852CF8240D003BFA15 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993842CF8240D003BFA15 /* Utils.swift */; };
 		FFB993872CF966AE003BFA15 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993862CF966AE003BFA15 /* Payment.swift */; };
 		FFCACD872CEB725E00334C38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */; };
@@ -50,6 +52,8 @@
 		FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFavoriteTeamView.swift; sourceTree = "<group>"; };
 		FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamDataHelper.swift; sourceTree = "<group>"; };
 		FF5AF23B2D0A679100AAE954 /* APIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIHelper.swift; sourceTree = "<group>"; };
+		FF67FAF32D14057200B0046E /* PostHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHelper.swift; sourceTree = "<group>"; };
+		FF6CDA002D13AB5900FFFFD6 /* SnackbarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackbarManager.swift; sourceTree = "<group>"; };
 		FFB993842CF8240D003BFA15 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		FFB993862CF966AE003BFA15 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		FFCACD702CEB71ED00334C38 /* VisitorGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitorGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -163,6 +167,8 @@
 				FFB993842CF8240D003BFA15 /* Utils.swift */,
 				FF5AF23B2D0A679100AAE954 /* APIHelper.swift */,
 				FF4C8E972D124F5000356DD5 /* UserData.swift */,
+				FF6CDA002D13AB5900FFFFD6 /* SnackbarManager.swift */,
+				FF67FAF32D14057200B0046E /* PostHelper.swift */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -259,6 +265,7 @@
 				FFCACD992CEB75DF00334C38 /* EditLocaleView.swift in Sources */,
 				FFB993872CF966AE003BFA15 /* Payment.swift in Sources */,
 				FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */,
+				FF6CDA012D13AB5900FFFFD6 /* SnackbarManager.swift in Sources */,
 				FFCF61212D07DD1F007D9D14 /* VerificationView.swift in Sources */,
 				FF4DF5712CFF562E00B8AA67 /* TeamDataHelper.swift in Sources */,
 				FFCACD8A2CEB725E00334C38 /* VisitorGOApp.swift in Sources */,
@@ -280,6 +287,7 @@
 				FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */,
 				FF5AF23C2D0A679100AAE954 /* APIHelper.swift in Sources */,
 				FFCACD902CEB72D800334C38 /* Locate.swift in Sources */,
+				FF67FAF42D14057200B0046E /* PostHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

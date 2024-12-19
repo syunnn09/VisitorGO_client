@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
+    @Environment(\.dismiss) var dismiss
     @State var mail: String = ""
     @State var password: String = ""
     @State var isCreate = false
@@ -27,6 +28,10 @@ struct LoginView: View {
         doLogin = false
         if result {
             success = true
+            DispatchQueue.main.async {
+                dismiss()
+                SnackBarManager.shared.show("ログインしました", .success)
+            }
         } else {
             isError = true
         }
@@ -84,10 +89,6 @@ struct LoginView: View {
                 .padding(.horizontal, 40)
 
                 Spacer()
-            }
-            .navigationDestination(isPresented: $success) {
-                ContentView()
-                    .navigationBarBackButtonHidden()
             }
         }
     }

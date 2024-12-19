@@ -56,7 +56,7 @@ struct EditProfileView: View {
                 VStack(spacing: 24) {
                     HeaderView(text: "プロフィール編集")
 
-                    VStack {
+                    VStack(spacing: 24) {
                         if profileImage != nil {
                             Image(uiImage: uiImage!)
                                 .resizable()
@@ -134,8 +134,8 @@ struct EditProfileView: View {
                         if teamDataHelper.teamData != nil {
                             VStack(alignment: .leading, spacing: 20) {
                                 ForEach(teamDataHelper.teamData!.data) { sports in
-                                    VStack(alignment: .leading) {
-                                        if !sports.ignore && !sports.favoriteTeams.isEmpty {
+                                    if !sports.ignore && !sports.favoriteTeams.isEmpty {
+                                        VStack(alignment: .leading) {
                                             HStack {
                                                 Image(systemName: sports.icon)
                                                     .foregroundStyle(.green)
@@ -159,9 +159,11 @@ struct EditProfileView: View {
 
                             apiHelper.updateProfile(bio: bio, name: name, updateImage: changeProfileImage, image: uiImage) { result in
                                 if result {
+                                    SnackBarManager.shared.show("プロフィールが更新されました", .success)
                                     dismiss()
                                 } else {
                                     isUpdating = false
+                                    SnackBarManager.shared.show("プロフィールの更新に失敗しました", .error)
                                 }
                             }
                         }
