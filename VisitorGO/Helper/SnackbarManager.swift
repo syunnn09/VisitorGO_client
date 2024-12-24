@@ -25,10 +25,10 @@ enum SnackBarStatus: String, CaseIterable {
 
     var color: SnackBarColor {
         switch self {
-            case .success: .init(.green, .black)
-            case .error: .init(.red, .black)
-            case .info: .init(.mint, .black)
-            case .warn: .init(.yellow, .black)
+            case .success: .init(.white, .green)
+            case .error: .init(.white, .red)
+            case .info: .init(.white, .mint)
+            case .warn: .init(.black, .yellow)
         }
     }
 

@@ -60,17 +60,21 @@ struct PostRowView: View {
                 }
 
                 HStack(alignment: .center) {
-                    Image("nakaya")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .clipShape(RoundedRectangle(cornerRadius: 50))
-
-                    VStack(alignment: .leading) {
-                        Text("nakaya").bold()
-                        Text("2023/11/04 ~ 2023/11/07")
-                    }
-
-                    Spacer()
+                    NavigationLink {
+                        ProfileView()
+                    } label: {
+                        Image("nakaya")
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .clipShape(RoundedRectangle(cornerRadius: 50))
+                        
+                        VStack(alignment: .leading) {
+                            Text("nakaya").bold()
+                            Text("2023/11/04 ~ 2023/11/07")
+                        }
+                        
+                        Spacer()
+                    }.buttonStyle(.plain)
 
                     HStack(spacing: 2) {
                         Button("", systemImage: "heart") {

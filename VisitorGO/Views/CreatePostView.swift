@@ -57,6 +57,7 @@ struct CreatePostView: View {
 
     @State var showTooltip = false
     @ObservedObject var postHelper: PostHelper = .init()
+    @State var selectedIndex: Int = 0
 
     var body: some View {
         NavigationStack {
@@ -67,20 +68,20 @@ struct CreatePostView: View {
                             Image(systemName: sports!.icon)
                                 .font(.title)
                                 .foregroundStyle(.green)
-                            
+
                             Text("\(sports!.rawValue)の遠征記録作成")
                                 .font(.system(size: 25))
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.1)
                         }
-                        
+
                         Toggle(isOn: $isPublic) {
                             HStack {
                                 Text("公開する").bold()
                                 HintTip(comment: "公開すると自分以外のユーザーも\n遠征記録を閲覧可能になります")
                             }
                         }.padding(.horizontal, 2)
-                        
+
                         HStack {
                             Text("遠征期間").bold()
                             Spacer()
@@ -88,13 +89,13 @@ struct CreatePostView: View {
                             Text(" ~ ")
                             CustomDatePicker(selection: $to)
                         }
-                        
+
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("会場").bold()
                                 HintTip(comment: "試合記録を入力すると自動的に入力されます")
                             }
-                            
+
                             HStack {
                                 TextField("", text: $newStadium)
                                     .textFieldStyle(.roundedBorder)
@@ -102,13 +103,25 @@ struct CreatePostView: View {
                             .listRowSeparator(.hidden)
                             .frame(height: CGFloat((stadium.count + 1) * 44))
                         }
-                        
-                        VStack(alignment: .leading) {
+
+                        VStack(alignment: .leading, spacing: 20) {
                             Text("試合記録").bold()
-                            
-                            CreateGameResultView(offset: $offset)
+
+                            ForEach(0..<postHelper.games, id: \.self) { num in
+                                CreateGameResultView(postHelper: postHelper, offset: $offset, index: num, selectedIndex: $selectedIndex)
+                            }
+
+                            HStack {
+                                Spacer()
+                                Button("", systemImage: "plus.circle") {
+                                    withAnimation {
+                                        postHelper.append()
+                                    }
+                                }
+                                Spacer()
+                            }
                         }
-                        
+
                         VStack(alignment: .leading) {
                             Text("メモ").bold()
                             TextEditor(text: $memo)
@@ -200,7 +213,7 @@ struct CreatePostView: View {
                 .padding()
                 .toolbar(.hidden)
 
-                NumberPicker(item: $postHelper.firstPoint[0], item2: $postHelper.secondPoint[0], offset: $offset)
+                NumberPicker(item: $postHelper.firstPoint[selectedIndex], item2: $postHelper.secondPoint[selectedIndex], offset: $offset)
                     .offset(y: offset)
             }
         }

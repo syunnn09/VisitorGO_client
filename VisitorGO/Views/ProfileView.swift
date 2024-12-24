@@ -12,87 +12,6 @@ enum TabType: String, CaseIterable {
     case good = "いいね"
 }
 
-struct Header: View {
-    @ObservedObject var helper: APIHelper = .shared
-    @ObservedObject var userData: UserData = .shared
-    @Binding var selectedTab: TabType
-    @Binding var height: CGFloat
-
-    var body: some View {
-        VStack {
-            HStack {
-                VStack(alignment: .leading, spacing: 24) {
-                    HStack(alignment: .bottom) {
-                        AsyncImage(url: URL(string: userData.userProfile?.profileImage ?? "")) { image in
-                            image.resizable()
-                                .clipShape(Circle())
-                                .frame(width: 90, height: 90)
-                        } placeholder: {
-                            ZStack {
-                                ProgressView()
-                                Circle()
-                                    .fill(Color.black.opacity(0.1))
-                                    .frame(width: 90, height: 90)
-                            }
-                        }
-
-                        VStack(alignment: .leading) {
-                            Text(userData.userProfile?.name ?? "")
-                                .font(.title)
-
-                            Text("@syunnn0909___september")
-                                .font(.caption)
-                                .foregroundStyle(.gray)
-                        }
-                        .padding(8)
-                    }
-
-                    Text(userData.userProfile?.description ?? "")
-
-                    HStack {
-                        NavigationLink("プロフィール編集") {
-                            EditProfileView()
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                        .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
-
-                        if !helper.isLoggedIn {
-                            NavigationLink("ログイン") {
-                                LoginView()
-                            }
-                            .buttonStyle(.plain)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
-                            .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
-                        } else {
-                            Button("ログアウト") {
-                                helper.logout()
-                                userData.setProfile(success: true, profile: nil)
-                            }
-                            .buttonStyle(.plain)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
-                            .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
-                        }
-                    }
-                }
-                .padding(.horizontal)
-
-                Spacer()
-            }
-        }
-        .background {
-            GeometryReader { geometry in
-                Color.clear.onChange(of: geometry.frame(in: .global)) { _, new in
-                    self.height = new.height
-                }
-            }
-        }
-    }
-}
-
 struct ProfileView: View {
     @ObservedObject var helper: APIHelper = .shared
     @ObservedObject var userData: UserData = .shared
@@ -126,7 +45,7 @@ struct ProfileView: View {
                 .zIndex(index)
 
                 VStack {
-                    Header(selectedTab: $selectedTab, height: $headerHeight)
+                    header
                         .offset(y: -offset)
 
                     VStack(alignment: .leading, spacing: 0) {
@@ -209,6 +128,82 @@ struct ProfileView: View {
             }
         }
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+    }
+
+    @ViewBuilder
+    private var header: some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading, spacing: 24) {
+                    HStack(alignment: .bottom) {
+                        AsyncImage(url: URL(string: userData.userProfile?.profileImage ?? "")) { image in
+                            image.resizable()
+                                .clipShape(Circle())
+                                .frame(width: 90, height: 90)
+                        } placeholder: {
+                            ZStack {
+                                ProgressView()
+                                Circle()
+                                    .fill(Color.black.opacity(0.1))
+                                    .frame(width: 90, height: 90)
+                            }
+                        }
+
+                        VStack(alignment: .leading) {
+                            Text(userData.userProfile?.name ?? "")
+                                .font(.title)
+                            
+                            Text("@syunnn0909___september")
+                                .font(.caption)
+                                .foregroundStyle(.gray)
+                        }
+                        .padding(8)
+                    }
+
+                    Text(userData.userProfile?.description ?? "")
+
+                    HStack {
+                        NavigationLink("プロフィール編集") {
+                            EditProfileView()
+                        }
+                        .buttonStyle(.plain)
+                        .padding(.horizontal)
+                        .padding(.vertical, 8)
+                        .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
+
+                        if !helper.isLoggedIn {
+                            NavigationLink("ログイン") {
+                                LoginView()
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
+                        } else {
+                            Button("ログアウト") {
+                                helper.logout()
+                                userData.setProfile(success: true, profile: nil)
+                            }
+                            .buttonStyle(.plain)
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
+                            .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
+                        }
+                    }
+                }
+                .background(.white)
+                .padding(.horizontal)
+
+                Spacer()
+            }
+        }
+        .background {
+            GeometryReader { geometry in
+                Color.clear.onChange(of: geometry.frame(in: .global)) { _, new in
+                    self.headerHeight = new.height
+                }
+            }
+        }
     }
 }
 

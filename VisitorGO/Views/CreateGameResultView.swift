@@ -8,22 +8,31 @@
 import SwiftUI
 
 struct CreateGameResultView: View {
-    @State var date: Date = .now
     @State var firstTeam: String = ""
-    @State var firstPoint: Int = 0
     @State var secondTeam: String = ""
-    @State var secondPoint: Int = 0
     @State var item: Int = 0
     @State var isPresented: Bool = false
+
+    @ObservedObject var postHelper: PostHelper
     @Binding var offset: CGFloat
+    @State var index: Int
+    @Binding var selectedIndex: Int
 
     var body: some View {
         VStack {
             HStack {
-                CustomDatePicker(selection: $date)
+                CustomDatePicker(selection: $postHelper.date[index])
 
                 Spacer()
+
+                Button("", systemImage: "trash") {
+                    withAnimation {
+                        selectedIndex = 0
+                        postHelper.delete(index)
+                    }
+                }
             }
+            .padding(.horizontal)
             
             HStack {
                 Text("先攻")
@@ -32,10 +41,11 @@ struct CreateGameResultView: View {
 
                 Button {
                     withAnimation(.linear) {
+                        selectedIndex = index
                         offset = 0
                     }
                 } label: {
-                    Text("\(firstPoint)点")
+                    Text("\(postHelper.firstPoint[index])点")
                 }.buttonStyle(.plain)
             }
             .padding(.horizontal)
@@ -47,10 +57,11 @@ struct CreateGameResultView: View {
 
                 Button {
                     withAnimation(.linear) {
+                        selectedIndex = index
                         offset = 0
                     }
                 } label: {
-                    Text("\(secondPoint)点")
+                    Text("\(postHelper.secondPoint[index])点")
                 }.buttonStyle(.plain)
             }
             .padding(.horizontal)
@@ -74,7 +85,9 @@ struct NumberPicker: View {
                         offset = 350
                     }
                 }
-            }.padding()
+            }
+            .padding()
+            .background(.white)
 
             HStack {
                 Spacer()
@@ -85,7 +98,7 @@ struct NumberPicker: View {
                 Spacer()
             }
             .padding(.top, 8)
-            .background(.gray.opacity(0.2))
+            .background(.white)
 
             HStack {
                 Picker("", selection: $item) {
@@ -101,12 +114,13 @@ struct NumberPicker: View {
                 }.pickerStyle(.wheel)
             }
             .frame(height: 200)
-            .background(.gray.opacity(0.1))
+            .background(.white)
         }
     }
 }
 
 #Preview {
-    CreateGameResultView(offset: .constant(0))
+    @Previewable @State var postHelper: PostHelper = PostHelper()
+    CreateGameResultView(postHelper: postHelper, offset: .constant(0), index: 0, selectedIndex: .constant(0))
 }
 
