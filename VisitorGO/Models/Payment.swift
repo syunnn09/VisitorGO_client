@@ -12,6 +12,14 @@ struct Payment: Identifiable, Hashable {
     let title: String
     let date: Date
     let cost: Int
+
+    var day: String {
+        let calendar = Calendar(identifier: .gregorian)
+        let year = calendar.component(.year, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        return "\(year)年\(month)月\(day)日"
+    }
 }
 
 extension Payment {

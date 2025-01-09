@@ -83,7 +83,9 @@ struct ContentView: View {
                     }
                     .tag(SelectTab.snack)
             }
+            .zIndex(100)
             .onChange(of: selectedTab) { _, new in
+                feedbackGenerator.impactOccurred()
                 if selectedTab == SelectTab.post {
                     selectSports = true
                 } else {
@@ -101,6 +103,7 @@ struct ContentView: View {
             }
 
             Snackbar()
+                .zIndex(101)
         }
     }
 }

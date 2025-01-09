@@ -56,6 +56,7 @@ class MapViewHelper: NSObject, ObservableObject, MKLocalSearchCompleterDelegate 
         MKLocalSearch(request: request).start { (response, err) in
             guard let response = response else {
                 print("MKLocalSearch Error: \(err!)")
+                SnackBarManager.shared.error()
                 return
             }
             if let item = response.mapItems.first {

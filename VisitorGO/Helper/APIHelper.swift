@@ -76,7 +76,11 @@ class APIHelper: ObservableObject {
 
         request.httpBody = try? JSONEncoder().encode(requestData)
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil { self.onError(String(describing: error), completion); return }
+            if error != nil {
+                self.onError(String(describing: error), completion);
+                SnackBarManager.shared.error()
+                return
+            }
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("decode error", completion); return }
             if decodeData.success {
@@ -104,7 +108,6 @@ class APIHelper: ObservableObject {
         request.setValue("\(loginToken!)", forHTTPHeaderField: "Authorization")
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
-                print("sample@gmail.com")
                 return
             }
 
@@ -211,6 +214,11 @@ class APIHelper: ObservableObject {
             if error != nil { self.onError(String(describing: error!), completion); return }
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("decode error"); return }
+
+            if !decodeData.success {
+                SnackBarManager.shared.error("ユーザーデータの取得に失敗しました。")
+            }
+
             Task {
                 await completion(decodeData.success, decodeData.data)
             }
@@ -254,6 +262,7 @@ class APIHelper: ObservableObject {
                 DispatchQueue.main.async {
                     UserData.shared.userProfile = decodeData.data
                 }
+
                 Task {
                     await completion(decodeData.success)
                 }

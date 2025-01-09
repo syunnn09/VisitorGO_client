@@ -115,6 +115,7 @@ struct CreatePostView: View {
                                 Spacer()
                                 Button("", systemImage: "plus.circle") {
                                     withAnimation {
+                                        feedbackGenerator.impactOccurred()
                                         postHelper.append()
                                     }
                                 }
@@ -130,15 +131,16 @@ struct CreatePostView: View {
                                     RoundedRectangle(cornerRadius: 7)
                                         .stroke(.primary.opacity(0.2), lineWidth: 1)
                                 )
+                                .padding(.horizontal, 1)
                         }
-                        
+
                         VStack(alignment: .leading) {
                             HStack {
                                 Text("写真").bold()
                                 HintTip(comment: "写真は10枚まで選択可能です")
-                                
+
                                 Spacer()
-                                
+
                                 PhotosPicker(selection: $selection, maxSelectionCount: 10, matching: .images) {
                                     Image(systemName: "photo.badge.plus")
                                 }.padding(.trailing, 2)
@@ -162,7 +164,7 @@ struct CreatePostView: View {
                                     .resizable()
                                     .scaledToFit()
                             }
-                            
+
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack {
                                     ForEach(uiImages, id: \.self) { image in
@@ -175,7 +177,7 @@ struct CreatePostView: View {
                                 }
                             }.frame(height: 70)
                         }
-                        
+
                         VStack(alignment: .leading) {
                             Text("マップ").bold()
                             NavigationLink {
@@ -190,7 +192,7 @@ struct CreatePostView: View {
                                 .padding(.horizontal, -20)
                             }
                         }
-                        
+
                         HStack {
                             NavigationLink {
                                 PaymentManageView(payments: $payments)
@@ -204,7 +206,7 @@ struct CreatePostView: View {
                                 }
                             }
                         }
-                        
+
                         LoadingButton(isLoading: $isLoading, text: "投稿する") {
                             
                         }.padding(.vertical, 16)

@@ -27,13 +27,14 @@ struct CreateGameResultView: View {
 
                 Button("", systemImage: "trash") {
                     withAnimation {
+                        feedbackGenerator.impactOccurred()
                         selectedIndex = 0
                         postHelper.delete(index)
                     }
                 }
             }
             .padding(.horizontal)
-            
+
             HStack {
                 Text("先攻")
                 TextField("", text: $firstTeam)
@@ -49,7 +50,7 @@ struct CreateGameResultView: View {
                 }.buttonStyle(.plain)
             }
             .padding(.horizontal)
-            
+
             HStack {
                 Text("後攻")
                 TextField("", text: $secondTeam)
@@ -77,7 +78,7 @@ struct NumberPicker: View {
     var body: some View {
         VStack(spacing: 0) {
             Spacer()
-            
+
             HStack {
                 Spacer()
                 Button("確定") {
@@ -121,6 +122,13 @@ struct NumberPicker: View {
 
 #Preview {
     @Previewable @State var postHelper: PostHelper = PostHelper()
-    CreateGameResultView(postHelper: postHelper, offset: .constant(0), index: 0, selectedIndex: .constant(0))
+    @Previewable @State var offset: CGFloat = 350
+
+    ZStack {
+        CreateGameResultView(postHelper: postHelper, offset: $offset, index: 0, selectedIndex: .constant(0))
+
+        NumberPicker(item: $postHelper.firstPoint[0], item2: $postHelper.secondPoint[0], offset: $offset)
+            .offset(y: offset)
+    }
 }
 

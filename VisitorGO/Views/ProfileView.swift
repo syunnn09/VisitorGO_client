@@ -25,8 +25,8 @@ struct ProfileView: View {
     @State var index: Double = 1
     @Namespace var ns
 
-    func onUpdateOffset(new: CGFloat) {
-        if defaultPos == nil { defaultPos = new; pos = 0 }
+    func onUpdateOffset(before: CGFloat, new: CGFloat) {
+        if defaultPos == nil { defaultPos = before; pos = 0 }
         offset = defaultPos! - new
     }
 
@@ -116,8 +116,8 @@ struct ProfileView: View {
                     .padding(.top, topHeight)
                     .background {
                         GeometryReader { geo in
-                            Color.clear.onChange(of: geo.frame(in: .global).minY) { _, new in
-                                onUpdateOffset(new: new)
+                            Color.clear.onChange(of: geo.frame(in: .global).minY) { before, new in
+                                onUpdateOffset(before: before, new: new)
                             }
                             Color.clear.onChange(of: geo.frame(in: .global).minX) { _, new in
                                 index = new == 0 ? 1 : 3

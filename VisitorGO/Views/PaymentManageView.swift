@@ -13,19 +13,18 @@ struct PaymentManageView: View {
     @State var date: Date = .now
     @State var cost: Int = 0
 
-    var groupedPayments: [Date: [Payment]] {
-        Dictionary(grouping: payments, by: { $0.date })
+    var groupedPayments: [String: [Payment]] {
+        Dictionary(grouping: payments, by: { $0.day })
     }
 
-    var dates: [Date] {
+    var dates: [String] {
         groupedPayments.map { $0.key }.sorted(by: <)
     }
 
-    func delete(date: Date, index: IndexSet) {
+    func delete(date: String, index: IndexSet) {
         withAnimation {
             if let index = index.first {
                 let payment = groupedPayments[date]![index]
-                print(payment)
                 payments.remove(at: payments.firstIndex(where: { $0 == payment })!)
             }
         }
@@ -74,24 +73,26 @@ struct PaymentManageView: View {
                                 Spacer()
                                 Text("\(payment.cost)円")
                             }
+                            .listRowBackground(Color.gray.opacity(0.09))
                         }
                         .onDelete { index in
                             self.delete(date: key, index: index)
                         }
                     } header: {
                         HStack {
-                            Text(key.toString())
+                            Text(key)
                             Spacer()
                             Text("\(Payment.calcSum(payments!))円")
                         }
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
         }
     }
 }
 
 #Preview {
-    @Previewable @State var payments: [Payment] = []
+    @Previewable @State var payments: [Payment] = [Payment(title: "寝取り", date: .now, cost: 3000), Payment(title: "チケット代", date: .now, cost: 4500)]
     PaymentManageView(payments: $payments)
 }

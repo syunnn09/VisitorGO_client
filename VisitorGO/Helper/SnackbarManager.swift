@@ -69,6 +69,14 @@ class SnackBarManager: ObservableObject {
         }
     }
 
+    func error() {
+        self.show("エラーが発生しました。", .error)
+    }
+
+    func error(_ message: String) {
+        self.show(message, .error)
+    }
+
     func close() {
         self.timer?.invalidate()
         self.timer = nil

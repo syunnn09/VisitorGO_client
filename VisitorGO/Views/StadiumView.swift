@@ -21,7 +21,7 @@ enum ShowingType: String, CaseIterable {
 }
 
 struct StadiumView: View {
-    @State var pickerTab: ShowingType = .around
+    @State var pickerTab: ShowingType = .all
     @State var sports: Sports? = .baseball
     @State var maxY: CGFloat = 100
     @State var defaultHeight: CGFloat? = nil
@@ -35,9 +35,9 @@ struct StadiumView: View {
     var width = UIScreen.main.bounds.width
     @Namespace var ns
 
-    func updateOffset(_ new: CGFloat) {
-        if defaultOffset == nil { defaultOffset = new }
-        if defaultHeight == nil { defaultHeight = new }
+    func updateOffset(before: CGFloat, new: CGFloat) {
+        if defaultOffset == nil { defaultOffset = before }
+        if defaultHeight == nil { defaultHeight = before }
         imageOffset = max(0, -(defaultHeight! - new - top))
         scaleSize = max(1, 1 - (defaultHeight! - new - top) * 0.005)
         self.offset = defaultOffset! - new
@@ -51,11 +51,15 @@ struct StadiumView: View {
                         TabView(selection: $pickerTab) {
                             ForEach(ShowingType.allCases, id: \.self) { type in
                                 ScrollView {
+//                                    header
+//                                        .offset(y: -offset)
+
                                     type.body
+                                        .padding(.top, headerHeight)
                                         .background {
                                             GeometryReader { geo in
-                                                Color.clear.onChange(of: geo.frame(in: .global).minY) { _, new in
-                                                    updateOffset(new)
+                                                Color.clear.onChange(of: geo.frame(in: .global).minY) { before, new in
+                                                    updateOffset(before: before, new: new)
                                                 }
                                             }
                                         }
@@ -64,7 +68,6 @@ struct StadiumView: View {
                         }
                         .tabViewStyle(.page(indexDisplayMode: .never))
                     }
-                    .padding(.top, headerHeight)
 
                     header
                         .offset(y: -offset)
@@ -105,7 +108,7 @@ struct StadiumView: View {
                             Text(type.rawValue)
                                 .font(.system(size: 22))
                                 .onTapGesture { withAnimation { pickerTab = type } }
-                            
+
                             if pickerTab == type {
                                 Text(type.rawValue)
                                     .opacity(0)
@@ -125,7 +128,7 @@ struct StadiumView: View {
 
                 Divider()
             }
-            .padding(.vertical)
+            .padding(.vertical, 14)
         }
         .background {
             GeometryReader { geometry in
@@ -155,22 +158,25 @@ struct AroundView: View {
         VStack(spacing: 20) {
             VStack(spacing: 0) {
                 ForEach(sampleData, id: \.self) { data in
-                    HStack {
-                        Image(systemName: "mappin")
-                        Button(data) {
-                            UIApplication.shared.open(URL(string: "https://www.google.com/maps/dir/?api=1&destination=\(data)&travelmode=train")!)
-                        }
-                        .font(.title2)
-                        .buttonStyle(.plain)
-                        .padding(.vertical)
+                    Button {
+                        UIApplication.shared.open(URL(string: "https://www.google.com/maps/dir/?api=1&destination=\(data)&travelmode=train")!)
+                    } label: {
+                        HStack {
+                            Image(systemName: "mappin")
+                            VStack(alignment: .leading) {
+                                Text(data)
+                                Text("100人が訪れました")
+                                    .font(.system(size: 13))
+                                    .opacity(0.7)
+                            }
+                            .font(.title2)
+                            .buttonStyle(.plain)
+                            .padding(.vertical)
 
-                        Spacer()
-                        VStack {
                             Spacer()
-                            Text("100人が訪れました").font(.subheadline)
+                            Image(systemName: "chevron.right")
                         }
-                        Image(systemName: "chevron.right")
-                    }
+                    }.buttonStyle(.plain)
                     Divider()
                 }
             }
