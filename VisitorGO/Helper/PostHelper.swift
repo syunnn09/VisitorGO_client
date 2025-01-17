@@ -52,3 +52,48 @@ class PostHelper: ObservableObject {
         }
     }
 }
+
+struct GameRequest: Codable {
+    let comment: String
+    let date: String
+    let scores: [GameScoreRequest]
+    let team1Id: Int
+    let team2Id: Int
+
+    init(item: PostHelper, index: Int) {
+        self.comment = ""
+        self.date = item.date[index].toString()
+        self.scores = GameScoreRequest.convert()
+        self.team1Id = 1
+        self.team2Id = 2
+    }
+}
+
+extension GameRequest {
+    static func convert(_ postHelperItems: [PostHelper]) -> [GameRequest] {
+        var requests: [GameRequest] = []
+
+        for (index, item) in postHelperItems.enumerated() {
+            requests.append(GameRequest(item: item, index: index))
+        }
+        return requests
+    }
+}
+
+struct GameScoreRequest: Codable {
+    let order: Int
+    let score: Int
+    let teamId: Int
+
+    init() {
+        self.order = 1
+        self.score = 3
+        self.teamId = 1
+    }
+}
+
+extension GameScoreRequest {
+    static func convert() -> [GameScoreRequest] {
+        return [GameScoreRequest(), GameScoreRequest()]
+    }
+}

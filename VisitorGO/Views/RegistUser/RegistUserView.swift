@@ -10,6 +10,8 @@ import SwiftUI
 struct RegistUserView: View {
     @Environment(\.dismiss) var dismiss
     @State var mail: String = ""
+    @State var sent: Bool = false
+    @State var isLoading: Bool = false
 
     var valid: Bool {
         !mail.isEmpty
@@ -37,10 +39,16 @@ struct RegistUserView: View {
                         .textFieldStyle(.roundedBorder)
                         .padding(.bottom, 16)
 
-                    NavigationLink("ユーザー登録") {
-                        VerificationView(mail: mail)
+                    LoadingButton(isLoading: $isLoading, text: "ユーザー登録", color: color) {
+                        if valid {
+                            feedbackGenerator.impactOccurred()
+                            isLoading = true
+                            APIHelper.shared.sendMail(mail: mail) { result in
+                                isLoading = false
+                                sent = true
+                            }
+                        }
                     }
-                    .buttonStyle(BigButtonStyle(color: color))
                     .padding(.bottom, 40)
 
                     VStack(alignment: .leading) {
@@ -57,9 +65,12 @@ struct RegistUserView: View {
                     }
                 }
                 .padding(.horizontal, 40)
+                .navigationDestination(isPresented: $sent) {
+                    VerificationView(mail: mail)
+                }
+
                 Spacer()
             }
-            .navigationBarBackButtonHidden()
         }
     }
 }

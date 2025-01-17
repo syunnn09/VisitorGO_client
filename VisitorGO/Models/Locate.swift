@@ -34,6 +34,34 @@ class Locate: Identifiable, Equatable, ObservableObject {
     }
 }
 
+struct VisitedFacilityRequest: Codable {
+    let address: String
+    let color: String
+    let icon: String
+    let latitude: Double
+    let longitude: Double
+    let name: String
+
+    init(_ locate: Locate) {
+        self.address = locate.place
+        self.color = "FFAAFF"
+        self.icon = locate.icon
+        self.latitude = locate.latitude
+        self.longitude = locate.longitude
+        self.name = locate.alias
+    }
+}
+
+extension VisitedFacilityRequest {
+    static func convert(locates: [Locate]) -> [VisitedFacilityRequest] {
+        var facilities: [VisitedFacilityRequest] = []
+        for locate in locates {
+            facilities.append(VisitedFacilityRequest(locate))
+        }
+        return facilities
+    }
+}
+
 extension Locate {
     static func == (lhs: Locate, rhs: Locate) -> Bool {
         return lhs.name == rhs.name && lhs.place == rhs.place

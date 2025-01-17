@@ -58,10 +58,12 @@ class SnackBarManager: ObservableObject {
 
     func show(_ text: String, _ status: SnackBarStatus) {
         self.timer?.invalidate()
-        self.offset = 100
-        self.text = text
-        self.status = status
-        self.toggle(true)
+        DispatchQueue.main.async {
+            self.offset = 100
+            self.text = text
+            self.status = status
+            self.toggle(true)
+        }
         feedbackGenerator.impactOccurred()
 
         self.timer = Timer.scheduledTimer(withTimeInterval: 5.0, repeats: false) { _ in

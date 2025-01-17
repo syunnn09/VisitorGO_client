@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FF0A506B2D388E900071BCD4 /* ExpeditionAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF0A506A2D388E8F0071BCD4 /* ExpeditionAPI.swift */; };
+		FF1306982D30EB7F004AD13F /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF1306972D30EB7F004AD13F /* Game.swift */; };
+		FF192FE72D38E6010038FA01 /* Expedition.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF192FE62D38E6010038FA01 /* Expedition.swift */; };
 		FF39EEE62CF59160003EB0CF /* PaymentManageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */; };
 		FF44F4102D08322C0014695A /* StadiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44F40F2D08322C0014695A /* StadiumView.swift */; };
 		FF4C8E962D11573800356DD5 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4C8E952D11573800356DD5 /* Profile.swift */; };
@@ -39,9 +42,16 @@
 		FFCF61232D07E98B007D9D14 /* SetPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF61222D07E98B007D9D14 /* SetPasswordView.swift */; };
 		FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF61242D081299007D9D14 /* PostRowView.swift */; };
 		FFE1B80F2D0A73660019F5C9 /* RegistProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */; };
+		FFE43F2D2D31085D00D5E50B /* LoginAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE43F2C2D31085D00D5E50B /* LoginAPI.swift */; };
+		FFE43F2F2D31089500D5E50B /* SendMailAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE43F2E2D31089500D5E50B /* SendMailAPI.swift */; };
+		FFE43F312D3108B500D5E50B /* RegistUserAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE43F302D3108B500D5E50B /* RegistUserAPI.swift */; };
+		FFE43F332D3108D300D5E50B /* UploadImageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE43F322D3108D300D5E50B /* UploadImageAPI.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FF0A506A2D388E8F0071BCD4 /* ExpeditionAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpeditionAPI.swift; sourceTree = "<group>"; };
+		FF1306972D30EB7F004AD13F /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
+		FF192FE62D38E6010038FA01 /* Expedition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Expedition.swift; sourceTree = "<group>"; };
 		FF39EEE02CF57C49003EB0CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentManageView.swift; sourceTree = "<group>"; };
 		FF44F40F2D08322C0014695A /* StadiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadiumView.swift; sourceTree = "<group>"; };
@@ -76,6 +86,10 @@
 		FFCF61222D07E98B007D9D14 /* SetPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetPasswordView.swift; sourceTree = "<group>"; };
 		FFCF61242D081299007D9D14 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
 		FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistProfileView.swift; sourceTree = "<group>"; };
+		FFE43F2C2D31085D00D5E50B /* LoginAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAPI.swift; sourceTree = "<group>"; };
+		FFE43F2E2D31089500D5E50B /* SendMailAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendMailAPI.swift; sourceTree = "<group>"; };
+		FFE43F302D3108B500D5E50B /* RegistUserAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistUserAPI.swift; sourceTree = "<group>"; };
+		FFE43F322D3108D300D5E50B /* UploadImageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageAPI.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -155,6 +169,8 @@
 				FFB993862CF966AE003BFA15 /* Payment.swift */,
 				FFCACD9A2CEB767A00334C38 /* Sports.swift */,
 				FF4C8E952D11573800356DD5 /* Profile.swift */,
+				FF1306972D30EB7F004AD13F /* Game.swift */,
+				FF192FE62D38E6010038FA01 /* Expedition.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -162,6 +178,7 @@
 		FFCACD932CEB74CC00334C38 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
+				FFE43F2B2D31084600D5E50B /* API */,
 				FFCACD942CEB753100334C38 /* MapViewHelper.swift */,
 				FF4DF5702CFF562E00B8AA67 /* TeamDataHelper.swift */,
 				FFB993842CF8240D003BFA15 /* Utils.swift */,
@@ -183,6 +200,18 @@
 				FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */,
 			);
 			path = RegistUser;
+			sourceTree = "<group>";
+		};
+		FFE43F2B2D31084600D5E50B /* API */ = {
+			isa = PBXGroup;
+			children = (
+				FFE43F2C2D31085D00D5E50B /* LoginAPI.swift */,
+				FFE43F2E2D31089500D5E50B /* SendMailAPI.swift */,
+				FFE43F302D3108B500D5E50B /* RegistUserAPI.swift */,
+				FFE43F322D3108D300D5E50B /* UploadImageAPI.swift */,
+				FF0A506A2D388E8F0071BCD4 /* ExpeditionAPI.swift */,
+			);
+			path = API;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -260,6 +289,7 @@
 			files = (
 				FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */,
 				FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */,
+				FFE43F2F2D31089500D5E50B /* SendMailAPI.swift in Sources */,
 				FF4C8E982D124F5000356DD5 /* UserData.swift in Sources */,
 				FF39EEE62CF59160003EB0CF /* PaymentManageView.swift in Sources */,
 				FFCACD992CEB75DF00334C38 /* EditLocaleView.swift in Sources */,
@@ -271,8 +301,11 @@
 				FFCACD8A2CEB725E00334C38 /* VisitorGOApp.swift in Sources */,
 				FFCACD9D2CEB848A00334C38 /* HomeView.swift in Sources */,
 				FFB993852CF8240D003BFA15 /* Utils.swift in Sources */,
+				FFE43F332D3108D300D5E50B /* UploadImageAPI.swift in Sources */,
+				FF192FE72D38E6010038FA01 /* Expedition.swift in Sources */,
 				FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */,
 				FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */,
+				FF0A506B2D388E900071BCD4 /* ExpeditionAPI.swift in Sources */,
 				FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */,
 				FF44F4102D08322C0014695A /* StadiumView.swift in Sources */,
 				FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */,
@@ -280,11 +313,14 @@
 				FFCF611E2D07D8F6007D9D14 /* RegistUserView.swift in Sources */,
 				FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */,
 				FFCF611C2D0731EC007D9D14 /* LoginView.swift in Sources */,
+				FFE43F312D3108B500D5E50B /* RegistUserAPI.swift in Sources */,
+				FF1306982D30EB7F004AD13F /* Game.swift in Sources */,
 				FFE1B80F2D0A73660019F5C9 /* RegistProfileView.swift in Sources */,
 				FF4C8E962D11573800356DD5 /* Profile.swift in Sources */,
 				FFCACD9B2CEB767B00334C38 /* Sports.swift in Sources */,
 				FFCF61232D07E98B007D9D14 /* SetPasswordView.swift in Sources */,
 				FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */,
+				FFE43F2D2D31085D00D5E50B /* LoginAPI.swift in Sources */,
 				FF5AF23C2D0A679100AAE954 /* APIHelper.swift in Sources */,
 				FFCACD902CEB72D800334C38 /* Locate.swift in Sources */,
 				FF67FAF42D14057200B0046E /* PostHelper.swift in Sources */,

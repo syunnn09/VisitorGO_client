@@ -13,11 +13,12 @@ import PhotosUI
 struct HintTip: View {
     @State var showTooltip = false
     let comment: String
+    var edge: Edge = .bottom
 
     var body: some View {
         Button("", systemImage: "questionmark.circle.fill") { showTooltip = true }
             .foregroundStyle(.black)
-            .popover(isPresented: $showTooltip, arrowEdge: .bottom) {
+            .popover(isPresented: $showTooltip, arrowEdge: edge) {
                 Text(comment)
                     .font(.system(size: 15))
                     .padding(.horizontal)
@@ -41,6 +42,7 @@ struct CustomDatePicker: View {
 struct CreatePostView: View {
     @Binding var sports: Sports?
     @State var isPublic = false
+    @State var title: String = ""
     @State var from: Date = .now
     @State var to: Date = .now
     @State var stadium = ""
@@ -78,9 +80,18 @@ struct CreatePostView: View {
                         Toggle(isOn: $isPublic) {
                             HStack {
                                 Text("公開する").bold()
-                                HintTip(comment: "公開すると自分以外のユーザーも\n遠征記録を閲覧可能になります")
+                                HintTip(comment: "公開すると自分以外のユーザーも\n遠征記録を閲覧可能になります", edge: .top)
                             }
                         }.padding(.horizontal, 2)
+
+                        HStack {
+                            Text("タイトル")
+                                .bold()
+                                .padding(.trailing, 20)
+
+                            TextField("", text: $title)
+                                .textFieldStyle(.roundedBorder)
+                        }
 
                         HStack {
                             Text("遠征期間").bold()
@@ -90,11 +101,11 @@ struct CreatePostView: View {
                             CustomDatePicker(selection: $to)
                         }
 
-                        VStack(alignment: .leading) {
+                        HStack {
                             HStack {
                                 Text("会場").bold()
                                 HintTip(comment: "試合記録を入力すると自動的に入力されます")
-                            }
+                            }.padding(.trailing, 20)
 
                             HStack {
                                 TextField("", text: $newStadium)
@@ -208,7 +219,11 @@ struct CreatePostView: View {
                         }
 
                         LoadingButton(isLoading: $isLoading, text: "投稿する") {
-                            
+                            let game = Game(isPublic: isPublic, sportId: 1, stadiumId: 1, title: title, startDate: from.toString(), endDate: to.toString(), memo: memo, games: [], imageUrls: [], payments: payments, visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
+                            print(game)
+                            APIHelper.shared.createExpedition(game: game) { status in
+                                print(status)
+                            }
                         }.padding(.vertical, 16)
                     }
                 }

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct Payment: Identifiable, Hashable {
-    let id = UUID()
+struct Payment: Identifiable, Hashable, Codable {
+    var id = UUID()
     let title: String
     let date: Date
     let cost: Int

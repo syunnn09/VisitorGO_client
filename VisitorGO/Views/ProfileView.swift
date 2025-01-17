@@ -38,7 +38,7 @@ struct ProfileView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 VStack {
-                    Text("").frame(height: 20)
+                    Text("").frame(height: 30)
 
                     tabView
                 }
@@ -77,7 +77,7 @@ struct ProfileView: View {
                     }
                     .padding(.vertical)
                     .coordinateSpace(name: "header")
-                    .offset(y: offset >= topHeight - 30 ? -topHeight + 30 : -offset)
+                    .offset(y: offset >= topHeight - 38 ? -topHeight + 38 : -offset)
                     .background {
                         GeometryReader { geometry in
                             Color.clear.onChange(of: geometry.frame(in: .named("header"))) { _, new in
@@ -94,6 +94,7 @@ struct ProfileView: View {
                         beforeOffset = temp
                     }
                 }
+                .mask(Rectangle().padding(.bottom, offset >= topHeight - 20 ? -topHeight + 20 : offset))
             }
         }
         .refreshable {
@@ -153,7 +154,7 @@ struct ProfileView: View {
                             Text(userData.userProfile?.name ?? "")
                                 .font(.title)
                             
-                            Text("@syunnn0909___september")
+                            Text("@\(userData.userProfile?.username ?? "")")
                                 .font(.caption)
                                 .foregroundStyle(.gray)
                         }
@@ -208,5 +209,6 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView()
+//    ProfileView()
+    ContentView()
 }

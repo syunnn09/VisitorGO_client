@@ -13,4 +13,6 @@ struct Profile: Codable {
     var name: String
     var description: String
     var profileImage: String
+    var fileId: String
+    var username: String
 }

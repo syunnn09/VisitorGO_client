@@ -177,7 +177,7 @@ struct EditProfileView: View {
                     if let profile = profile {
                         name = profile.name
                         bio = profile.description
-                        imageUrl = URL(string: profile.profileImage)!
+                        imageUrl = URL(string: profile.profileImage)
                     }
                 }
             }

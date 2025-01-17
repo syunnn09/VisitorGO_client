@@ -51,9 +51,6 @@ struct StadiumView: View {
                         TabView(selection: $pickerTab) {
                             ForEach(ShowingType.allCases, id: \.self) { type in
                                 ScrollView {
-//                                    header
-//                                        .offset(y: -offset)
-
                                     type.body
                                         .padding(.top, headerHeight)
                                         .background {
@@ -72,6 +69,7 @@ struct StadiumView: View {
                     header
                         .offset(y: -offset)
                 }
+                .mask(Rectangle().padding(.bottom, top))
             }
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -98,7 +96,6 @@ struct StadiumView: View {
                 .resizable()
                 .scaledToFit()
                 .scaleEffect(scaleSize)
-                .mask(Rectangle().padding(.bottom, -imageOffset))
                 .offset(y: -imageOffset)
 
             VStack(alignment: .leading, spacing: 0) {

@@ -12,6 +12,7 @@ struct RegistProfileView: View {
     @Environment(\.dismiss) var dismiss
     var helper: APIHelper = .shared
 
+    @State var username: String = ""
     @State var name: String = ""
     @State var bio: String = ""
     @State var pickerItem: PhotosPickerItem?
@@ -24,6 +25,7 @@ struct RegistProfileView: View {
     func onRegist(status: Bool) {
         if status {
             completed = true
+            dismiss()
         } else {
             isLoading = false
         }
@@ -66,6 +68,12 @@ struct RegistProfileView: View {
                         }
 
                         VStack(alignment: .leading) {
+                            Text("ユーザーID")
+                            TextField("ユーザーID", text: $username)
+                                .textFieldStyle(.roundedBorder)
+                        }
+
+                        VStack(alignment: .leading) {
                             Text("ニックネーム")
                             TextField("ニックネーム", text: $name)
                                 .textFieldStyle(.roundedBorder)
@@ -104,8 +112,9 @@ struct RegistProfileView: View {
                         LoadingButton(isLoading: $isLoading, text: "登録") {
                             if password == password2 && !isLoading {
                                 isLoading = true
-                                APIHelper.shared.regist(password: password, name: name, bio: bio) { status in
+                                APIHelper.shared.regist(username: username, password: password, name: name, bio: bio) { status in
                                     onRegist(status: status)
+                                    print(status)
                                 }
                             }
                         }.padding(.bottom)
