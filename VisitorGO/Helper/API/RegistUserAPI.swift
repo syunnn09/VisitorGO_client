@@ -40,4 +40,33 @@ extension APIHelper {
             completion(decodeData.success)
         }.resume()
     }
+
+    func onError(_ message: String, _ completion: @escaping (Bool, String) -> Void) {
+        completion(false, "エラーが発生ました");
+    }
+
+    func isUnique(username: String, completion: @escaping (Bool, String) -> Void) {
+        struct Data: Codable {
+            var message: String
+            var isUnique: Bool
+        }
+
+        struct Response: Codable {
+            var message: String
+            var success: Bool
+            var data: Data
+        }
+
+        let url = getURL("api/user/isUnique/\(username)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+            completion(decodeData.data.isUnique, decodeData.data.message)
+        }.resume()
+    }
 }

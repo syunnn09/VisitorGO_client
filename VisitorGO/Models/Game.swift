@@ -19,6 +19,13 @@ struct Game: Codable {
     var imageUrls: [String]
     var payments: [Payment]
     var visitedFacilities: [VisitedFacilityRequest]
+
+    var startDated: Date? {
+        return ISO8601DateFormatter().date(from: startDate)
+    }
+    var endDated: Date? {
+        return ISO8601DateFormatter().date(from: endDate)
+    }
 }
 
 

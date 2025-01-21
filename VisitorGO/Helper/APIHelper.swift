@@ -72,10 +72,6 @@ class APIHelper: ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error!), completion); return }
 
-            if let response = response as? HTTPURLResponse {
-                print(response.statusCode)
-            }
-
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
 
             if !decodeData.success {

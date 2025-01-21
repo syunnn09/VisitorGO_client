@@ -168,6 +168,7 @@ struct EditLocaleView: View {
             .toolbar {
                 ToolbarItem(placement: .principal) {
                     Text(locate!.name)
+                        .lineLimit(1)
                 }
             }
         }

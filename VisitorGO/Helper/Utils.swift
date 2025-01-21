@@ -9,7 +9,7 @@ import SwiftUI
 import Foundation
 
 extension Date {
-    static var defaultFormat: String = "yyyy年MM月dd日"
+    static var defaultFormat: String = "yyyy年M月d日"
 
     func toString() -> String {
         let formatter: DateFormatter = DateFormatter()

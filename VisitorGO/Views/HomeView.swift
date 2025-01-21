@@ -8,18 +8,17 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State var count: Int = 10
+    @State var expeditions: [Expedition] = []
 
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    ForEach(1...count, id: \.self) { number in
-                        let view = PostRowView(heart: number)
+                    ForEach($expeditions, id: \.self) { expedition in
                         NavigationLink {
-                            view
+                            PostDetailView(id: expedition.id)
                         } label: {
-                            view
+                            PostRowView(expedition: expedition)
                         }.buttonStyle(.plain)
                         Divider()
                     }
@@ -27,10 +26,16 @@ struct HomeView: View {
             }
             .refreshable {
                 try! await Task.sleep(nanoseconds: 1_000_000_000)
-                count += 5
             }
             .navigationBarBackButtonHidden()
             .navigationTitle("ホーム")
+        }
+        .onAppear {
+            APIHelper.shared.getExpeditionList { data in
+                if data != nil {
+                    self.expeditions = data!
+                }
+            }
         }
     }
 }

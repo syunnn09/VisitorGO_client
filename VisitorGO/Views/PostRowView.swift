@@ -8,12 +8,7 @@
 import SwiftUI
 
 struct PostRowView: View {
-    @State var isFavorite: Bool = false
-    @State var heart: Int = 1
-
-    var count: Int {
-        heart + (isFavorite ? 1 : 0)
-    }
+    @Binding var expedition: Expedition
 
     var body: some View {
         NavigationStack {
@@ -22,7 +17,7 @@ struct PostRowView: View {
                     Image(systemName: "baseball")
                         .foregroundStyle(.green)
 
-                    Text("福岡への遠征記録").bold()
+                    Text(expedition.title).bold()
                 }
                 .font(.system(size: 24))
 
@@ -53,10 +48,11 @@ struct PostRowView: View {
                     }.buttonStyle(.plain)
 
                     HStack {
-                        Text("楽天イーグルス")
+                        Text(expedition.team1Name)
                         Text("VS")
-                        Text("ソフトバンクホークス")
+                        Text(expedition.team2Name)
                     }
+                    .lineLimit(1)
                 }
 
                 HStack(alignment: .center) {
@@ -69,8 +65,8 @@ struct PostRowView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 50))
                         
                         VStack(alignment: .leading) {
-                            Text("nakaya").bold()
-                            Text("2023/11/04 ~ 2023/11/07")
+                            Text(expedition.userName).bold()
+                            Text("\(expedition.startDated?.toString() ?? "") ~ \(expedition.endDated?.toString() ?? "")")
                         }
                         
                         Spacer()
@@ -80,13 +76,12 @@ struct PostRowView: View {
                         Button("", systemImage: "heart") {
                             withAnimation {
                                 feedbackGenerator.impactOccurred()
-                                isFavorite.toggle()
                             }
                         }
                         .foregroundStyle(.pink)
-                        .symbolVariant(isFavorite ? .fill : .none)
+//                        .symbolVariant(isFavorite ? .fill : .none)
                         
-                        Text("\(count)")
+                        Text("\(expedition.likesCount)")
                             .frame(minWidth: 30)
                             .contentTransition(.numericText())
                     }.font(.system(size: 22))
@@ -99,6 +94,16 @@ struct PostRowView: View {
     }
 }
 
-#Preview {
-    PostRowView()
-}
+//#Preview {
+//    @Previewable @State var expedition: expedition
+//    PostRowView(expedition: $expedition)
+//        .onAppear {
+//            APIHelper.shared.getExpeditionList { expeditions in
+//                if expeditions != nil {
+//                    expedition = expeditions?.first
+//                } else {
+//                    print("nil")
+//                }
+//            }
+//        }
+//}

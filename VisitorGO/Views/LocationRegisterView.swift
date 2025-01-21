@@ -161,6 +161,7 @@ struct LocationRegisterView: View {
                                     }
                                     Spacer()
                                 }
+                                .listRowBackground(Color.gray.opacity(0.09))
                                 .onTapGesture {
                                     getPosition(completion: completion)
                                 }
@@ -181,6 +182,7 @@ struct LocationRegisterView: View {
                                     }
                                     Spacer()
                                 }
+                                .listRowBackground(Color.gray.opacity(0.09))
                                 .onTapGesture {
                                     self.editingLocation = locate
                                     self.alias = locate.alias
@@ -198,6 +200,7 @@ struct LocationRegisterView: View {
                     }
                 }
             }
+            .scrollContentBackground(.hidden)
 
             Button {
                 withAnimation(.easeInOut(duration: 0.7)) {

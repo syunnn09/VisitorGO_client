@@ -22,6 +22,10 @@ struct RegistProfileView: View {
     @State var isLoading: Bool = false
     @State var completed: Bool = false
 
+    @State var message: String = "1文字以上で設定してください"
+    @State var color: Color = .red
+    @State var isUniqueLoading: Bool = false
+
     func onRegist(status: Bool) {
         if status {
             completed = true
@@ -69,7 +73,36 @@ struct RegistProfileView: View {
 
                         VStack(alignment: .leading) {
                             Text("ユーザーID")
-                            TextField("ユーザーID", text: $username)
+
+                            HStack {
+                                TextField("ユーザーID", text: $username)
+                                    .textFieldStyle(.roundedBorder)
+
+                                LoadingButton(isLoading: $isUniqueLoading, text: "チェック", color: .blue) {
+                                    isUniqueLoading = true
+                                    APIHelper.shared.isUnique(username: username) { result, message in
+                                        self.color = result ? .green : .red
+                                        self.message = message
+                                        isUniqueLoading = false
+                                    }
+                                }
+                                .frame(width: 100)
+                            }
+
+                            Text(message)
+                                .font(.system(size: 14))
+                                .foregroundStyle(color)
+                        }
+
+                        VStack(alignment: .leading) {
+                            Text("パスワード")
+                            SecureField("", text: $password)
+                                .textFieldStyle(.roundedBorder)
+                        }
+
+                        VStack(alignment: .leading) {
+                            Text("確認用パスワード")
+                            SecureField("", text: $password2)
                                 .textFieldStyle(.roundedBorder)
                         }
 
@@ -97,24 +130,11 @@ struct RegistProfileView: View {
                                 .padding(.horizontal, 1)
                         }
 
-                        VStack(alignment: .leading) {
-                            Text("パスワード")
-                            SecureField("", text: $password)
-                                .textFieldStyle(.roundedBorder)
-                        }
-
-                        VStack(alignment: .leading) {
-                            Text("確認用パスワード")
-                            SecureField("", text: $password2)
-                                .textFieldStyle(.roundedBorder)
-                        }
-
                         LoadingButton(isLoading: $isLoading, text: "登録") {
                             if password == password2 && !isLoading {
                                 isLoading = true
                                 APIHelper.shared.regist(username: username, password: password, name: name, bio: bio) { status in
                                     onRegist(status: status)
-                                    print(status)
                                 }
                             }
                         }.padding(.bottom)

@@ -109,7 +109,7 @@ struct ProfileView: View {
                 ScrollView {
                     VStack(spacing: 20) {
                         ForEach(1...5, id: \.self) { _ in
-                            PostRowView()
+//                            PostRowView()
                             Divider()
                         }
                     }

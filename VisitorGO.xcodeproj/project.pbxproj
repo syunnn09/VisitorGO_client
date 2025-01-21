@@ -23,6 +23,7 @@
 		FF6CDA012D13AB5900FFFFD6 /* SnackbarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF6CDA002D13AB5900FFFFD6 /* SnackbarManager.swift */; };
 		FFB993852CF8240D003BFA15 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993842CF8240D003BFA15 /* Utils.swift */; };
 		FFB993872CF966AE003BFA15 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993862CF966AE003BFA15 /* Payment.swift */; };
+		FFBC47792D3E3944008D9EE5 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */; };
 		FFCACD872CEB725E00334C38 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */; };
 		FFCACD882CEB725E00334C38 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FFCACD832CEB725E00334C38 /* Assets.xcassets */; };
 		FFCACD892CEB725E00334C38 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCACD842CEB725E00334C38 /* ContentView.swift */; };
@@ -66,6 +67,7 @@
 		FF6CDA002D13AB5900FFFFD6 /* SnackbarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnackbarManager.swift; sourceTree = "<group>"; };
 		FFB993842CF8240D003BFA15 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		FFB993862CF966AE003BFA15 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
+		FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
 		FFCACD702CEB71ED00334C38 /* VisitorGO.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VisitorGO.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FFCACD812CEB725E00334C38 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		FFCACD832CEB725E00334C38 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */,
 				FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */,
 				FFCF61242D081299007D9D14 /* PostRowView.swift */,
+				FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */,
 				FF44F40F2D08322C0014695A /* StadiumView.swift */,
 				FFCF611F2D07DCCE007D9D14 /* RegistUser */,
 			);
@@ -306,6 +309,7 @@
 				FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */,
 				FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */,
 				FF0A506B2D388E900071BCD4 /* ExpeditionAPI.swift in Sources */,
+				FFBC47792D3E3944008D9EE5 /* PostDetailView.swift in Sources */,
 				FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */,
 				FF44F4102D08322C0014695A /* StadiumView.swift in Sources */,
 				FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */,

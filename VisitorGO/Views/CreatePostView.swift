@@ -30,13 +30,39 @@ struct HintTip: View {
 
 struct CustomDatePicker: View {
     @Binding var selection: Date
-    
+
+    var partialRangeFrom: PartialRangeFrom<Date>?
+    var partialRangeThrough: PartialRangeThrough<Date>?
+    var closedRange: ClosedRange<Date>?
+
     var body: some View {
-        DatePicker("", selection: $selection, displayedComponents: [.date])
-            .environment(\.locale, Locale(identifier: "ja_JP"))
-            .pickerStyle(.inline)
-            .labelsHidden()
+        if partialRangeFrom != nil {
+            DatePicker("", selection: $selection, in: partialRangeFrom!, displayedComponents: [.date])
+                .environment(\.locale, Locale(identifier: "ja_JP"))
+                .pickerStyle(.inline)
+                .labelsHidden()
+        } else if partialRangeThrough != nil {
+            DatePicker("", selection: $selection, in: partialRangeThrough!, displayedComponents: [.date])
+                .environment(\.locale, Locale(identifier: "ja_JP"))
+                .pickerStyle(.inline)
+                .labelsHidden()
+        } else if closedRange != nil {
+            DatePicker("", selection: $selection, in: closedRange!, displayedComponents: [.date])
+                .environment(\.locale, Locale(identifier: "ja_JP"))
+                .pickerStyle(.inline)
+                .labelsHidden()
+        } else {
+            DatePicker("", selection: $selection, displayedComponents: [.date])
+                .environment(\.locale, Locale(identifier: "ja_JP"))
+                .pickerStyle(.inline)
+                .labelsHidden()
+        }
     }
+}
+
+enum CreatePostField: Hashable {
+    case from
+    case to
 }
 
 struct CreatePostView: View {
@@ -60,6 +86,7 @@ struct CreatePostView: View {
     @State var showTooltip = false
     @ObservedObject var postHelper: PostHelper = .init()
     @State var selectedIndex: Int = 0
+    @FocusState var focus: CreatePostField?
 
     var body: some View {
         NavigationStack {
@@ -96,30 +123,35 @@ struct CreatePostView: View {
                         HStack {
                             Text("遠征期間").bold()
                             Spacer()
-                            CustomDatePicker(selection: $from)
+                            CustomDatePicker(selection: $from, partialRangeThrough: ...to)
+                                .focused($focus, equals: .from)
+                                .onChange(of: from) { focus = .to }
+
                             Text(" ~ ")
-                            CustomDatePicker(selection: $to)
-                        }
 
-                        HStack {
-                            HStack {
-                                Text("会場").bold()
-                                HintTip(comment: "試合記録を入力すると自動的に入力されます")
-                            }.padding(.trailing, 20)
-
-                            HStack {
-                                TextField("", text: $newStadium)
-                                    .textFieldStyle(.roundedBorder)
-                            }
-                            .listRowSeparator(.hidden)
-                            .frame(height: CGFloat((stadium.count + 1) * 44))
+                            CustomDatePicker(selection: $to, partialRangeFrom: from...)
+                                .focused($focus, equals: .to)
                         }
 
                         VStack(alignment: .leading, spacing: 20) {
                             Text("試合記録").bold()
 
+                            HStack {
+                                HStack {
+                                    Text("会場").bold()
+                                    HintTip(comment: "試合記録を入力すると自動的に入力されます")
+                                }.padding(.trailing, 20)
+
+                                HStack {
+                                    TextField("", text: $newStadium)
+                                        .textFieldStyle(.roundedBorder)
+                                }
+                                .listRowSeparator(.hidden)
+                                .frame(height: CGFloat((stadium.count + 1) * 44))
+                            }
+
                             ForEach(0..<postHelper.games, id: \.self) { num in
-                                CreateGameResultView(postHelper: postHelper, offset: $offset, index: num, selectedIndex: $selectedIndex)
+                                CreateGameResultView(postHelper: postHelper, offset: $offset, index: num, selectedIndex: $selectedIndex, from: $from, to: $to)
                             }
 
                             HStack {

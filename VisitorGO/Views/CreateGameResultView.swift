@@ -18,18 +18,23 @@ struct CreateGameResultView: View {
     @State var index: Int
     @Binding var selectedIndex: Int
 
+    @Binding var from: Date
+    @Binding var to: Date
+
     var body: some View {
         VStack {
             HStack {
-                CustomDatePicker(selection: $postHelper.date[index])
+                CustomDatePicker(selection: $postHelper.date[index], closedRange: from...to)
 
                 Spacer()
 
-                Button("", systemImage: "trash") {
-                    withAnimation {
-                        feedbackGenerator.impactOccurred()
-                        selectedIndex = 0
-                        postHelper.delete(index)
+                if postHelper.games > 1 {
+                    Button("", systemImage: "trash") {
+                        withAnimation {
+                            feedbackGenerator.impactOccurred()
+                            selectedIndex = 0
+                            postHelper.delete(index)
+                        }
                     }
                 }
             }
@@ -123,9 +128,10 @@ struct NumberPicker: View {
 #Preview {
     @Previewable @State var postHelper: PostHelper = PostHelper()
     @Previewable @State var offset: CGFloat = 350
+    @Previewable @State var date: Date = Date()
 
     ZStack {
-        CreateGameResultView(postHelper: postHelper, offset: $offset, index: 0, selectedIndex: .constant(0))
+        CreateGameResultView(postHelper: postHelper, offset: $offset, index: 0, selectedIndex: .constant(0), from: .constant(date), to: .constant(date))
 
         NumberPicker(item: $postHelper.firstPoint[0], item2: $postHelper.secondPoint[0], offset: $offset)
             .offset(y: offset)

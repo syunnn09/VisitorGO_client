@@ -21,10 +21,12 @@ extension APIHelper {
 
         let url = getURL("api/expedition/create")
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = try? JSONEncoder().encode(game)
+        print(request)
+        print(request.httpBody!.count)
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error!), completion); return }
@@ -54,7 +56,7 @@ extension APIHelper {
         }
 
         guard let token = loginToken else { print("token not found"); return }
-        let url = getURL("api/expedition/list?page=1&sportId=1&teamId=1")
+        let url = getURL("api/expedition/list?page=1")
 
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
@@ -68,7 +70,7 @@ extension APIHelper {
 
             if !decodeData.success {
                 print(decodeData.message)
-                SnackBarManager.shared.error("投稿に失敗しました。")
+                SnackBarManager.shared.error("取得に失敗しました。")
             }
 
             completion(decodeData.data)
@@ -119,9 +121,9 @@ extension APIHelper {
 
         CreatePostView(sports: .constant(Sports.baseball))
     }
-//    .onAppear {
-//        APIHelper.shared.getExpeditionList { expeditionData in
-//            expedition = expeditionData?.first
-//        }
-//    }
+    .onAppear {
+        APIHelper.shared.getExpeditionList { expeditionData in
+            expedition = expeditionData?.first
+        }
+    }
 }
