@@ -25,8 +25,6 @@ extension APIHelper {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         request.httpBody = try? JSONEncoder().encode(game)
-        print(request)
-        print(request.httpBody!.count)
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error!), completion); return }
@@ -40,12 +38,6 @@ extension APIHelper {
 
             completion(decodeData.success)
         }.resume()
-    }
-
-    func onError(_ reason: String, _ completion: @escaping ([Expedition]?) -> Void) {
-        print(reason)
-        SnackBarManager.shared.show("エラーが発生しました。\n\(reason)", .error)
-        completion(nil)
     }
 
     func getExpeditionList(completion: @escaping ([Expedition]?) -> Void) {
@@ -75,12 +67,6 @@ extension APIHelper {
 
             completion(decodeData.data)
         }.resume()
-    }
-
-    func onError(_ reason: String, _ completion: @escaping (ExpeditionDetail?) -> Void) {
-        print(reason)
-        SnackBarManager.shared.show("投稿取得に失敗しました。\n\(reason)", .error)
-        completion(nil)
     }
 
     func getExpeditionDetail(expeditionId: Int, completion: @escaping (ExpeditionDetail?) -> Void) {

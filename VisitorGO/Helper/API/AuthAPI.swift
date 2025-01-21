@@ -13,12 +13,12 @@ extension APIHelper {
             var message: String
             var success: Bool
         }
-        
+
         let url = getURL("api/auth/emailVerification?email=\(mail)&tokenType=\(tokenType)")
         var request = URLRequest(url: url)
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { print("error: \(String(describing: error))"); return }
             guard let data else { return }
@@ -40,14 +40,14 @@ extension APIHelper {
             var message: String
             var success: Bool
         }
-        
+
         let requestData = Request(email: email, password: password)
-        
+
         let url = getURL("api/auth/login")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         request.httpBody = try? JSONEncoder().encode(requestData)
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
@@ -55,7 +55,7 @@ extension APIHelper {
                 SnackBarManager.shared.error()
                 return
             }
-            
+
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
             if decodeData.success {
                 self.setToken(token: decodeData.data!.token)
@@ -82,16 +82,16 @@ extension APIHelper {
             var message: String
             var success: Bool
         }
-        
+
         guard let token = verifyToken else { print("verify token error"); return }
-        
+
         let requestData = Request(name: name, token: token, password: password, description: bio, profileImage: "http://172.20.10.8:58285/icon", username: username)
-        
+
         let url = getURL("api/auth/register")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-        
+
         request.httpBody = try? JSONEncoder().encode(requestData)
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error), completion); return }

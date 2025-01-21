@@ -37,10 +37,23 @@ class APIHelper: ObservableObject {
         self.isLoggedIn = false
     }
 
+    func getURL(_ url: String) -> URL {
+        return URL(string: "\(baseURL)/\(url)")!
+    }
+
+    func printStatusCode(response: URLResponse) {
+        guard let response = response as? HTTPURLResponse else { return }
+        print(response.statusCode)
+    }
+
     func onError(_ reason: String, _ completion: @escaping (Bool) -> Void) {
         print(reason)
         SnackBarManager.shared.show("エラーが発生しました。\n\(reason)", .error)
         completion(false)
+    }
+
+    func onError(_ message: String, _ completion: @escaping (Bool, String) -> Void) {
+        completion(false, "エラーが発生ました");
     }
 
     func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, Profile?) -> Void) {
@@ -50,8 +63,16 @@ class APIHelper: ObservableObject {
         }
     }
 
-    func getURL(_ url: String) -> URL {
-        return URL(string: "\(baseURL)/\(url)")!
+    func onError(_ reason: String, _ completion: @escaping ([Expedition]?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.show("エラーが発生しました。\n\(reason)", .error)
+        completion(nil)
+    }
+
+    func onError(_ reason: String, _ completion: @escaping (ExpeditionDetail?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.show("投稿取得に失敗しました。\n\(reason)", .error)
+        completion(nil)
     }
 }
 

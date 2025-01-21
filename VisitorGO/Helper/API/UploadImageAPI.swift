@@ -17,19 +17,19 @@ extension APIHelper {
             let success: Bool
             let data: Body?
         }
-        
+
         guard let token = loginToken else { print("verify token error"); return }
-        
+
         let boundary = UUID().uuidString
-        
+
         let url = getURL("api/upload/images?folder=\(folder)")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
-        
+
         var body = Data()
-        
+
         for image in images {
             guard let imageData = image.jpegData(compressionQuality: 0.6) else { print("image error"); return }
             body.append("--\(boundary)\r\n".data(using: .utf8)!)
@@ -40,7 +40,7 @@ extension APIHelper {
         }
         body.append("--\(boundary)--\r\n".data(using: .utf8)!)
         request.httpBody = body
-        
+
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil {
                 print("request error")
