@@ -40,6 +40,35 @@ extension APIHelper {
         }.resume()
     }
 
+    func likeExpedition(expeditionId: Int, completion: @escaping (LikeResponse?) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var message: String
+            var data: LikeResponse?
+        }
+
+        guard let token = loginToken else { onError("ログインしてください。", completion); return }
+        let url = getURL("api/expedition/like/\(expeditionId)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+
+            if !decodeData.success {
+                print(decodeData.message)
+                SnackBarManager.shared.error("いいねに失敗しました。")
+            }
+
+            completion(decodeData.data)
+        }.resume()
+    }
+
     func getExpeditionList(completion: @escaping ([Expedition]?) -> Void) {
         struct Response: Codable {
             var success: Bool

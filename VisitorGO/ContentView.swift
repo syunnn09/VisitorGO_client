@@ -43,7 +43,7 @@ struct ContentView: View {
                         }
                     }
                     .tag(SelectTab.home)
-                
+
                 if selectedSports != nil {
                     CreatePostView(sports: $selectedSports)
                         .tabItem {
@@ -64,7 +64,7 @@ struct ContentView: View {
                         }
                         .tag(SelectTab.post)
                 }
-                
+
                 ProfileView()
                     .tabItem {
                         HStack {
@@ -73,15 +73,6 @@ struct ContentView: View {
                         }
                     }
                     .tag(SelectTab.prof)
-                
-                SnackBarPreview()
-                    .tabItem {
-                        HStack {
-                            Image(systemName: SelectTab.snack.icon)
-                            Text(SelectTab.snack.rawValue)
-                        }
-                    }
-                    .tag(SelectTab.snack)
             }
             .zIndex(100)
             .onChange(of: selectedTab) { _, new in

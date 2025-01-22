@@ -64,12 +64,13 @@ extension APIHelper {
         }.resume()
     }
 
-    @MainActor func updateProfile(bio: String, name: String, updateImage: Bool, image: UIImage?, completion: @escaping @MainActor (Bool) -> Void) {
+    @MainActor func updateProfile(username: String, name: String, bio: String, updateImage: Bool, image: UIImage?, favoriteTeams: [Int], completion: @escaping @MainActor (Bool) -> Void) {
         struct Request: Encodable {
-            var description: String
-            var name: String
-            var profileImage: String
             var username: String
+            var name: String
+            var description: String
+            var profileImage: String
+            var favoriteTeams: [Int]
         }
 
         struct Response: Codable {
@@ -78,13 +79,12 @@ extension APIHelper {
             var data: Profile?
         }
 
-        guard let token = loginToken else { print("token not found"); return }
+        guard let token = loginToken else { print("token not found"); completion(false); return }
         guard let profile = UserData.shared.userProfile else { print("user not found"); completion(false); return }
 
         @MainActor func onUpload(success: Bool, images: [String]?) {
-            guard let images = images else { print("Error"); return }
-            guard images.first != nil else { print("image error"); completion(false); return }
-            let image = images.first!
+            guard let images = images else { print("\(#function) Error"); completion(false); return }
+            guard let image = images.first else { print("image error"); completion(false); return }
 
             let url = getURL("api/user/update/\(profile.id)")
             var request = URLRequest(url: url)
@@ -92,7 +92,7 @@ extension APIHelper {
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
 
-            let body = Request(description: bio, name: name, profileImage: image, username: profile.username)
+            let body = Request(username: bio, name: name, description: image, profileImage: username, favoriteTeams: favoriteTeams)
             request.httpBody = try? JSONEncoder().encode(body)
 
             URLSession.shared.dataTask(with: request) { data, response, error in
@@ -100,7 +100,9 @@ extension APIHelper {
 
                 guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
                 DispatchQueue.main.async {
-                    UserData.shared.userProfile = decodeData.data
+                    if let data = decodeData.data {
+                        UserData.shared.userProfile = data
+                    }
                 }
 
                 Task {
@@ -108,7 +110,7 @@ extension APIHelper {
                 }
             }.resume()
         }
-        
+
         if let image = image {
             self.uploadImage([image], completion: onUpload)
         } else {

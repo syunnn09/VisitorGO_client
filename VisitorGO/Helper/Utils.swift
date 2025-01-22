@@ -32,6 +32,12 @@ extension UUID {
     }
 }
 
+extension String {
+    func toDate() -> String {
+        return ISO8601DateFormatter().date(from: self)?.toString() ?? ""
+    }
+}
+
 struct HeaderView: View {
     let text: String
 

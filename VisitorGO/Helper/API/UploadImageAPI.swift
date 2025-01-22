@@ -18,14 +18,11 @@ extension APIHelper {
             let data: Body?
         }
 
-        guard let token = loginToken else { print("verify token error"); return }
-
         let boundary = UUID().uuidString
 
         let url = getURL("api/upload/images?folder=\(folder)")
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         request.setValue("multipart/form-data; boundary=\(boundary)", forHTTPHeaderField: "Content-Type")
 
         var body = Data()

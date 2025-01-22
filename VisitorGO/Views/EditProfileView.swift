@@ -36,8 +36,10 @@ struct EditProfileView: View {
     @ObservedObject var userData: UserData
     @ObservedObject var apiHelper: APIHelper = .shared
 
+    @State var username: String = ""
     @State var name: String = ""
     @State var bio: String = ""
+
     @State var pickerItem: PhotosPickerItem?
     @State var uiImage: UIImage?
     @State var profileImage: UIImage?
@@ -100,6 +102,12 @@ struct EditProfileView: View {
                         }
 
                         VStack(alignment: .leading) {
+                            Text("ユーザー名")
+                            TextField("ユーザー名", text: $username)
+                                .textFieldStyle(.roundedBorder)
+                        }
+
+                        VStack(alignment: .leading) {
                             Text("ニックネーム")
                             TextField("ニックネーム", text: $name)
                                 .textFieldStyle(.roundedBorder)
@@ -157,7 +165,7 @@ struct EditProfileView: View {
                             isUpdating = true
                             feedbackGenerator.impactOccurred()
 
-                            apiHelper.updateProfile(bio: bio, name: name, updateImage: changeProfileImage, image: uiImage) { result in
+                            apiHelper.updateProfile(username: username, name: name, bio: bio, updateImage: changeProfileImage, image: uiImage, favoriteTeams: teamDataHelper.favoriteTeamIds) { result in
                                 if result {
                                     SnackBarManager.shared.show("プロフィールが更新されました", .success)
                                     dismiss()
@@ -175,6 +183,7 @@ struct EditProfileView: View {
                 reloadTeamData()
                 userData.getProfile { profile in
                     if let profile = profile {
+                        username = profile.username
                         name = profile.name
                         bio = profile.description
                         imageUrl = URL(string: profile.profileImage)

@@ -11,6 +11,7 @@ import PhotosUI
 struct RegistProfileView: View {
     @Environment(\.dismiss) var dismiss
     var helper: APIHelper = .shared
+    var teamDataHelper: TeamDataHelper = .shared
 
     @State var username: String = ""
     @State var name: String = ""
@@ -22,9 +23,10 @@ struct RegistProfileView: View {
     @State var isLoading: Bool = false
     @State var completed: Bool = false
 
-    @State var message: String = "1文字以上で設定してください"
+    @State var message: String = ""
     @State var color: Color = .red
     @State var isUniqueLoading: Bool = false
+    @State var error: String = ""
 
     func onRegist(status: Bool) {
         if status {
@@ -130,18 +132,37 @@ struct RegistProfileView: View {
                                 .padding(.horizontal, 1)
                         }
 
+                        NavigationLink {
+                            EditFavoriteTeamView(teamDataHelper: teamDataHelper)
+                        } label: {
+                            Image(systemName: "pencil")
+                            Text("推しチームを登録")
+                        }
+                        .buttonStyle(BigButtonStyle(color: .mint))
+                        .padding(.vertical)
+
                         LoadingButton(isLoading: $isLoading, text: "登録") {
                             if password == password2 && !isLoading {
                                 isLoading = true
-                                APIHelper.shared.regist(username: username, password: password, name: name, bio: bio) { status in
+                                APIHelper.shared.regist(username: username, password: password, name: name, bio: bio, profileImage: uiImage, favoriteTeamIds: teamDataHelper.favoriteTeamIds) { status, message in
                                     onRegist(status: status)
+                                    if !status {
+                                        self.error = message
+                                    }
                                 }
                             }
-                        }.padding(.bottom)
+                        }
 
-                        Button("戻る") {
-                            dismiss()
-                        }.buttonStyle(BigButtonStyle(color: .gray))
+                        Text(error)
+                            .font(.system(size: 14))
+                            .foregroundStyle(.red)
+                            .padding(.bottom)
+
+                        if !isLoading {
+                            Button("戻る") {
+                                dismiss()
+                            }.buttonStyle(BigButtonStyle(color: .gray))
+                        }
                     }
                     .padding([.horizontal, .bottom])
                 }

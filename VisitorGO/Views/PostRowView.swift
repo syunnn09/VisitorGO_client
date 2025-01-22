@@ -8,7 +8,15 @@
 import SwiftUI
 
 struct PostRowView: View {
-    @Binding var expedition: Expedition
+    var expedition: Expedition
+    @State var isFavorite: Bool
+    @State var favoriteCount: Int
+
+    init(expedition: Expedition) {
+        self.expedition = expedition
+        self.isFavorite = expedition.isLiked
+        self.favoriteCount = expedition.likesCount
+    }
 
     var body: some View {
         NavigationStack {
@@ -66,7 +74,7 @@ struct PostRowView: View {
                         
                         VStack(alignment: .leading) {
                             Text(expedition.userName).bold()
-                            Text("\(expedition.startDated?.toString() ?? "") ~ \(expedition.endDated?.toString() ?? "")")
+                            Text("\(expedition.startDate.toDate()) ~ \(expedition.endDate.toDate())")
                         }
                         
                         Spacer()
@@ -74,12 +82,16 @@ struct PostRowView: View {
 
                     HStack(spacing: 2) {
                         Button("", systemImage: "heart") {
-                            withAnimation {
-                                feedbackGenerator.impactOccurred()
+                            feedbackGenerator.impactOccurred()
+                            APIHelper.shared.likeExpedition(expeditionId: expedition.id) { data in
+                                if let data = data {
+                                    self.isFavorite = data.isLike
+                                    self.favoriteCount = data.likesCount
+                                }
                             }
                         }
                         .foregroundStyle(.pink)
-//                        .symbolVariant(isFavorite ? .fill : .none)
+                        .symbolVariant(expedition.isLiked ? .fill : .none)
                         
                         Text("\(expedition.likesCount)")
                             .frame(minWidth: 30)
@@ -93,17 +105,3 @@ struct PostRowView: View {
         }
     }
 }
-
-//#Preview {
-//    @Previewable @State var expedition: expedition
-//    PostRowView(expedition: $expedition)
-//        .onAppear {
-//            APIHelper.shared.getExpeditionList { expeditions in
-//                if expeditions != nil {
-//                    expedition = expeditions?.first
-//                } else {
-//                    print("nil")
-//                }
-//            }
-//        }
-//}

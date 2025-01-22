@@ -21,17 +21,9 @@ struct Expedition: Identifiable, Codable, Hashable {
     var images: [String]
     var team1Name: String
     var team2Name: String
-
-    var isFavorite: Bool?
-    var stadiumId: Int?
-    var stadiumName: String?
-
-    var startDated: Date? {
-        return ISO8601DateFormatter().date(from: startDate)
-    }
-    var endDated: Date? {
-        return ISO8601DateFormatter().date(from: endDate)
-    }
+    var isLiked: Bool
+    var stadiumId: Int
+    var stadiumName: String
 }
 
 struct ExpeditionDetail: Codable {

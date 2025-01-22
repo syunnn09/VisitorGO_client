@@ -52,8 +52,10 @@ class APIHelper: ObservableObject {
         completion(false)
     }
 
-    func onError(_ message: String, _ completion: @escaping (Bool, String) -> Void) {
-        completion(false, "エラーが発生ました");
+    func onError(_ reason: String, _ completion: @escaping (Bool, String) -> Void) {
+        print(reason)
+        SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        completion(false, reason)
     }
 
     func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, Profile?) -> Void) {
@@ -65,13 +67,19 @@ class APIHelper: ObservableObject {
 
     func onError(_ reason: String, _ completion: @escaping ([Expedition]?) -> Void) {
         print(reason)
-        SnackBarManager.shared.show("エラーが発生しました。\n\(reason)", .error)
+        SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
         completion(nil)
     }
 
     func onError(_ reason: String, _ completion: @escaping (ExpeditionDetail?) -> Void) {
         print(reason)
-        SnackBarManager.shared.show("投稿取得に失敗しました。\n\(reason)", .error)
+        SnackBarManager.shared.error("投稿取得に失敗しました。\n\(reason)")
+        completion(nil)
+    }
+
+    func onError(_ reason: String, _ completion: @escaping (LikeResponse?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.error("エラーが発生しました。")
         completion(nil)
     }
 }

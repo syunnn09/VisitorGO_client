@@ -25,8 +25,11 @@ class ParameterParser {
 
 @main
 struct VisitorGOApp: App {
+    // init helpers
     var apiHelper: APIHelper = .shared
     var userData: UserData = .shared
+    var teamDataHelper: TeamDataHelper = .shared
+
     @State var index: Int = 0
     @State var verify: Bool = false
     @State var token: String = ""

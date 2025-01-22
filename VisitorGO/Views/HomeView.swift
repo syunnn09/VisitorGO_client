@@ -14,7 +14,7 @@ struct HomeView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    ForEach($expeditions, id: \.self) { expedition in
+                    ForEach(expeditions, id: \.self) { expedition in
                         NavigationLink {
                             PostDetailView(id: expedition.id)
                         } label: {
@@ -32,8 +32,8 @@ struct HomeView: View {
         }
         .onAppear {
             APIHelper.shared.getExpeditionList { data in
-                if data != nil {
-                    self.expeditions = data!
+                if let data = data {
+                    self.expeditions = data
                 }
             }
         }

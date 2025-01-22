@@ -5,6 +5,7 @@
 //  Created by shusuke imamura on 2025/01/21.
 //
 
+import SwiftUI
 import Foundation
 
 extension APIHelper {
@@ -68,36 +69,47 @@ extension APIHelper {
         }.resume()
     }
 
-    func regist(username: String, password: String, name: String, bio: String, completion: @escaping (Bool) -> Void) {
+    @MainActor func regist(username: String, password: String, name: String, bio: String, profileImage: UIImage?, favoriteTeamIds: [Int], completion: @escaping (Bool, String) -> Void) {
         struct Request: Codable {
             var name: String
             var token: String
             var password: String
             var description: String
-            var profileImage: String?
+            var profileImage: String
             var username: String
-            var fileId: String?
+            var favoriteTeamIds: [Int]
         }
+
         struct Response: Codable {
-            var message: String
             var success: Bool
+            var message: String
+            var data: Profile?
         }
 
-        guard let token = verifyToken else { print("verify token error"); return }
+        guard let profileImage = profileImage else { self.onError("プロフィール画像を設定してください", completion); return }
+        guard let token = verifyToken else { self.onError("トークンが存在しません\nもう一度やり直してください", completion); return }
 
-        let requestData = Request(name: name, token: token, password: password, description: bio, profileImage: "http://172.20.10.8:58285/icon", username: username)
+        @MainActor func onUpload(success: Bool, images: [String]?) {
+            let errorMessage = "画像アップロードに失敗しました"
+            guard let images = images else { self.onError("\(errorMessage)", completion); return }
+            guard let image = images.first else { self.onError("\(errorMessage)", completion); return }
 
-        let url = getURL("api/auth/register")
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+            let url = getURL("api/auth/register")
+            var request = URLRequest(url: url)
+            request.httpMethod = "POST"
+            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
-        request.httpBody = try? JSONEncoder().encode(requestData)
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil { self.onError(String(describing: error), completion); return }
+            let body = Request(name: name, token: token, password: password, description: bio, profileImage: image, username: username, favoriteTeamIds: favoriteTeamIds)
+            request.httpBody = try? JSONEncoder().encode(body)
             
-            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
-            completion(decodeData.success)
-        }.resume()
+            URLSession.shared.dataTask(with: request) { data, response, error in
+                if error != nil { self.onError(String(describing: error), completion); return }
+                
+                guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+                completion(decodeData.success, decodeData.message)
+            }.resume()
+        }
+
+        uploadImage([profileImage], completion: onUpload)
     }
 }
