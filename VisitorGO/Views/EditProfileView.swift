@@ -10,12 +10,7 @@ import PhotosUI
 
 struct BigButtonStyle: ButtonStyle {
     var color: Color = .green
-
-    init() { }
-
-    init(color: Color) {
-        self.color = color
-    }
+    var fg: Color = .white
 
     func makeBody(configuration: Configuration) -> some View {
         HStack {
@@ -25,7 +20,7 @@ struct BigButtonStyle: ButtonStyle {
         }
             .padding(10)
             .background(color)
-            .foregroundStyle(.white)
+            .foregroundStyle(fg)
             .clipShape(RoundedRectangle(cornerRadius: 5))
     }
 }
@@ -165,13 +160,13 @@ struct EditProfileView: View {
                             isUpdating = true
                             feedbackGenerator.impactOccurred()
 
-                            apiHelper.updateProfile(username: username, name: name, bio: bio, updateImage: changeProfileImage, image: uiImage, favoriteTeams: teamDataHelper.favoriteTeamIds) { result in
+                            apiHelper.updateProfile(username: username, name: name, bio: bio, updateImage: changeProfileImage, image: uiImage, favoriteTeams: teamDataHelper.favoriteTeamIds) { result, message in
                                 if result {
                                     SnackBarManager.shared.show("プロフィールが更新されました", .success)
                                     dismiss()
                                 } else {
                                     isUpdating = false
-                                    SnackBarManager.shared.show("プロフィールの更新に失敗しました", .error)
+                                    SnackBarManager.shared.error(message)
                                 }
                             }
                         }

@@ -65,7 +65,7 @@ struct ContentView: View {
                         .tag(SelectTab.post)
                 }
 
-                ProfileView()
+                ProfileView(userId: UserData.shared.userProfile?.id ?? 0)
                     .tabItem {
                         HStack {
                             Image(systemName: SelectTab.prof.icon)

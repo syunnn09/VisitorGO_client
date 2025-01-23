@@ -35,7 +35,8 @@ class TeamDataHelper: ObservableObject {
         }
 
         URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let jsonData = try? JSONDecoder().decode(TeamData.self, from: data!) else { print("\(#function) decode error!"); return }
+            guard let data = data else { print("\(#function) data error!"); return }
+            guard let jsonData = try? JSONDecoder().decode(TeamData.self, from: data) else { print("\(#function) decode error!"); return }
             DispatchQueue.main.async {
                 self.selectedSports = jsonData.data.first!
                 self.teamData = jsonData

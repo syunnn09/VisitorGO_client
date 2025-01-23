@@ -47,11 +47,11 @@ extension APIHelper {
             var data: LikeResponse?
         }
 
-        guard let token = loginToken else { onError("ログインしてください。", completion); return }
+        guard let token = loginToken else { self.onError("ログインしてください。", completion); return }
         let url = getURL("api/expedition/like/\(expeditionId)")
 
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("\(token)", forHTTPHeaderField: "Authorization")
 
@@ -60,10 +60,7 @@ extension APIHelper {
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            if !decodeData.success {
-                print(decodeData.message)
-                SnackBarManager.shared.error("いいねに失敗しました。")
-            }
+            guard decodeData.success else { self.onError(decodeData.message, completion); return }
 
             completion(decodeData.data)
         }.resume()
@@ -73,7 +70,7 @@ extension APIHelper {
         struct Response: Codable {
             var success: Bool
             var message: String
-            var data: [Expedition]
+            var data: [Expedition]?
         }
 
         guard let token = loginToken else { print("token not found"); return }
@@ -93,6 +90,58 @@ extension APIHelper {
                 print(decodeData.message)
                 SnackBarManager.shared.error("取得に失敗しました。")
             }
+
+            completion(decodeData.data)
+        }.resume()
+    }
+
+    func getExpeditionListByUser(userId: Int, page: Int=1, completion: @escaping ([Expedition]?) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var message: String
+            var data: [Expedition]?
+        }
+
+        guard let token = loginToken else { print("token not found"); return }
+        let url = getURL("api/expedition/list/user?userId=\(userId)&page=\(page)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+
+            if !decodeData.success { self.onError(decodeData.message, completion); return }
+
+            completion(decodeData.data)
+        }.resume()
+    }
+
+    func getFavoriteExpeditionList(userId: Int, page: Int=1, completion: @escaping ([Expedition]?) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var message: String
+            var data: [Expedition]?
+        }
+
+        guard let token = loginToken else { print("token not found"); return }
+        let url = getURL("api/expedition/list/user/likes?userId=\(userId)&page=\(page)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+
+            if !decodeData.success { self.onError(decodeData.message, completion); return }
 
             completion(decodeData.data)
         }.resume()

@@ -10,17 +10,11 @@ import SwiftUI
 enum ShowingType: String, CaseIterable {
     case all = "投稿一覧"
     case around = "周辺施設"
-
-    @ViewBuilder
-    var body: some View {
-        switch self {
-            case .all: AllView()
-            case .around: AroundView()
-        }
-    }
 }
 
 struct StadiumView: View {
+    var stadiumId: Int
+
     @State var pickerTab: ShowingType = .all
     @State var sports: Sports? = .baseball
     @State var maxY: CGFloat = 100
@@ -32,8 +26,21 @@ struct StadiumView: View {
     @State var defaultOffset: CGFloat? = nil
     @State var offset: CGFloat = 0
 
+    @State var data: StadiumResponseBody? = nil
+
     var width = UIScreen.main.bounds.width
     @Namespace var ns
+
+    @ViewBuilder
+    func body(showingType: ShowingType) -> some View {
+        switch showingType {
+            case .all: AllView(expeditions: .init(
+                get: { data?.expeditions },
+                set: { data?.expeditions = $0 ?? [] }
+            ))
+            case .around: AroundView()
+        }
+    }
 
     func updateOffset(before: CGFloat, new: CGFloat) {
         if defaultOffset == nil { defaultOffset = before }
@@ -51,7 +58,7 @@ struct StadiumView: View {
                         TabView(selection: $pickerTab) {
                             ForEach(ShowingType.allCases, id: \.self) { type in
                                 ScrollView {
-                                    type.body
+                                    body(showingType: type)
                                         .padding(.top, headerHeight)
                                         .background {
                                             GeometryReader { geo in
@@ -77,7 +84,7 @@ struct StadiumView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
-                    Text("京セラドーム大阪").bold()
+                    Text(data?.name ?? "").bold()
                 }
 
                 ToolbarItem(placement: .topBarTrailing) {
@@ -85,6 +92,11 @@ struct StadiumView: View {
                         CreatePostView(sports: $sports)
                     }
                 }
+            }
+        }
+        .onAppear {
+            APIHelper.shared.getStadium(stadiumId: stadiumId) { result in
+                self.data = result
             }
         }
     }
@@ -138,11 +150,14 @@ struct StadiumView: View {
 }
 
 struct AllView: View {
+    @Binding var expeditions: [Expedition]?
+
     var body: some View {
-        VStack(spacing: 20) {
-            ForEach(1...5, id: \.self) { _ in
-//                PostRowView()
-                Divider()
+        if let expeditions = expeditions {
+            VStack(spacing: 20) {
+                ForEach(expeditions, id: \.self) { expedition in
+                    PostRowView(expedition: expedition)
+                }
             }
         }
     }
@@ -183,5 +198,5 @@ struct AroundView: View {
 }
 
 #Preview {
-    StadiumView()
+    StadiumView(stadiumId: 1)
 }

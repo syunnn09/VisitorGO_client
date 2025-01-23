@@ -69,7 +69,7 @@ extension APIHelper {
         }.resume()
     }
 
-    @MainActor func regist(username: String, password: String, name: String, bio: String, profileImage: UIImage?, favoriteTeamIds: [Int], completion: @escaping (Bool, String) -> Void) {
+    func regist(username: String, password: String, name: String, bio: String, profileImage: UIImage?, favoriteTeamIds: [Int], completion: @escaping (Bool, String) -> Void) {
         struct Request: Codable {
             var name: String
             var token: String
@@ -89,7 +89,7 @@ extension APIHelper {
         guard let profileImage = profileImage else { self.onError("プロフィール画像を設定してください", completion); return }
         guard let token = verifyToken else { self.onError("トークンが存在しません\nもう一度やり直してください", completion); return }
 
-        @MainActor func onUpload(success: Bool, images: [String]?) {
+        func onUpload(success: Bool, images: [String]?) {
             let errorMessage = "画像アップロードに失敗しました"
             guard let images = images else { self.onError("\(errorMessage)", completion); return }
             guard let image = images.first else { self.onError("\(errorMessage)", completion); return }

@@ -9,5 +9,5 @@ import SwiftUI
 
 struct LikeResponse: Codable {
     var likesCount: Int
-    var isLike: Bool
+    var isLiked: Bool
 }

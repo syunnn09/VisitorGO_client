@@ -29,29 +29,36 @@ struct PostRowView: View {
                 }
                 .font(.system(size: 24))
 
-                Image("fighters")
-                    .resizable()
-                    .scaledToFit()
+                AsyncImage(url: URL(string: expedition.images.first!)) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                } placeholder: {
+                    ProgressView()
+                }
 
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        let images = ["eagles", "hawks", "buffaloes", "fighters"]
-                        ForEach(images, id: \.self) { image in
-                            Image(image)
-                                .resizable()
-                                .scaledToFit()
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        ForEach(expedition.images, id: \.self) { image in
+                            AsyncImage(url: URL(string: image)) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                            } placeholder: {
+                                ProgressView()
+                            }
                         }
                     }.frame(height: 70)
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
                     NavigationLink {
-                        StadiumView()
+                        StadiumView(stadiumId: expedition.stadiumId)
                     } label: {
                         HStack {
                             Image(systemName: "mappin")
-                            Text("京セラドーム大阪")
+                            Text(expedition.stadiumName)
                         }.foregroundStyle(.gray)
                     }.buttonStyle(.plain)
 
@@ -65,18 +72,24 @@ struct PostRowView: View {
 
                 HStack(alignment: .center) {
                     NavigationLink {
-                        ProfileView()
+                        ProfileView(userId: expedition.userId)
                     } label: {
-                        Image("nakaya")
-                            .resizable()
-                            .frame(width: 50, height: 50)
-                            .clipShape(RoundedRectangle(cornerRadius: 50))
-                        
+                        AsyncImage(url: URL(string: expedition.userIcon)) { image in
+                            image
+                                .resizable()
+                                .frame(width: 50, height: 50)
+                                .clipShape(RoundedRectangle(cornerRadius: 50))
+                        } placeholder: {
+                            ProgressView()
+                        }
+
                         VStack(alignment: .leading) {
                             Text(expedition.userName).bold()
                             Text("\(expedition.startDate.toDate()) ~ \(expedition.endDate.toDate())")
                         }
-                        
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.1)
+
                         Spacer()
                     }.buttonStyle(.plain)
 
@@ -85,15 +98,15 @@ struct PostRowView: View {
                             feedbackGenerator.impactOccurred()
                             APIHelper.shared.likeExpedition(expeditionId: expedition.id) { data in
                                 if let data = data {
-                                    self.isFavorite = data.isLike
+                                    self.isFavorite = data.isLiked
                                     self.favoriteCount = data.likesCount
                                 }
                             }
                         }
                         .foregroundStyle(.pink)
-                        .symbolVariant(expedition.isLiked ? .fill : .none)
-                        
-                        Text("\(expedition.likesCount)")
+                        .symbolVariant(isFavorite ? .fill : .none)
+
+                        Text("\(favoriteCount)")
                             .frame(minWidth: 30)
                             .contentTransition(.numericText())
                     }.font(.system(size: 22))
@@ -102,6 +115,8 @@ struct PostRowView: View {
                 Spacer()
             }
             .padding(.horizontal, 8)
+
+            Divider()
         }
     }
 }

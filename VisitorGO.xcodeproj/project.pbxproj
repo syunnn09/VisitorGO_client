@@ -17,6 +17,8 @@
 		FF44F4102D08322C0014695A /* StadiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF44F40F2D08322C0014695A /* StadiumView.swift */; };
 		FF4C8E962D11573800356DD5 /* Profile.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4C8E952D11573800356DD5 /* Profile.swift */; };
 		FF4C8E982D124F5000356DD5 /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4C8E972D124F5000356DD5 /* UserData.swift */; };
+		FF4DB02F2D407B18008D201A /* StadiumResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DB02E2D407B18008D201A /* StadiumResponse.swift */; };
+		FF4DB0312D407BCB008D201A /* StadiumAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DB0302D407BCB008D201A /* StadiumAPI.swift */; };
 		FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */; };
 		FF4DF56D2CFF4E1400B8AA67 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */; };
 		FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */; };
@@ -49,6 +51,7 @@
 		FFCF61252D081299007D9D14 /* PostRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFCF61242D081299007D9D14 /* PostRowView.swift */; };
 		FFE1B80F2D0A73660019F5C9 /* RegistProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */; };
 		FFE43F332D3108D300D5E50B /* UploadImageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFE43F322D3108D300D5E50B /* UploadImageAPI.swift */; };
+		FFF398A02D40B7AB008FE319 /* SearchStadiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFF3989F2D40B7AB008FE319 /* SearchStadiumView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +66,8 @@
 		FF44F40F2D08322C0014695A /* StadiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadiumView.swift; sourceTree = "<group>"; };
 		FF4C8E952D11573800356DD5 /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		FF4C8E972D124F5000356DD5 /* UserData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserData.swift; sourceTree = "<group>"; };
+		FF4DB02E2D407B18008D201A /* StadiumResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadiumResponse.swift; sourceTree = "<group>"; };
+		FF4DB0302D407BCB008D201A /* StadiumAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StadiumAPI.swift; sourceTree = "<group>"; };
 		FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
 		FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditFavoriteTeamView.swift; sourceTree = "<group>"; };
@@ -96,6 +101,7 @@
 		FFCF61242D081299007D9D14 /* PostRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRowView.swift; sourceTree = "<group>"; };
 		FFE1B80E2D0A73660019F5C9 /* RegistProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistProfileView.swift; sourceTree = "<group>"; };
 		FFE43F322D3108D300D5E50B /* UploadImageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadImageAPI.swift; sourceTree = "<group>"; };
+		FFF3989F2D40B7AB008FE319 /* SearchStadiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStadiumView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +170,7 @@
 				FFCF61242D081299007D9D14 /* PostRowView.swift */,
 				FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */,
 				FF44F40F2D08322C0014695A /* StadiumView.swift */,
+				FFF3989F2D40B7AB008FE319 /* SearchStadiumView.swift */,
 				FFCF611F2D07DCCE007D9D14 /* RegistUser */,
 			);
 			path = Views;
@@ -180,6 +187,7 @@
 				FF192FE62D38E6010038FA01 /* Expedition.swift */,
 				FF28DD3B2D3F2D4D003D0513 /* LikeResponse.swift */,
 				FF8737802D3F3F6C00F4370F /* Team.swift */,
+				FF4DB02E2D407B18008D201A /* StadiumResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -216,6 +224,7 @@
 			children = (
 				FF28DD372D3F21C4003D0513 /* AuthAPI.swift */,
 				FF0A506A2D388E8F0071BCD4 /* ExpeditionAPI.swift */,
+				FF4DB0302D407BCB008D201A /* StadiumAPI.swift */,
 				FFE43F322D3108D300D5E50B /* UploadImageAPI.swift */,
 				FF28DD392D3F2277003D0513 /* UserAPI.swift */,
 				FF87377E2D3F38CF00F4370F /* TeamAPI.swift */,
@@ -296,6 +305,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FFF398A02D40B7AB008FE319 /* SearchStadiumView.swift in Sources */,
 				FF4DF56B2CFF4DBD00B8AA67 /* EditProfileView.swift in Sources */,
 				FF4DF56F2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift in Sources */,
 				FF4C8E982D124F5000356DD5 /* UserData.swift in Sources */,
@@ -317,12 +327,14 @@
 				FFCACD9F2CEB876600334C38 /* SportsSelectView.swift in Sources */,
 				FF28DD3C2D3F2D4D003D0513 /* LikeResponse.swift in Sources */,
 				FF0A506B2D388E900071BCD4 /* ExpeditionAPI.swift in Sources */,
+				FF4DB02F2D407B18008D201A /* StadiumResponse.swift in Sources */,
 				FFBC47792D3E3944008D9EE5 /* PostDetailView.swift in Sources */,
 				FFCACD972CEB758100334C38 /* CreateGameResultView.swift in Sources */,
 				FF44F4102D08322C0014695A /* StadiumView.swift in Sources */,
 				FFCACD922CEB733900334C38 /* LocationRegisterView.swift in Sources */,
 				FFCACD952CEB753100334C38 /* MapViewHelper.swift in Sources */,
 				FFCF611E2D07D8F6007D9D14 /* RegistUserView.swift in Sources */,
+				FF4DB0312D407BCB008D201A /* StadiumAPI.swift in Sources */,
 				FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */,
 				FF8737812D3F3F6C00F4370F /* Team.swift in Sources */,
 				FFCF611C2D0731EC007D9D14 /* LoginView.swift in Sources */,

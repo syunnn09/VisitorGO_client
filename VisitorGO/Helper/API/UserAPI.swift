@@ -64,7 +64,37 @@ extension APIHelper {
         }.resume()
     }
 
-    @MainActor func updateProfile(username: String, name: String, bio: String, updateImage: Bool, image: UIImage?, favoriteTeams: [Int], completion: @escaping @MainActor (Bool) -> Void) {
+    func getUserDataById(userId: Int, completion: @escaping @MainActor (Bool, Profile?) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var message: String
+            var data: Profile?
+        }
+
+        guard let token = loginToken else { print("token not found"); return }
+
+        let url = getURL("api/user/userId/\(userId)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
+
+            if !decodeData.success {
+                SnackBarManager.shared.error("ユーザーデータの取得に失敗しました。")
+            }
+
+            Task {
+                await completion(decodeData.success, decodeData.data)
+            }
+        }.resume()
+    }
+
+    @MainActor func updateProfile(username: String, name: String, bio: String, updateImage: Bool, image: UIImage?, favoriteTeams: [Int], completion: @escaping (Bool, String) -> Void) {
         struct Request: Encodable {
             var username: String
             var name: String
@@ -79,12 +109,12 @@ extension APIHelper {
             var data: Profile?
         }
 
-        guard let token = loginToken else { print("token not found"); completion(false); return }
-        guard let profile = UserData.shared.userProfile else { print("user not found"); completion(false); return }
+        guard let token = loginToken else { self.onError("token not found", completion); return }
+        guard let profile = UserData.shared.userProfile else { self.onError("user not found", completion); return }
 
         @MainActor func onUpload(success: Bool, images: [String]?) {
-            guard let images = images else { print("\(#function) Error"); completion(false); return }
-            guard let image = images.first else { print("image error"); completion(false); return }
+            guard let images = images else { self.onError("\(#function) Error", completion); return }
+            guard let image = images.first else { self.onError("image error", completion); return }
 
             let url = getURL("api/user/update/\(profile.id)")
             var request = URLRequest(url: url)
@@ -96,7 +126,7 @@ extension APIHelper {
             request.httpBody = try? JSONEncoder().encode(body)
 
             URLSession.shared.dataTask(with: request) { data, response, error in
-                if error != nil { print(error!); return }
+                guard error == nil else { self.onError(String(describing: error), completion); return }
 
                 guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
                 DispatchQueue.main.async {
@@ -105,9 +135,7 @@ extension APIHelper {
                     }
                 }
 
-                Task {
-                    await completion(decodeData.success)
-                }
+                completion(decodeData.success, decodeData.message)
             }.resume()
         }
 

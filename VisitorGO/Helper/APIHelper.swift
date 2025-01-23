@@ -41,9 +41,13 @@ class APIHelper: ObservableObject {
         return URL(string: "\(baseURL)/\(url)")!
     }
 
-    func printStatusCode(response: URLResponse) {
-        guard let response = response as? HTTPURLResponse else { return }
-        print(response.statusCode)
+    func getStatusCode(response: URLResponse?) -> Int {
+        guard let response = response as? HTTPURLResponse else { return 0 }
+        return response.statusCode
+    }
+
+    func printStatusCode(response: URLResponse?) {
+        print(getStatusCode(response: response))
     }
 
     func onError(_ reason: String, _ completion: @escaping (Bool) -> Void) {
@@ -79,8 +83,22 @@ class APIHelper: ObservableObject {
 
     func onError(_ reason: String, _ completion: @escaping (LikeResponse?) -> Void) {
         print(reason)
-        SnackBarManager.shared.error("エラーが発生しました。")
+        SnackBarManager.shared.error("いいねに失敗しました。")
         completion(nil)
+    }
+
+    func onError(_ reason: String, _ completion: @escaping (StadiumResponseBody?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.error("スタジアム情報取得に失敗しました。")
+        completion(nil)
+    }
+
+    func onError(_ reason: String, _ completion: @escaping @MainActor ([StadiumResponseBody]?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.error("スタジアム情報取得に失敗しました。")
+        Task {
+            await completion([])
+        }
     }
 }
 
@@ -90,14 +108,6 @@ class APIHelper: ObservableObject {
 
     VStack {
         Text(profileString)
-        Button("Profile API") {
-            APIHelper.shared.getUserData { status, profile in
-                feedbackGenerator.impactOccurred()
-                if profile != nil {
-                    profileString = profile!.description
-                }
-            }
-        }.buttonStyle(.borderedProminent)
 
         PhotosPicker(selection: $selectedPhoto, matching: .images) {
             Text("Picker open")

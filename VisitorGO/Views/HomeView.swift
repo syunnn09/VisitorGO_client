@@ -13,14 +13,13 @@ struct HomeView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 20) {
+                LazyVStack(alignment: .leading, spacing: 20) {
                     ForEach(expeditions, id: \.self) { expedition in
                         NavigationLink {
                             PostDetailView(id: expedition.id)
                         } label: {
                             PostRowView(expedition: expedition)
                         }.buttonStyle(.plain)
-                        Divider()
                     }
                 }
             }

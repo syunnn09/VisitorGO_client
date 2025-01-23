@@ -228,7 +228,6 @@ struct LocationRegisterView: View {
                 }
                 .onChange(of: icon) {
                     editingLocation?.icon = icon
-                    
                 }
                 .onChange(of: color) {
                     editingLocation?.color = color

@@ -13,6 +13,8 @@ enum TabType: String, CaseIterable {
 }
 
 struct ProfileView: View {
+    var userId: Int
+
     @ObservedObject var helper: APIHelper = .shared
     @ObservedObject var userData: UserData = .shared
     @State var selectedTab: TabType = .mine
@@ -24,6 +26,24 @@ struct ProfileView: View {
     @State var beforeOffset: CGFloat = 0
     @State var index: Double = 1
     @Namespace var ns
+
+    @State var profile: Profile? = nil
+    @State var expeditions: [Expedition]? = []
+    @State var favoriteExpeditions: [Expedition]? = []
+
+    @ViewBuilder
+    func body(tabType: TabType) -> some View {
+        switch tabType {
+            case .mine: ExpeditionsListView(expeditions: .init(
+                get: { expeditions ?? [] },
+                set: { expeditions = $0 }
+            ))
+            case .good: ExpeditionsListView(expeditions: .init(
+                get: { favoriteExpeditions ?? [] },
+                set: { favoriteExpeditions = $0 }
+            ))
+        }
+    }
 
     func onUpdateOffset(before: CGFloat, new: CGFloat) {
         if defaultPos == nil { defaultPos = before; pos = 0 }
@@ -97,8 +117,22 @@ struct ProfileView: View {
                 .mask(Rectangle().padding(.bottom, offset >= topHeight - 20 ? -topHeight + 20 : offset))
             }
         }
-        .refreshable {
-            UserData.shared.getProfile()
+        .onAppear {
+            Task {
+                APIHelper.shared.getUserDataById(userId: userId) { success, data in
+                    profile = data
+                }
+            }
+            Task {
+                APIHelper.shared.getExpeditionListByUser(userId: userId) { data in
+                    expeditions = data
+                }
+            }
+            Task {
+                APIHelper.shared.getFavoriteExpeditionList(userId: userId) { data in
+                    favoriteExpeditions = data
+                }
+            }
         }
     }
 
@@ -107,24 +141,19 @@ struct ProfileView: View {
         TabView(selection: $selectedTab) {
             ForEach(TabType.allCases, id: \.self) { type in
                 ScrollView {
-                    VStack(spacing: 20) {
-                        ForEach(1...5, id: \.self) { _ in
-//                            PostRowView()
-                            Divider()
-                        }
-                    }
-                    .background(.white)
-                    .padding(.top, topHeight)
-                    .background {
-                        GeometryReader { geo in
-                            Color.clear.onChange(of: geo.frame(in: .global).minY) { before, new in
-                                onUpdateOffset(before: before, new: new)
-                            }
-                            Color.clear.onChange(of: geo.frame(in: .global).minX) { _, new in
-                                index = new == 0 ? 1 : 3
+                    self.body(tabType: type)
+                        .background(.white)
+                        .padding(.top, topHeight)
+                        .background {
+                            GeometryReader { geo in
+                                Color.clear.onChange(of: geo.frame(in: .global).minY) { before, new in
+                                    onUpdateOffset(before: before, new: new)
+                                }
+                                Color.clear.onChange(of: geo.frame(in: .global).minX) { _, new in
+                                    index = new == 0 ? 1 : 3
+                                }
                             }
                         }
-                    }
                 }
             }
         }
@@ -136,59 +165,79 @@ struct ProfileView: View {
         VStack {
             HStack {
                 VStack(alignment: .leading, spacing: 24) {
-                    HStack(alignment: .bottom) {
-                        AsyncImage(url: URL(string: userData.userProfile?.profileImage ?? "")) { image in
-                            image.resizable()
-                                .clipShape(Circle())
-                                .frame(width: 90, height: 90)
-                        } placeholder: {
-                            ZStack {
-                                ProgressView()
-                                Circle()
-                                    .fill(Color.black.opacity(0.1))
+                    HStack(alignment: .center) {
+                        HStack(alignment: .bottom) {
+                            AsyncImage(url: URL(string: profile?.profileImage ?? "")) { image in
+                                image.resizable()
+                                    .clipShape(Circle())
                                     .frame(width: 90, height: 90)
+                            } placeholder: {
+                                ZStack {
+                                    ProgressView()
+                                    Circle()
+                                        .fill(Color.black.opacity(0.1))
+                                        .frame(width: 90, height: 90)
+                                }
                             }
+
+                            VStack(alignment: .leading) {
+                                Text(profile?.name ?? "")
+                                    .bold()
+                                    .font(.title)
+
+                                Text("@\(profile?.username ?? "")")
+                                    .font(.caption)
+                                    .foregroundStyle(.gray)
+                            }
+                            .padding(8)
                         }
 
-                        VStack(alignment: .leading) {
-                            Text(userData.userProfile?.name ?? "")
-                                .font(.title)
-                            
-                            Text("@\(userData.userProfile?.username ?? "")")
-                                .font(.caption)
-                                .foregroundStyle(.gray)
+                        Spacer()
+
+                        if userData.userProfile?.id == profile?.id {
+                            Menu {
+                                NavigationLink {
+                                    SearchStadiumView()
+                                } label: {
+                                    Text("スタジアム検索")
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis.circle")
+                                    .imageScale(.large)
+                            }
                         }
-                        .padding(8)
                     }
 
-                    Text(userData.userProfile?.description ?? "")
+                    Text(profile?.description ?? "")
 
-                    HStack {
-                        NavigationLink("プロフィール編集") {
-                            EditProfileView()
-                        }
-                        .buttonStyle(.plain)
-                        .padding(.horizontal)
-                        .padding(.vertical, 8)
-                        .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
-
-                        if !helper.isLoggedIn {
-                            NavigationLink("ログイン") {
-                                LoginView()
+                    if userData.userProfile?.id == profile?.id {
+                        HStack {
+                            NavigationLink("プロフィール編集") {
+                                EditProfileView()
                             }
                             .buttonStyle(.plain)
                             .padding(.horizontal)
                             .padding(.vertical, 8)
                             .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
-                        } else {
-                            Button("ログアウト") {
-                                helper.logout()
-                                userData.setProfile(success: true, profile: nil)
+
+                            if !helper.isLoggedIn {
+                                NavigationLink("ログイン") {
+                                    LoginView()
+                                }
+                                .buttonStyle(.plain)
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
+                                .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
+                            } else {
+                                Button("ログアウト") {
+                                    helper.logout()
+                                    userData.setProfile(success: true, profile: nil)
+                                }
+                                .buttonStyle(.plain)
+                                .padding(.horizontal)
+                                .padding(.vertical, 8)
+                                .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
                             }
-                            .buttonStyle(.plain)
-                            .padding(.horizontal)
-                            .padding(.vertical, 8)
-                            .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
                         }
                     }
                 }
@@ -208,7 +257,18 @@ struct ProfileView: View {
     }
 }
 
+struct ExpeditionsListView: View {
+    @Binding var expeditions: [Expedition]
+
+    var body: some View {
+        VStack(spacing: 20) {
+            ForEach(expeditions, id: \.self) { expedition in
+                PostRowView(expedition: expedition)
+            }
+        }
+    }
+}
+
 #Preview {
-//    ProfileView()
-    ContentView()
+    ProfileView(userId: 8)
 }
