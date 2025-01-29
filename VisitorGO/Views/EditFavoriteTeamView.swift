@@ -40,17 +40,17 @@ struct TeamSelector: View {
 
     var body: some View {
         HStack {
-            Text(team.name)
-                .font(.system(size: 16))
-
-            Spacer()
-
             Button {
                 withAnimation {
                     feedbackGenerator.impactOccurred()
                     TeamDataHelper.shared.toggle(team: team)
                 }
             } label: {
+                Text(team.name)
+                    .font(.system(size: 16))
+
+                Spacer()
+
                 Image(systemName: image)
                     .imageScale(.large)
                     .foregroundStyle(.green)

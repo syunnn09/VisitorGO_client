@@ -12,6 +12,7 @@ struct RegistUserView: View {
     @State var mail: String = ""
     @State var sent: Bool = false
     @State var isLoading: Bool = false
+    @State var message: String = ""
 
     var valid: Bool {
         !mail.isEmpty
@@ -37,15 +38,20 @@ struct RegistUserView: View {
                     Text("メールアドレス")
                     TextField("", text: $mail)
                         .textFieldStyle(.roundedBorder)
+
+                    Text(message)
+                        .foregroundStyle(.red)
+                        .font(.system(size: 14))
                         .padding(.bottom, 16)
 
                     LoadingButton(isLoading: $isLoading, text: "ユーザー登録", color: color) {
                         if valid {
-                            feedbackGenerator.impactOccurred()
                             isLoading = true
-                            APIHelper.shared.sendMail(mail: mail) { result in
-                                isLoading = false
-                                sent = true
+                            feedbackGenerator.impactOccurred()
+                            APIHelper.shared.sendMail(mail: mail) { result, message in
+                                self.isLoading = false
+                                self.sent = result
+                                self.message = message
                             }
                         }
                     }
@@ -65,11 +71,11 @@ struct RegistUserView: View {
                     }
                 }
                 .padding(.horizontal, 40)
-                .navigationDestination(isPresented: $sent) {
-                    VerificationView(mail: mail)
-                }
 
                 Spacer()
+            }
+            .navigationDestination(isPresented: $sent) {
+                VerificationView(mail: mail)
             }
         }
     }

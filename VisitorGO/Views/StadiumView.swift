@@ -104,11 +104,22 @@ struct StadiumView: View {
     @ViewBuilder
     private var header: some View {
         VStack {
-            Image("dome")
-                .resizable()
-                .scaledToFit()
-                .scaleEffect(scaleSize)
-                .offset(y: -imageOffset)
+            if let imageURL = data?.image, data?.image != "string" {
+                AsyncImage(url: URL(string: imageURL)) { image in
+                    image.resizable()
+                        .scaledToFit()
+                        .scaleEffect(scaleSize)
+                        .offset(y: -imageOffset)
+                } placeholder: {
+                    ProgressView()
+                }
+            } else {
+                Image("dome")
+                    .resizable()
+                    .scaledToFit()
+                    .scaleEffect(scaleSize)
+                    .offset(y: -imageOffset)
+            }
 
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
@@ -156,7 +167,7 @@ struct AllView: View {
         if let expeditions = expeditions {
             VStack(spacing: 20) {
                 ForEach(expeditions, id: \.self) { expedition in
-                    PostRowView(expedition: expedition)
+                    ExpeditionNavigationView(expedition: expedition, ignoreType: .stadium)
                 }
             }
         }

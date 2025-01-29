@@ -27,20 +27,18 @@ struct ProfileView: View {
     @State var index: Double = 1
     @Namespace var ns
 
-    @State var profile: Profile? = nil
-    @State var expeditions: [Expedition]? = []
-    @State var favoriteExpeditions: [Expedition]? = []
+    @State var profile: UserDataResponse? = nil
 
     @ViewBuilder
     func body(tabType: TabType) -> some View {
         switch tabType {
             case .mine: ExpeditionsListView(expeditions: .init(
-                get: { expeditions ?? [] },
-                set: { expeditions = $0 }
+                get: { profile?.expeditions ?? [] },
+                set: { profile?.expeditions = $0 }
             ))
             case .good: ExpeditionsListView(expeditions: .init(
-                get: { favoriteExpeditions ?? [] },
-                set: { favoriteExpeditions = $0 }
+                get: { profile?.likedExpeditions ?? [] },
+                set: { profile?.likedExpeditions = $0 }
             ))
         }
     }
@@ -123,16 +121,6 @@ struct ProfileView: View {
                     profile = data
                 }
             }
-            Task {
-                APIHelper.shared.getExpeditionListByUser(userId: userId) { data in
-                    expeditions = data
-                }
-            }
-            Task {
-                APIHelper.shared.getFavoriteExpeditionList(userId: userId) { data in
-                    favoriteExpeditions = data
-                }
-            }
         }
     }
 
@@ -196,11 +184,11 @@ struct ProfileView: View {
 
                         if userData.userProfile?.id == profile?.id {
                             Menu {
-                                NavigationLink {
-                                    SearchStadiumView()
-                                } label: {
-                                    Text("スタジアム検索")
-                                }
+                                Button("ログアウト", action: {
+                                    helper.logout()
+                                    userData.setProfile(success: true, profile: nil)
+                                })
+                                NavigationLink("プロフィール編集", destination: EditProfileView())
                             } label: {
                                 Image(systemName: "ellipsis.circle")
                                     .imageScale(.large)
@@ -220,15 +208,7 @@ struct ProfileView: View {
                             .padding(.vertical, 8)
                             .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
 
-                            if !helper.isLoggedIn {
-                                NavigationLink("ログイン") {
-                                    LoginView()
-                                }
-                                .buttonStyle(.plain)
-                                .padding(.horizontal)
-                                .padding(.vertical, 8)
-                                .overlay(RoundedRectangle(cornerRadius: 7).stroke(.black, lineWidth: 1))
-                            } else {
+                            if helper.isLoggedIn {
                                 Button("ログアウト") {
                                     helper.logout()
                                     userData.setProfile(success: true, profile: nil)
@@ -263,7 +243,7 @@ struct ExpeditionsListView: View {
     var body: some View {
         VStack(spacing: 20) {
             ForEach(expeditions, id: \.self) { expedition in
-                PostRowView(expedition: expedition)
+                ExpeditionNavigationView(expedition: expedition, ignoreType: .profile)
             }
         }
     }

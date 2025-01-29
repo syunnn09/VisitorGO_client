@@ -18,6 +18,7 @@ struct SearchStadiumView: View {
                     .textFieldStyle(.roundedBorder)
 
                 Button("検索") {
+                    feedbackGenerator.impactOccurred()
                     APIHelper.shared.searchStadium(keyword: keyword) { data in
                         self.stadiums = data ?? []
                     }
@@ -36,6 +37,7 @@ struct SearchStadiumView: View {
                 }
             }
             .scrollContentBackground(.hidden)
+            .navigationTitle("スタジアム検索")
         }
     }
 }

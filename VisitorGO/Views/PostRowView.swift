@@ -7,15 +7,64 @@
 
 import SwiftUI
 
+enum IgnoreType: Equatable {
+    case stadium
+    case profile
+}
+
+struct ExpeditionNavigationView: View {
+    var expedition: Expedition
+    var ignoreType: IgnoreType?
+
+    var body: some View {
+        NavigationLink {
+            PostDetailView(id: expedition.id)
+        } label: {
+            PostRowView(expedition: expedition, ignoreType: ignoreType)
+        }.buttonStyle(.plain)
+    }
+}
+
 struct PostRowView: View {
     var expedition: Expedition
+    var ignoreType: IgnoreType?
+
     @State var isFavorite: Bool
     @State var favoriteCount: Int
 
-    init(expedition: Expedition) {
+    @State var isStadiumEnable: Bool
+    @State var isProfileEnable: Bool
+
+    init(expedition: Expedition, ignoreType: IgnoreType?) {
         self.expedition = expedition
         self.isFavorite = expedition.isLiked
         self.favoriteCount = expedition.likesCount
+
+        self.ignoreType = ignoreType
+        self.isStadiumEnable = ignoreType == .stadium
+        self.isProfileEnable = ignoreType == .profile
+    }
+
+    var profile: some View {
+        HStack {
+            AsyncImage(url: URL(string: expedition.userIcon)) { image in
+                image
+                    .resizable()
+                    .frame(width: 50, height: 50)
+                    .clipShape(RoundedRectangle(cornerRadius: 50))
+            } placeholder: {
+                ProgressView()
+            }
+
+            VStack(alignment: .leading) {
+                Text(expedition.userName).bold()
+                Text("\(expedition.startDate.toDate()) ~ \(expedition.endDate.toDate())")
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.1)
+
+            Spacer()
+        }
     }
 
     var body: some View {
@@ -53,14 +102,22 @@ struct PostRowView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 2) {
-                    NavigationLink {
-                        StadiumView(stadiumId: expedition.stadiumId)
-                    } label: {
+                    if !isStadiumEnable {
+                        NavigationLink {
+                            StadiumView(stadiumId: expedition.stadiumId)
+                        } label: {
+                            HStack {
+                                Image(systemName: "mappin")
+                                Text(expedition.stadiumName)
+                                Image(systemName: "chevron.right")
+                            }.foregroundStyle(.gray)
+                        }.buttonStyle(.plain)
+                    } else {
                         HStack {
                             Image(systemName: "mappin")
                             Text(expedition.stadiumName)
                         }.foregroundStyle(.gray)
-                    }.buttonStyle(.plain)
+                    }
 
                     HStack {
                         Text(expedition.team1Name)
@@ -71,27 +128,15 @@ struct PostRowView: View {
                 }
 
                 HStack(alignment: .center) {
-                    NavigationLink {
-                        ProfileView(userId: expedition.userId)
-                    } label: {
-                        AsyncImage(url: URL(string: expedition.userIcon)) { image in
-                            image
-                                .resizable()
-                                .frame(width: 50, height: 50)
-                                .clipShape(RoundedRectangle(cornerRadius: 50))
-                        } placeholder: {
-                            ProgressView()
-                        }
-
-                        VStack(alignment: .leading) {
-                            Text(expedition.userName).bold()
-                            Text("\(expedition.startDate.toDate()) ~ \(expedition.endDate.toDate())")
-                        }
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.1)
-
-                        Spacer()
-                    }.buttonStyle(.plain)
+                    if !isProfileEnable {
+                        NavigationLink {
+                            ProfileView(userId: expedition.userId)
+                        } label: {
+                            profile
+                        }.buttonStyle(.plain)
+                    } else {
+                        profile
+                    }
 
                     HStack(spacing: 2) {
                         Button("", systemImage: "heart") {

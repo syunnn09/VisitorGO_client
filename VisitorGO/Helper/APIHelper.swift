@@ -56,14 +56,19 @@ class APIHelper: ObservableObject {
         completion(false)
     }
 
-    func onError(_ reason: String, _ completion: @escaping (Bool, String) -> Void) {
+    func onError(_ reason: String, _ completion: @escaping (Bool, String) -> Void, _ showSnackBar: Bool = true) {
         print(reason)
-        SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        if showSnackBar {
+            SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        }
         completion(false, reason)
     }
 
-    func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, Profile?) -> Void) {
-        print(reason)
+    func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, Profile?) -> Void, _ showSnackBar: Bool = true) {
+        if showSnackBar {
+            print(reason)
+            SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        }
         Task {
             await completion(false, nil)
         }
@@ -98,6 +103,14 @@ class APIHelper: ObservableObject {
         SnackBarManager.shared.error("スタジアム情報取得に失敗しました。")
         Task {
             await completion([])
+        }
+    }
+
+    func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, UserDataResponse?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        Task {
+            await completion(false, nil)
         }
     }
 }

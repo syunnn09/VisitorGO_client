@@ -9,7 +9,7 @@ import SwiftUI
 import Foundation
 
 extension APIHelper {
-    func sendMail(mail: String, completion: @escaping (Bool) -> Void, tokenType: String="register") {
+    func sendMail(mail: String, completion: @escaping (Bool, String) -> Void, tokenType: String="register") {
         struct Response: Codable {
             var message: String
             var success: Bool
@@ -21,10 +21,12 @@ extension APIHelper {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
 
         URLSession.shared.dataTask(with: request) { data, response, error in
-            if error != nil { print("error: \(String(describing: error))"); return }
-            guard let data else { return }
+            if error != nil { self.onError("error: \(String(describing: error))", completion); return }
+
+            guard let data else { self.onError("data error", completion); return }
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data) else { self.onError("\(#function) decode error", completion); return }
-            completion(decodeData.success)
+
+            completion(decodeData.success, decodeData.message)
         }.resume()
     }
 

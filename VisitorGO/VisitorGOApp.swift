@@ -26,13 +26,14 @@ class ParameterParser {
 @main
 struct VisitorGOApp: App {
     // init helpers
-    var apiHelper: APIHelper = .shared
+    @ObservedObject var apiHelper: APIHelper = .shared
     var userData: UserData = .shared
     var teamDataHelper: TeamDataHelper = .shared
 
     @State var index: Int = 0
     @State var verify: Bool = false
     @State var token: String = ""
+    @State var isNeedLogin: Bool = false
 
     var body: some Scene {
         WindowGroup {
@@ -53,6 +54,17 @@ struct VisitorGOApp: App {
             
                 .fullScreenCover(isPresented: $verify) {
                     RegistProfileView()
+                }
+
+                .fullScreenCover(isPresented: $isNeedLogin) {
+                    LoginView()
+                }
+
+                .onAppear {
+                    self.isNeedLogin = !apiHelper.isLoggedIn
+                }
+                .onChange(of: apiHelper.isLoggedIn) {
+                    self.isNeedLogin = !apiHelper.isLoggedIn
                 }
         }
     }

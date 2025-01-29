@@ -41,7 +41,7 @@ extension APIHelper {
             var data: Profile?
         }
 
-        guard let token = loginToken else { print("token not found"); return }
+        guard let token = loginToken else { self.onError("token not found", completion, false); return }
 
         let url = getURL("api/user/logined")
         var request = URLRequest(url: url)
@@ -52,11 +52,9 @@ extension APIHelper {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error!), completion); return }
 
-            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            if !decodeData.success {
-                SnackBarManager.shared.error("ユーザーデータの取得に失敗しました。")
-            }
+            guard decodeData.success else { self.onError(decodeData.message, completion); return }
 
             Task {
                 await completion(decodeData.success, decodeData.data)
@@ -64,14 +62,14 @@ extension APIHelper {
         }.resume()
     }
 
-    func getUserDataById(userId: Int, completion: @escaping @MainActor (Bool, Profile?) -> Void) {
+    func getUserDataById(userId: Int, completion: @escaping @MainActor (Bool, UserDataResponse?) -> Void) {
         struct Response: Codable {
             var success: Bool
             var message: String
-            var data: Profile?
+            var data: UserDataResponse?
         }
 
-        guard let token = loginToken else { print("token not found"); return }
+        guard let token = loginToken else { self.onError("token not found", completion); return }
 
         let url = getURL("api/user/userId/\(userId)")
         var request = URLRequest(url: url)
@@ -82,11 +80,9 @@ extension APIHelper {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error!), completion); return }
 
-            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            if !decodeData.success {
-                SnackBarManager.shared.error("ユーザーデータの取得に失敗しました。")
-            }
+            guard decodeData.success else { self.onError("ユーザーデータの取得に失敗しました。\n\(decodeData.message)", completion); return }
 
             Task {
                 await completion(decodeData.success, decodeData.data)
