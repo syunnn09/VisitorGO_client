@@ -12,7 +12,7 @@ extension APIHelper {
     func getMyTeam(completion: @escaping (Bool) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
         }
 
         let endpoint = loginToken != nil ? "me" : "public"
@@ -31,7 +31,7 @@ extension APIHelper {
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
             if !decodeData.success {
-                print(decodeData.message)
+                print(decodeData.messages)
                 SnackBarManager.shared.error("投稿に失敗しました。")
             }
 

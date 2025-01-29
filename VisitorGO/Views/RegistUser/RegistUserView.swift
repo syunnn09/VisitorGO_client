@@ -12,7 +12,7 @@ struct RegistUserView: View {
     @State var mail: String = ""
     @State var sent: Bool = false
     @State var isLoading: Bool = false
-    @State var message: String = ""
+    @State var messages: [String] = [""]
 
     var valid: Bool {
         !mail.isEmpty
@@ -39,7 +39,7 @@ struct RegistUserView: View {
                     TextField("", text: $mail)
                         .textFieldStyle(.roundedBorder)
 
-                    Text(message)
+                    Text(messages[0])
                         .foregroundStyle(.red)
                         .font(.system(size: 14))
                         .padding(.bottom, 16)
@@ -48,10 +48,10 @@ struct RegistUserView: View {
                         if valid {
                             isLoading = true
                             feedbackGenerator.impactOccurred()
-                            APIHelper.shared.sendMail(mail: mail) { result, message in
+                            APIHelper.shared.sendMail(mail: mail) { result, messages in
                                 self.isLoading = false
                                 self.sent = result
-                                self.message = message
+                                self.messages = messages
                             }
                         }
                     }

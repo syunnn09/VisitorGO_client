@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StadiumResponse: Codable {
     var success: Bool
-    var message: String
+    var messages: [String]
     var data: StadiumResponseBody?
 }
 
@@ -32,6 +32,6 @@ struct Facility: Codable {
 
 struct StadiumSearchResponse: Codable {
     var success: Bool
-    var message: String
+    var messages: [String]
     var data: [StadiumResponseBody]?
 }

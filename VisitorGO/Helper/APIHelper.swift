@@ -64,6 +64,22 @@ class APIHelper: ObservableObject {
         completion(false, reason)
     }
 
+    func onError(_ reason: String, _ completion: @escaping (Bool, [String]) -> Void, _ showSnackBar: Bool = true) {
+        print(reason)
+        if showSnackBar {
+            SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        }
+        completion(false, [reason])
+    }
+
+    func onError(_ reason: [String], _ completion: @escaping (Bool, [String]) -> Void, _ showSnackBar: Bool = true) {
+        print(reason)
+        if showSnackBar {
+            SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        }
+        completion(false, reason)
+    }
+
     func onError(_ reason: String, _ completion: @escaping @MainActor (Bool, Profile?) -> Void, _ showSnackBar: Bool = true) {
         if showSnackBar {
             print(reason)

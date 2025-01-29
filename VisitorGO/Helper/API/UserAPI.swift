@@ -16,7 +16,7 @@ extension APIHelper {
         }
 
         struct Response: Codable {
-            var message: String
+            var messages: [String]
             var success: Bool
             var data: Data
         }
@@ -30,14 +30,14 @@ extension APIHelper {
             if error != nil { self.onError(String(describing: error), completion); return }
             
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
-            completion(decodeData.data.isUnique, decodeData.data.message)
+            completion(decodeData.data.isUnique, decodeData.data.message)         
         }.resume()
     }
 
     func getUserData(completion: @escaping @MainActor (Bool, Profile?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: Profile?
         }
 
@@ -54,7 +54,7 @@ extension APIHelper {
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            guard decodeData.success else { self.onError(decodeData.message, completion); return }
+            guard decodeData.success else { self.onError(decodeData.messages.joined(separator: "\n"), completion); return }
 
             Task {
                 await completion(decodeData.success, decodeData.data)
@@ -65,7 +65,7 @@ extension APIHelper {
     func getUserDataById(userId: Int, completion: @escaping @MainActor (Bool, UserDataResponse?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: UserDataResponse?
         }
 
@@ -82,7 +82,7 @@ extension APIHelper {
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            guard decodeData.success else { self.onError("ユーザーデータの取得に失敗しました。\n\(decodeData.message)", completion); return }
+            guard decodeData.success else { self.onError("ユーザーデータの取得に失敗しました。\n\(decodeData.messages)", completion); return }
 
             Task {
                 await completion(decodeData.success, decodeData.data)
@@ -101,7 +101,7 @@ extension APIHelper {
 
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: Profile?
         }
 
@@ -131,7 +131,7 @@ extension APIHelper {
                     }
                 }
 
-                completion(decodeData.success, decodeData.message)
+                completion(decodeData.success, decodeData.messages.joined(separator: "\n"))
             }.resume()
         }
 

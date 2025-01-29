@@ -9,9 +9,9 @@ import SwiftUI
 import Foundation
 
 extension APIHelper {
-    func sendMail(mail: String, completion: @escaping (Bool, String) -> Void, tokenType: String="register") {
+    func sendMail(mail: String, completion: @escaping (Bool, [String]) -> Void, tokenType: String="register") {
         struct Response: Codable {
-            var message: String
+            var messages: [String]
             var success: Bool
         }
 
@@ -26,7 +26,7 @@ extension APIHelper {
             guard let data else { self.onError("data error", completion); return }
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data) else { self.onError("\(#function) decode error", completion); return }
 
-            completion(decodeData.success, decodeData.message)
+            completion(decodeData.success, decodeData.messages)
         }.resume()
     }
 
@@ -40,7 +40,7 @@ extension APIHelper {
         }
         struct Response: Decodable {
             var data: Data?
-            var message: String
+            var messages: [String]
             var success: Bool
         }
 
@@ -71,7 +71,7 @@ extension APIHelper {
         }.resume()
     }
 
-    func regist(username: String, password: String, name: String, bio: String, profileImage: UIImage?, favoriteTeamIds: [Int], completion: @escaping (Bool, String) -> Void) {
+    func regist(username: String, password: String, name: String, bio: String, profileImage: UIImage?, favoriteTeamIds: [Int], completion: @escaping (Bool, [String]) -> Void) {
         struct Request: Codable {
             var name: String
             var token: String
@@ -84,7 +84,7 @@ extension APIHelper {
 
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: Profile?
         }
 
@@ -108,7 +108,7 @@ extension APIHelper {
                 if error != nil { self.onError(String(describing: error), completion); return }
                 
                 guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
-                completion(decodeData.success, decodeData.message)
+                completion(decodeData.success, decodeData.messages)
             }.resume()
         }
 

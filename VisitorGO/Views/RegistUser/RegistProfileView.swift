@@ -144,10 +144,10 @@ struct RegistProfileView: View {
                         LoadingButton(isLoading: $isLoading, text: "登録") {
                             if password == password2 && !isLoading {
                                 isLoading = true
-                                APIHelper.shared.regist(username: username, password: password, name: name, bio: bio, profileImage: uiImage, favoriteTeamIds: teamDataHelper.favoriteTeamIds) { status, message in
+                                APIHelper.shared.regist(username: username, password: password, name: name, bio: bio, profileImage: uiImage, favoriteTeamIds: teamDataHelper.favoriteTeamIds) { status, messages in
                                     onRegist(status: status)
                                     if !status {
-                                        self.error = message
+                                        self.error = messages.joined(separator: "\n")
                                     }
                                 }
                             }

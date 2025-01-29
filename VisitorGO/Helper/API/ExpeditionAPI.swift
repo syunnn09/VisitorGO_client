@@ -13,7 +13,7 @@ extension APIHelper {
 
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: Profile?
         }
 
@@ -32,7 +32,7 @@ extension APIHelper {
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
 
             if !decodeData.success {
-                print(decodeData.message)
+                print(decodeData.messages)
                 SnackBarManager.shared.error("投稿に失敗しました。")
             }
 
@@ -43,7 +43,7 @@ extension APIHelper {
     func likeExpedition(expeditionId: Int, completion: @escaping (LikeResponse?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: LikeResponse?
         }
 
@@ -60,7 +60,7 @@ extension APIHelper {
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            guard decodeData.success else { self.onError(decodeData.message, completion); return }
+            guard decodeData.success else { self.onError(decodeData.messages.joined(separator: "\n"), completion); return }
 
             completion(decodeData.data)
         }.resume()
@@ -69,7 +69,7 @@ extension APIHelper {
     func getExpeditionList(completion: @escaping ([Expedition]?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: [Expedition]?
         }
 
@@ -87,7 +87,7 @@ extension APIHelper {
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
             if !decodeData.success {
-                print(decodeData.message)
+                print(decodeData.messages)
                 SnackBarManager.shared.error("取得に失敗しました。")
             }
 
@@ -98,7 +98,7 @@ extension APIHelper {
     func getExpeditionListByUser(userId: Int, page: Int=1, completion: @escaping ([Expedition]?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: [Expedition]?
         }
 
@@ -115,7 +115,7 @@ extension APIHelper {
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            if !decodeData.success { self.onError(decodeData.message, completion); return }
+            if !decodeData.success { self.onError(decodeData.messages.joined(separator: "\n"), completion); return }
 
             completion(decodeData.data)
         }.resume()
@@ -124,7 +124,7 @@ extension APIHelper {
     func getFavoriteExpeditionList(userId: Int, page: Int=1, completion: @escaping ([Expedition]?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: [Expedition]?
         }
 
@@ -141,7 +141,7 @@ extension APIHelper {
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            if !decodeData.success { self.onError(decodeData.message, completion); return }
+            if !decodeData.success { self.onError(decodeData.messages.joined(separator: "\n"), completion); return }
 
             completion(decodeData.data)
         }.resume()
@@ -150,7 +150,7 @@ extension APIHelper {
     func getExpeditionDetail(expeditionId: Int, completion: @escaping (ExpeditionDetail?) -> Void) {
         struct Response: Codable {
             var success: Bool
-            var message: String
+            var messages: [String]
             var data: ExpeditionDetail
         }
 
@@ -168,7 +168,7 @@ extension APIHelper {
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
             if !decodeData.success {
-                print(decodeData.message)
+                print(decodeData.messages)
                 SnackBarManager.shared.error("投稿に失敗しました。")
             }
 
