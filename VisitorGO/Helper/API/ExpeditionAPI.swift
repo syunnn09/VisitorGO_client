@@ -28,6 +28,7 @@ extension APIHelper {
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if error != nil { self.onError(String(describing: error!), completion); return }
+            self.printStatusCode(response: response)
 
             guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
 

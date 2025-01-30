@@ -78,7 +78,7 @@ struct PostRowView: View {
                 }
                 .font(.system(size: 24))
 
-                AsyncImage(url: URL(string: expedition.images.first!)) { image in
+                AsyncImage(url: URL(string: expedition.images.first ?? "")) { image in
                     image
                         .resizable()
                         .scaledToFit()

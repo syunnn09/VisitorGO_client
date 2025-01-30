@@ -71,12 +71,13 @@ struct CreatePostView: View {
     @State var title: String = ""
     @State var from: Date = .now
     @State var to: Date = .now
-    @State var stadium = ""
     @State var newStadium = ""
     @State var memo = ""
     @State var showingImage: UIImage?
     @State var isLoading = false
     @State var offset: CGFloat = 350
+
+    @State var stadium: StadiumResponseBody?
 
     @State var selection: [PhotosPickerItem] = []
     @State var uiImages: [UIImage] = []
@@ -92,7 +93,7 @@ struct CreatePostView: View {
         NavigationStack {
             ZStack {
                 ScrollView(showsIndicators: false) {
-                    VStack(alignment: .leading, spacing: 20) {
+                    VStack(alignment: .leading, spacing: 30) {
                         HStack(alignment: .center) {
                             Image(systemName: sports!.icon)
                                 .font(.title)
@@ -136,18 +137,16 @@ struct CreatePostView: View {
                         VStack(alignment: .leading, spacing: 20) {
                             Text("試合記録").bold()
 
-                            HStack {
+                            NavigationLink {
+                                SelectStadiumView(stadium: $stadium)
+                            } label: {
                                 HStack {
                                     Text("会場").bold()
-                                    HintTip(comment: "試合記録を入力すると自動的に入力されます")
-                                }.padding(.trailing, 20)
-
-                                HStack {
-                                    TextField("", text: $newStadium)
-                                        .textFieldStyle(.roundedBorder)
+                                    Spacer()
+                                    Text(stadium?.name ?? "")
+                                    Image(systemName: "chevron.right")
                                 }
-                                .listRowSeparator(.hidden)
-                                .frame(height: CGFloat((stadium.count + 1) * 44))
+                                .foregroundStyle(.black)
                             }
 
                             ForEach(0..<postHelper.games, id: \.self) { num in
@@ -222,17 +221,25 @@ struct CreatePostView: View {
                         }
 
                         VStack(alignment: .leading) {
-                            Text("マップ").bold()
                             NavigationLink {
                                 LocationRegisterView(saveLocations: $saveLocations)
                             } label: {
-                                Map(interactionModes: .init()) {
-                                    ForEach(saveLocations) { locate in
-                                        Marker(locate.alias, systemImage: locate.icon, coordinate: locate.coordinate)
+                                VStack {
+                                    HStack {
+                                        Text("マップ").bold()
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
                                     }
+                                    .foregroundStyle(.black)
+
+                                    Map(interactionModes: .init()) {
+                                        ForEach(saveLocations) { locate in
+                                            Marker(locate.alias, systemImage: locate.icon, coordinate: locate.coordinate)
+                                        }
+                                    }
+                                    .frame(height: 300)
+                                    .padding(.horizontal, -20)
                                 }
-                                .frame(height: 300)
-                                .padding(.horizontal, -20)
                             }
                         }
 
@@ -241,21 +248,19 @@ struct CreatePostView: View {
                                 PaymentManageView(payments: $payments)
                             } label: {
                                 HStack {
-                                    Text("出費管理")
+                                    Text("出費管理").bold()
                                     HintTip(comment: "出費管理は公開されません").foregroundStyle(.black)
                                     Spacer()
                                     Text("\(Payment.calcSum(payments))円")
                                     Image(systemName: "chevron.forward")
                                 }
+                                .foregroundStyle(.black)
                             }
                         }
 
                         LoadingButton(isLoading: $isLoading, text: "投稿する") {
-                            let game = Game(isPublic: isPublic, sportId: 1, stadiumId: 1, title: title, startDate: from.toString(), endDate: to.toString(), memo: memo, games: [], imageUrls: [], payments: payments, visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
-                            print(game)
-                            APIHelper.shared.createExpedition(game: game) { status in
-                                print(status)
-                            }
+                            isLoading = true
+                            APIHelper.shared.uploadImage(self.uiImages, completion: uploadGame)
                         }.padding(.vertical, 16)
                     }
                 }
@@ -265,6 +270,19 @@ struct CreatePostView: View {
                 NumberPicker(item: $postHelper.firstPoint[selectedIndex], item2: $postHelper.secondPoint[selectedIndex], offset: $offset)
                     .offset(y: offset)
             }
+        }
+    }
+
+    func uploadGame(_ result: Bool, _ urls: [String]?) {
+        if let urls = urls, let stadium = stadium, result {
+            let game = Game(isPublic: isPublic, sportId: 1, stadiumId: stadium.id, title: title, startDate: from.toISOString(), endDate: to.toISOString(), memo: memo, games: [], imageUrls: urls, payments: payments, visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
+            print(game)
+            APIHelper.shared.createExpedition(game: game) { status in
+                isLoading = false
+                print(status)
+            }
+        } else {
+            isLoading = false
         }
     }
 }

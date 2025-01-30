@@ -38,6 +38,10 @@ struct StadiumView: View {
                 get: { data?.expeditions },
                 set: { data?.expeditions = $0 ?? [] }
             ))
+//            case .around: AroundView(facilities: .init(
+//                get: { data?.facilities },
+//                set: { data?.facilities = $0 ?? [] } )
+//            )
             case .around: AroundView()
         }
     }
@@ -174,37 +178,40 @@ struct AllView: View {
     }
 }
 
-let sampleData = ["桜島", "イオンタウン姶良", "鹿児島中央駅"]
-
 struct AroundView: View {
-    var body: some View {
-        VStack(spacing: 20) {
-            VStack(spacing: 0) {
-                ForEach(sampleData, id: \.self) { data in
-                    Button {
-                        UIApplication.shared.open(URL(string: "https://www.google.com/maps/dir/?api=1&destination=\(data)&travelmode=train")!)
-                    } label: {
-                        HStack {
-                            Image(systemName: "mappin")
-                            VStack(alignment: .leading) {
-                                Text(data)
-                                Text("100人が訪れました")
-                                    .font(.system(size: 13))
-                                    .opacity(0.7)
-                            }
-                            .font(.title2)
-                            .buttonStyle(.plain)
-                            .padding(.vertical)
+//    @Binding var facilities: [Facility]?
+    var facilities: [Facility]? = []
 
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                        }
-                    }.buttonStyle(.plain)
-                    Divider()
+    var body: some View {
+        if let facilities = facilities {
+            VStack(spacing: 20) {
+                VStack(spacing: 0) {
+                    ForEach(facilities, id: \.self) { facility in
+                        Button {
+                            UIApplication.shared.open(URL(string: "https://www.google.com/maps/dir/?api=1&destination=\(facility.name)&travelmode=train")!)
+                        } label: {
+                            HStack {
+                                Image(systemName: "mappin")
+                                VStack(alignment: .leading) {
+                                    Text(facility.name)
+                                    Text("\(facility.visitCount)人が訪れました")
+                                        .font(.system(size: 13))
+                                        .opacity(0.7)
+                                }
+                                .font(.title2)
+                                .buttonStyle(.plain)
+                                .padding(.vertical)
+
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                            }
+                        }.buttonStyle(.plain)
+                        Divider()
+                    }
                 }
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
 

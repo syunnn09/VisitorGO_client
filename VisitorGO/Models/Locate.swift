@@ -37,6 +37,7 @@ class Locate: Identifiable, Equatable, ObservableObject {
 struct VisitedFacilityRequest: Codable {
     let address: String
     let color: String
+    let customName: String
     let icon: String
     let latitude: Double
     let longitude: Double
@@ -45,6 +46,7 @@ struct VisitedFacilityRequest: Codable {
     init(_ locate: Locate) {
         self.address = locate.place
         self.color = "FFAAFF"
+        self.customName = locate.alias
         self.icon = locate.icon
         self.latitude = locate.latitude
         self.longitude = locate.longitude

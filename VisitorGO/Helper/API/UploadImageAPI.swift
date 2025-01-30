@@ -13,7 +13,7 @@ extension APIHelper {
             let imageUrls: [String]
         }
         struct Response: Codable {
-            let message: String
+            let messages: [String]
             let success: Bool
             let data: Body?
         }

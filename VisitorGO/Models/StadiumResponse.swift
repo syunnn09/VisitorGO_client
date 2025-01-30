@@ -21,11 +21,11 @@ struct StadiumResponseBody: Codable, Hashable {
     var capacity: Int
     var image: String
     var expeditions: [Expedition]?
-//    var facilities: [Facility]
+//    var facilities: [Facility]?
 }
 
-struct Facility: Codable {
-    var ame: String
+struct Facility: Codable, Hashable {
+    var name: String
     var address: String
     var visitCount: String
 }

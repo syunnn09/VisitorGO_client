@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct Expedition: Identifiable, Codable, Hashable {
     var id: Int
@@ -41,9 +42,10 @@ struct ExpeditionDetail: Codable {
     var username: String
     var userIcon: String
     var likesCount: Int
-    var games: [Games]
-    var payments: [PaymentResponse]
-    var expeditionImages: [ExpeditionImage]
+    var visitedFacilities: [VisitedFacility]?
+    var games: [Games]?
+    var payments: [PaymentResponse]?
+    var expeditionImages: [ExpeditionImage]?
 }
 
 struct Games: Codable, Hashable {
@@ -75,4 +77,19 @@ struct PaymentResponse: Codable, Hashable {
     var title: String
     var date: String
     var cost: Int
+}
+
+struct VisitedFacility: Codable, Hashable {
+    var id: Int
+    var name: String
+    var customName: String
+    var address: String
+    var icon: String
+    var color: String
+    var latitude: Double
+    var longitude: Double
+
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 }
