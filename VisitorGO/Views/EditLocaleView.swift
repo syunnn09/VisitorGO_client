@@ -16,13 +16,13 @@ let symbolsDict: Dictionary<String, [String]> = [
     "スポーツ": ["baseball", "baseball.fill", "figure.baseball", "baseball.diamond.bases", "hat.cap", "soccerball", "soccerball.inverse", "figure.indoor.soccer", "basketball", "basketball.fill", "figure.basketball", "volleyball", "volleyball.fill", "figure.volleyball"]
 ]
 
-let symbolNames: [String] = ["マップ", "交通", "スポーツ"]
+let symbolNames: [String] = symbolsDict.keys.map({ $0 })
 let symbols: [[String]] = symbolNames.compactMap { symbolsDict[$0] }
 
 struct CircleColor: View {
-    @Binding var selectedColor: Color
+    @Binding var selectedColor: String
     @Binding var effect: Bool
-    let color: Color
+    let color: String
 
     var body: some View {
         Button {
@@ -44,7 +44,7 @@ struct CircleColor: View {
 
                 Circle()
                     .frame(width: 40)
-                    .foregroundStyle(color)
+                    .foregroundStyle(Color(hex: color))
             }
             .frame(width: 50, height: 50)
         }
@@ -118,7 +118,7 @@ struct EditLocaleView: View {
                             BackgroundWhiteView {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 15) {
                                     ForEach(colors, id: \.self) { color in
-                                        CircleColor(selectedColor: .constant(Color(hex: color)), effect: $effect, color: Color(hex: color))
+                                        CircleColor(selectedColor: $color, effect: $effect, color: color)
                                     }
                                 }
                             }
