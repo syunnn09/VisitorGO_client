@@ -20,7 +20,7 @@ struct LocationRegisterView: View {
 
     @State var alias = ""
     @State var icon = ""
-    @State var color: Color = .red
+    @State var color: String = "FF3A30"
 
     @State var showTooltip = false
     @State var showedTooltip = false
@@ -104,7 +104,7 @@ struct LocationRegisterView: View {
                 Map(position: $position) {
                     ForEach(saveLocations) { locate in
                         Marker(locate.alias, systemImage: locate.icon, coordinate: locate.coordinate)
-                            .tint(locate.color)
+                            .tint(Color(hex: locate.color))
                     }
                     if suggestion != nil {
                         Marker(suggestion!.name, coordinate: suggestion!.coordinate)

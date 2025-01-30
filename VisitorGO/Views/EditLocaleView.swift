@@ -8,8 +8,7 @@
 import MapKit
 import SwiftUI
 
-let colors: [Color] = [.red, .pink, .orange, .yellow, .green, .teal, .mint, .cyan, .blue, .indigo,
-                       .purple, .gray, .brown,]
+let colors: [String] = ["FF3A30", "FF2D54", "FF9400", "FFCC00", "33C85A", "3380C8", "00C8C0", "33AEE6", "007AFF", "5A57D7", "B051DE", "8F8F94", "A5855E"]
 
 let symbolsDict: Dictionary<String, [String]> = [
     "マップ": ["mappin", "house", "sportscourt", "location", "map", "flag", "figure.walk", "cart", "suitcase", "bathtub", "fork.knife", "cup.and.saucer", "cup.and.heat.waves", "wineglass", "bed.double", "mountain.2", "snowflake", "drop", "flame", "leaf", "camera.macro", "tree", "balloon", "balloon.2", "popcorn", "fish", "building.columns", "building", "building.2", "sparkle", "sparkles", "moon", "moon.stars", "star", "fireworks", "camera", "photo"],
@@ -72,7 +71,7 @@ struct EditLocaleView: View {
     @Binding var locate: Locate?
     @Binding var alias: String
     @Binding var icon: String
-    @Binding var color: Color
+    @Binding var color: String
     @State var effect = false
     @State var offset = 0.0
 
@@ -95,7 +94,7 @@ struct EditLocaleView: View {
                             ZStack {
                                 Circle()
                                     .frame(width: 50)
-                                    .foregroundStyle(color)
+                                    .foregroundStyle(Color(hex: color))
 
                                 Image(systemName: icon)
                                     .imageScale(.large)
@@ -119,7 +118,7 @@ struct EditLocaleView: View {
                             BackgroundWhiteView {
                                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 15) {
                                     ForEach(colors, id: \.self) { color in
-                                        CircleColor(selectedColor: $color, effect: $effect, color: color)
+                                        CircleColor(selectedColor: .constant(Color(hex: color)), effect: $effect, color: Color(hex: color))
                                     }
                                 }
                             }
@@ -179,6 +178,6 @@ struct EditLocaleView: View {
     @Previewable @State var alias = "東京ドーム"
     @Previewable @State var locate: Locate? = .sample
     @Previewable @State var icon = "mappin"
-    @Previewable @State var color: Color = .red
+    @Previewable @State var color: String = "FF3A30"
     EditLocaleView(locate: $locate, alias: $alias, icon: $icon, color: $color)
 }

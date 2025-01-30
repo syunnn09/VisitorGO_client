@@ -18,7 +18,7 @@ class Locate: Identifiable, Equatable, ObservableObject {
     
     @Published var alias: String
     @Published var icon: String = "mappin"
-    @Published var color: Color = .red
+    @Published var color: String = "FF3A30"
     
     init(name: String, place: String, latitude: CLLocationDegrees, longitude: CLLocationDegrees) {
         self.id = UUID()
@@ -45,7 +45,7 @@ struct VisitedFacilityRequest: Codable {
 
     init(_ locate: Locate) {
         self.address = locate.place
-        self.color = "FFAAFF"
+        self.color = locate.color
         self.customName = locate.alias
         self.icon = locate.icon
         self.latitude = locate.latitude
