@@ -12,6 +12,9 @@ struct PostDetailView: View {
     var id: Int
     @State var expeditionDetail: ExpeditionDetail?
 
+    @State var isFavorite: Bool = false
+    @State var favoriteCount: Int = 0
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -57,6 +60,7 @@ struct PostDetailView: View {
                                 HStack {
                                     Image(systemName: "mappin")
                                     Text(expedition.stadiumName)
+                                    Image(systemName: "chevron.right")
                                 }.foregroundStyle(.gray)
                             }
                             .padding(.top, 20)
@@ -107,20 +111,20 @@ struct PostDetailView: View {
                         
                         Spacer()
                         
-                        HStack(spacing: 2) {
+                        HStack(spacing: 0) {
                             Button("", systemImage: "heart") {
                                 feedbackGenerator.impactOccurred()
-//                                APIHelper.shared.likeExpedition(expeditionId: detail.id) { data in
-//                                    if let data = data {
-//                                        self.isFavorite = data.isLiked
-//                                        self.favoriteCount = data.likesCount
-//                                    }
-//                                }
+                                APIHelper.shared.likeExpedition(expeditionId: detail.id) { data in
+                                    if let data = data {
+                                        self.isFavorite = data.isLiked
+                                        self.favoriteCount = data.likesCount
+                                    }
+                                }
                             }
                             .foregroundStyle(.pink)
-//                            .symbolVariant(isFavorite ? .fill : .none)
+                            .symbolVariant(isFavorite ? .fill : .none)
                             
-                            Text("\(detail.likesCount)")
+                            Text("\(favoriteCount)")
                                 .frame(minWidth: 30)
                                 .contentTransition(.numericText())
                         }.font(.system(size: 22))
@@ -128,17 +132,20 @@ struct PostDetailView: View {
                     .padding()
                     .background(.white)
                 }
-                
             }
         }
         .onAppear {
             APIHelper.shared.getExpeditionDetail(expeditionId: id) { data in
-                self.expeditionDetail = data
+                if let data = data {
+                    self.expeditionDetail = data
+                    self.isFavorite = data.isLiked
+                    self.favoriteCount = data.likesCount
+                }
             }
         }
     }
 }
 
 #Preview {
-    PostDetailView(id: 19)
+    PostDetailView(id: 20)
 }

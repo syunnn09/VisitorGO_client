@@ -20,14 +20,15 @@ struct StadiumResponseBody: Codable, Hashable {
     var address: String
     var capacity: Int
     var image: String
+    var attribution: String?
     var expeditions: [Expedition]?
-//    var facilities: [Facility]?
+    var facilities: [Facility]?
 }
 
 struct Facility: Codable, Hashable {
     var name: String
     var address: String
-    var visitCount: String
+    var visitCount: Int
 }
 
 struct StadiumSearchResponse: Codable {

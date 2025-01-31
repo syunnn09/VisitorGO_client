@@ -41,6 +41,7 @@ struct ExpeditionDetail: Codable {
     var memo: String
     var username: String
     var userIcon: String
+    var isLiked: Bool
     var likesCount: Int
     var visitedFacilities: [VisitedFacility]?
     var games: [Games]?

@@ -16,7 +16,6 @@ struct StadiumView: View {
     var stadiumId: Int
 
     @State var pickerTab: ShowingType = .all
-    @State var sports: Sports? = .baseball
     @State var maxY: CGFloat = 100
     @State var defaultHeight: CGFloat? = nil
     @State var scaleSize: CGFloat = 1
@@ -25,6 +24,7 @@ struct StadiumView: View {
     @State var headerHeight: CGFloat = 0
     @State var defaultOffset: CGFloat? = nil
     @State var offset: CGFloat = 0
+    @State var beforeOffset: CGFloat = 0
 
     @State var data: StadiumResponseBody? = nil
 
@@ -38,11 +38,10 @@ struct StadiumView: View {
                 get: { data?.expeditions },
                 set: { data?.expeditions = $0 ?? [] }
             ))
-//            case .around: AroundView(facilities: .init(
-//                get: { data?.facilities },
-//                set: { data?.facilities = $0 ?? [] } )
-//            )
-            case .around: AroundView()
+            case .around: AroundView(facilities: .init(
+                get: { data?.facilities },
+                set: { data?.facilities = $0 ?? [] } )
+            )
         }
     }
 
@@ -90,12 +89,6 @@ struct StadiumView: View {
                 ToolbarItem(placement: .principal) {
                     Text(data?.name ?? "").bold()
                 }
-
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink("追加") {
-                        CreatePostView(sports: $sports)
-                    }
-                }
             }
         }
         .onAppear {
@@ -117,13 +110,11 @@ struct StadiumView: View {
                 } placeholder: {
                     ProgressView()
                 }
-            } else {
-                Image("dome")
-                    .resizable()
-                    .scaledToFit()
-                    .scaleEffect(scaleSize)
-                    .offset(y: -imageOffset)
             }
+
+            Text(data?.attribution ?? "")
+                .lineLimit(1)
+                .minimumScaleFactor(0.1)
 
             VStack(alignment: .leading, spacing: 0) {
                 HStack {
@@ -132,6 +123,13 @@ struct StadiumView: View {
                             Text(type.rawValue)
                                 .font(.system(size: 22))
                                 .onTapGesture { withAnimation { pickerTab = type } }
+                                .onChange(of: pickerTab) {
+                                    withAnimation {
+                                        let temp = offset
+                                        offset = beforeOffset
+                                        beforeOffset = temp
+                                    }
+                                }
 
                             if pickerTab == type {
                                 Text(type.rawValue)
@@ -179,8 +177,7 @@ struct AllView: View {
 }
 
 struct AroundView: View {
-//    @Binding var facilities: [Facility]?
-    var facilities: [Facility]? = []
+    @Binding var facilities: [Facility]?
 
     var body: some View {
         if let facilities = facilities {

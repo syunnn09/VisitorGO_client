@@ -67,7 +67,7 @@ enum CreatePostField: Hashable {
 
 struct CreatePostView: View {
     @Binding var sports: Sports?
-    @State var isPublic = false
+    @State var isPublic = true
     @State var title: String = ""
     @State var from: Date = .now
     @State var to: Date = .now
