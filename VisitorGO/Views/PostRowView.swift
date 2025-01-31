@@ -18,7 +18,7 @@ struct ExpeditionNavigationView: View {
 
     var body: some View {
         NavigationLink {
-            PostDetailView(id: expedition.id)
+            PostDetailView(expedition: expedition)
         } label: {
             PostRowView(expedition: expedition, ignoreType: ignoreType)
         }.buttonStyle(.plain)

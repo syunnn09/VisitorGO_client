@@ -38,4 +38,33 @@ extension APIHelper {
             completion(decodeData.success)
         }.resume()
     }
+
+    func getTeamList(sportsId: Int, completion: @escaping ([TeamResponse]?) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var messages: [String]
+            var data: [TeamResponse]?
+        }
+
+        guard let token = self.loginToken else { self.onError("invalid token", completion); return }
+        let url = getURL("api/team/\(sportsId)")
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+            
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+            
+            if !decodeData.success {
+                self.onError("\(#function) \(decodeData.messages.joined(separator: ", "))", completion);
+                return
+            }
+            
+            completion(decodeData.data)
+        }.resume()
+    }
 }

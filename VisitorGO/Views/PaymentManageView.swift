@@ -9,6 +9,9 @@ import SwiftUI
 
 struct PaymentManageView: View {
     @Binding var payments: [Payment]
+    @Binding var from: Date
+    @Binding var to: Date
+
     @State var title: String = ""
     @State var date: Date = .now
     @State var cost: Int = 0
@@ -37,10 +40,7 @@ struct PaymentManageView: View {
                     .textFieldStyle(.roundedBorder)
 
                 HStack {
-                    DatePicker("", selection: $date, displayedComponents: [.date])
-                        .environment(\.locale, Locale(identifier: "ja_JP"))
-                        .pickerStyle(.inline)
-                        .labelsHidden()
+                    CustomDatePicker(selection: $date, closedRange: from...to)
 
                     HStack(alignment: .bottom) {
                         TextField("3000", value: $cost, format: .number)
@@ -93,6 +93,9 @@ struct PaymentManageView: View {
 }
 
 #Preview {
-    @Previewable @State var payments: [Payment] = [Payment(title: "寝取り", date: .now, cost: 3000), Payment(title: "チケット代", date: .now, cost: 4500)]
-    PaymentManageView(payments: $payments)
+    @Previewable @State var payments: [Payment] = [Payment(title: "宿泊代", date: .now, cost: 9000), Payment(title: "チケット代", date: .now, cost: 4500)]
+    @Previewable @State var from: Date = .now
+    @Previewable @State var to: Date = .now
+
+    PaymentManageView(payments: $payments, from: $from, to: $to)
 }

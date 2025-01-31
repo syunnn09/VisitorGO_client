@@ -82,3 +82,8 @@ struct SportsData: Identifiable, Codable, Equatable {
         lhs.sports == rhs.sports
     }
 }
+
+struct TeamResponse: Codable, Hashable {
+    var id: Int
+    var name: String
+}

@@ -9,7 +9,7 @@ import SwiftUI
 import MapKit
 
 struct PostDetailView: View {
-    var id: Int
+    var expedition: Expedition
     @State var expeditionDetail: ExpeditionDetail?
 
     @State var isFavorite: Bool = false
@@ -20,40 +20,38 @@ struct PostDetailView: View {
             ZStack(alignment: .bottom) {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        if let expedition = expeditionDetail {
-                            Text(expedition.title)
-                                .bold()
-                                .font(.system(size: 24))
+                        Text(expedition.title)
+                            .bold()
+                            .font(.system(size: 24))
 
-                            Text(expedition.memo)
+                        Text(expeditionDetail?.memo ?? "")
 
-                            if let expeditionImages = expedition.expeditionImages {
-                                if let imagePath = expeditionImages.first {
-                                    AsyncImage(url: URL(string: imagePath.image)) { image in
+                        if let imagePath = expedition.images.first {
+                            AsyncImage(url: URL(string: imagePath)) { image in
+                                image.resizable()
+                                    .scaledToFit()
+                            } placeholder: {
+                                ProgressView()
+                                    .scaledToFit()
+                            }
+                        }
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(expedition.images, id: \.self) { image in
+                                    AsyncImage(url: URL(string: image)) { image in
                                         image.resizable()
                                             .scaledToFit()
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
                                     } placeholder: {
                                         ProgressView()
-                                            .scaledToFit()
                                     }
                                 }
-
-                                ScrollView(.horizontal, showsIndicators: false) {
-                                    HStack {
-                                        ForEach(expeditionImages, id: \.self) { image in
-                                            AsyncImage(url: URL(string: image.image)) { image in
-                                                image.resizable()
-                                                    .scaledToFit()
-                                                    .clipShape(RoundedRectangle(cornerRadius: 10))
-                                            } placeholder: {
-                                                ProgressView()
-                                            }
-                                        }
-                                    }
-                                }
-                                .frame(height: 70)
                             }
+                        }
+                        .frame(height: 70)
 
+                        if let expeditionDetail = expeditionDetail {
                             NavigationLink {
                                 StadiumView(stadiumId: expedition.stadiumId)
                             } label: {
@@ -65,7 +63,7 @@ struct PostDetailView: View {
                             }
                             .padding(.top, 20)
 
-                            if let visitedFacilities = expedition.visitedFacilities {
+                            if let visitedFacilities = expeditionDetail.visitedFacilities {
                                 NavigationLink {
                                     Map {
                                         ForEach(visitedFacilities, id: \.self) { facility in
@@ -91,9 +89,11 @@ struct PostDetailView: View {
                 }
                 .padding(.bottom, 70)
 
-                if let detail = expeditionDetail {
-                    HStack {
-                        AsyncImage(url: URL(string: detail.userIcon)) { image in
+                HStack {
+                    NavigationLink {
+                        ProfileView(userId: expedition.userId)
+                    } label: {
+                        AsyncImage(url: URL(string: expedition.userIcon)) { image in
                             image
                                 .resizable()
                                 .frame(width: 50, height: 50)
@@ -101,16 +101,18 @@ struct PostDetailView: View {
                         } placeholder: {
                             ProgressView()
                         }
-                        
+
                         VStack(alignment: .leading) {
-                            Text(detail.username).bold()
-                            Text("\(detail.startDate.toDate()) ~ \(detail.endDate.toDate())")
+                            Text(expedition.userName).bold()
+                            Text("\(expedition.startDate.toDate()) ~ \(expedition.endDate.toDate())")
                         }
                         .lineLimit(1)
                         .minimumScaleFactor(0.1)
-                        
-                        Spacer()
-                        
+                    }.buttonStyle(.plain)
+
+                    Spacer()
+
+                    if let detail = expeditionDetail {
                         HStack(spacing: 0) {
                             Button("", systemImage: "heart") {
                                 feedbackGenerator.impactOccurred()
@@ -123,19 +125,19 @@ struct PostDetailView: View {
                             }
                             .foregroundStyle(.pink)
                             .symbolVariant(isFavorite ? .fill : .none)
-                            
+
                             Text("\(favoriteCount)")
                                 .frame(minWidth: 30)
                                 .contentTransition(.numericText())
                         }.font(.system(size: 22))
                     }
-                    .padding()
-                    .background(.white)
                 }
+                .padding()
+                .background(.white)
             }
         }
         .onAppear {
-            APIHelper.shared.getExpeditionDetail(expeditionId: id) { data in
+            APIHelper.shared.getExpeditionDetail(expeditionId: expedition.id) { data in
                 if let data = data {
                     self.expeditionDetail = data
                     self.isFavorite = data.isLiked
@@ -144,8 +146,4 @@ struct PostDetailView: View {
             }
         }
     }
-}
-
-#Preview {
-    PostDetailView(id: 20)
 }

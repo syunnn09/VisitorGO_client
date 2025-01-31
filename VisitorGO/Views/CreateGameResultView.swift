@@ -18,6 +18,8 @@ struct CreateGameResultView: View {
     @State var index: Int
     @Binding var selectedIndex: Int
 
+    @Binding var teamList: [TeamResponse]
+
     @Binding var from: Date
     @Binding var to: Date
 
@@ -42,8 +44,13 @@ struct CreateGameResultView: View {
 
             HStack {
                 Text("先攻")
-                TextField("", text: $firstTeam)
-                    .textFieldStyle(.roundedBorder)
+                Picker("", selection: $postHelper.firstTeam[index]) {
+                    ForEach(teamList, id: \.self) { team in
+                        Text(team.name)
+                    }
+                }
+
+                Spacer()
 
                 Button {
                     withAnimation(.linear) {
@@ -58,8 +65,13 @@ struct CreateGameResultView: View {
 
             HStack {
                 Text("後攻")
-                TextField("", text: $secondTeam)
-                    .textFieldStyle(.roundedBorder)
+                Picker("", selection: $postHelper.secondTeam[index]) {
+                    ForEach(teamList, id: \.self) { team in
+                        Text(team.name)
+                    }
+                }
+
+                Spacer()
 
                 Button {
                     withAnimation(.linear) {
@@ -129,9 +141,15 @@ struct NumberPicker: View {
     @Previewable @State var postHelper: PostHelper = PostHelper()
     @Previewable @State var offset: CGFloat = 350
     @Previewable @State var date: Date = Date()
+    @Previewable @State var teamList: [TeamResponse] = []
 
     ZStack {
-        CreateGameResultView(postHelper: postHelper, offset: $offset, index: 0, selectedIndex: .constant(0), from: .constant(date), to: .constant(date))
+        CreateGameResultView(postHelper: postHelper, offset: $offset, index: 0, selectedIndex: .constant(0), teamList: $teamList, from: .constant(date), to: .constant(date))
+            .onAppear {
+                APIHelper.shared.getTeamList(sportsId: 2) { data in
+                    teamList = data ?? []
+                }
+            }
 
         NumberPicker(item: $postHelper.firstPoint[0], item2: $postHelper.secondPoint[0], offset: $offset)
             .offset(y: offset)

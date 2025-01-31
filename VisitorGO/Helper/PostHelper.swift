@@ -12,9 +12,13 @@ class PostHelper: ObservableObject {
 
     @Published var games: Int = 0
 
+    @Published var firstTeam: [TeamResponse] = []
+    @Published var secondTeam: [TeamResponse] = []
     @Published var firstPoint: [Int] = []
     @Published var secondPoint: [Int] = []
     @Published var date: [Date] = []
+
+    @Published var teamList: [TeamResponse] = []
 
     convenience init() {
         self.init(1)
@@ -22,14 +26,33 @@ class PostHelper: ObservableObject {
 
     init(_ games: Int) {
         for _ in 0..<games {
-            self.append()
+            self.initAppend()
         }
+    }
+
+    func setTeamList(_ teamList: [TeamResponse]) {
+        DispatchQueue.main.async {
+            self.firstTeam = []
+            self.secondTeam = []
+            self.teamList = teamList
+            self.firstTeam.append(teamList.first!)
+            self.secondTeam.append(teamList.first!)
+        }
+    }
+
+    func initAppend() {
+        games += 1
+        firstPoint.append(0)
+        secondPoint.append(0)
+        date.append(.now)
     }
 
     func append() {
         games += 1
         firstPoint.append(0)
+        firstTeam.append(teamList.first!)
         secondPoint.append(0)
+        secondTeam.append(teamList.first!)
         date.append(.now)
     }
 
@@ -38,6 +61,8 @@ class PostHelper: ObservableObject {
             firstPoint[i] = firstPoint[i+1]
             secondPoint[i] = secondPoint[i+1]
             date[i] = date[i+1]
+            firstTeam[i] = firstTeam[i+1]
+            secondTeam[i] = secondTeam[i+1]
         }
     }
 
@@ -49,6 +74,8 @@ class PostHelper: ObservableObject {
             self.firstPoint.remove(at: self.games-1)
             self.secondPoint.remove(at: self.games-1)
             self.date.remove(at: self.games-1)
+            self.firstTeam.remove(at: self.games-1)
+            self.secondTeam.remove(at: self.games-1)
         }
     }
 }

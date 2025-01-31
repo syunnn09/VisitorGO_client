@@ -129,6 +129,12 @@ class APIHelper: ObservableObject {
             await completion(false, nil)
         }
     }
+
+    func onError(_ reason: String, _ completion: @escaping ([TeamResponse]?) -> Void) {
+        print(reason)
+        SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        completion(nil)
+    }
 }
 
 #Preview {

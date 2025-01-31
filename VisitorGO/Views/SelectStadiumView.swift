@@ -30,15 +30,23 @@ struct SelectStadiumView: View {
             .padding([.top, .horizontal])
             
             List(self.stadiums, id: \.self) { stadium in
-                Text(stadium.name)
-                    .listRowBackground(Color.gray.opacity(0.09))
-                    .onTapGesture {
-                        self.stadium = stadium
-                        dismiss()
-                    }
+                HStack {
+                    Text(stadium.name)
+                    Spacer()
+                }
+                .listRowBackground(Color.gray.opacity(0.09))
+                .onTapGesture {
+                    self.stadium = stadium
+                    dismiss()
+                }
             }
             .scrollContentBackground(.hidden)
             .navigationTitle("スタジアム検索")
+            .onAppear {
+                APIHelper.shared.searchStadium(keyword: "") { data in
+                    self.stadiums = data ?? []
+                }
+            }
         }
     }
 }

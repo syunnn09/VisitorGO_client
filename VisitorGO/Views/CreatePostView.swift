@@ -78,6 +78,7 @@ struct CreatePostView: View {
     @State var offset: CGFloat = 350
 
     @State var stadium: StadiumResponseBody?
+    @State var teamList: [TeamResponse] = []
 
     @State var selection: [PhotosPickerItem] = []
     @State var uiImages: [UIImage] = []
@@ -149,8 +150,10 @@ struct CreatePostView: View {
                                 .foregroundStyle(.black)
                             }
 
-                            ForEach(0..<postHelper.games, id: \.self) { num in
-                                CreateGameResultView(postHelper: postHelper, offset: $offset, index: num, selectedIndex: $selectedIndex, from: $from, to: $to)
+                            if postHelper.teamList != [] {
+                                ForEach(0..<postHelper.games, id: \.self) { num in
+                                    CreateGameResultView(postHelper: postHelper, offset: $offset, index: num, selectedIndex: $selectedIndex, teamList: $teamList, from: $from, to: $to)
+                                }
                             }
 
                             HStack {
@@ -245,7 +248,7 @@ struct CreatePostView: View {
 
                         HStack {
                             NavigationLink {
-                                PaymentManageView(payments: $payments)
+                                PaymentManageView(payments: $payments, from: $from, to: $to)
                             } label: {
                                 HStack {
                                     Text("出費管理").bold()
@@ -270,16 +273,30 @@ struct CreatePostView: View {
                 NumberPicker(item: $postHelper.firstPoint[selectedIndex], item2: $postHelper.secondPoint[selectedIndex], offset: $offset)
                     .offset(y: offset)
             }
+            .onChange(of: sports) {
+                APIHelper.shared.getTeamList(sportsId: sports!.id) { data in
+                    self.teamList = data ?? []
+                    postHelper.setTeamList(self.teamList)
+                }
+            }
+            .onAppear {
+                APIHelper.shared.getTeamList(sportsId: sports!.id) { data in
+                    self.teamList = data ?? []
+                    postHelper.setTeamList(self.teamList)
+                }
+            }
         }
     }
 
     func uploadGame(_ result: Bool, _ urls: [String]?) {
         if let urls = urls, let stadium = stadium, result {
-            let game = Game(isPublic: isPublic, sportId: 1, stadiumId: stadium.id, title: title, startDate: from.toISOString(), endDate: to.toISOString(), memo: memo, games: [], imageUrls: urls, payments: payments, visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
+            let game = Game(isPublic: isPublic, sportId: sports!.id, stadiumId: stadium.id, title: title, startDate: from.toISOString(), endDate: to.toISOString(), memo: memo, games: GamesRequest.convert(postHelper: postHelper), imageUrls: urls, payments: PaymentRequest.convert(payments: payments), visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
             print(game)
             APIHelper.shared.createExpedition(game: game) { status in
                 isLoading = false
-                print(status)
+                if status {
+                    SnackBarManager.shared.show("投稿に成功しました", .success)
+                }
             }
         } else {
             isLoading = false

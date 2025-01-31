@@ -27,3 +27,25 @@ extension Payment {
         return payments.map({ $0.cost }).reduce(0, +)
     }
 }
+
+struct PaymentRequest: Codable {
+    var title: String
+    var date: String
+    var cost: Int
+
+    init(_ payment: Payment) {
+        self.title = payment.title
+        self.date = payment.date.toISOString()
+        self.cost = payment.cost
+    }
+}
+
+extension PaymentRequest {
+    static func convert(payments: [Payment]) -> [PaymentRequest] {
+        var paymentRequests: [PaymentRequest] = []
+        for payment in payments {
+            paymentRequests.append(PaymentRequest(payment))
+        }
+        return paymentRequests
+    }
+}

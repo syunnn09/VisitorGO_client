@@ -15,9 +15,9 @@ struct Game: Codable {
     var startDate: String
     var endDate: String
     var memo: String
-    var games: [GameRequest]
+    var games: [GamesRequest]
     var imageUrls: [String]
-    var payments: [Payment]
+    var payments: [PaymentRequest]
     var visitedFacilities: [VisitedFacilityRequest]
 
     var startDated: Date? {
@@ -28,6 +28,32 @@ struct Game: Codable {
     }
 }
 
+struct GamesRequest: Codable {
+    var date: String
+    var scores: [Score]
+    var team1Id: Int
+    var team2Id: Int
+}
+
+struct Score: Codable {
+    var order: Int
+    var score: Int
+    var teamId: Int
+}
+
+extension GamesRequest {
+    static func convert(postHelper: PostHelper) -> [GamesRequest] {
+        var games: [GamesRequest] = []
+
+        for i in 0..<postHelper.games {
+            var scores: [Score] = []
+            scores.append(Score(order: i*2, score: postHelper.firstPoint[i], teamId: postHelper.firstTeam[i].id))
+            scores.append(Score(order: i*2+1, score: postHelper.secondPoint[i], teamId: postHelper.secondTeam[i].id))
+            games.append(GamesRequest(date: postHelper.date[i].toISOString(), scores: scores, team1Id: postHelper.firstTeam[i].id, team2Id: postHelper.secondTeam[i].id))
+        }
+        return games
+    }
+}
 
 //{
 //  "isPublic": true,
@@ -76,4 +102,11 @@ struct Game: Codable {
 //    }
 //  ]
 //}
+
+// games: [{
+//      date: "2025-01-31T08:55:48Z",
+//      scores: [{order: 0, score: 13, teamId: 61}, {order: 1, score: 6, teamId: 61}],
+//      team1Id: 61,
+//      team2Id: 61
+// ]
 
