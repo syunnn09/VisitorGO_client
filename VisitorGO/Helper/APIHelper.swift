@@ -10,7 +10,7 @@ import PhotosUI
 
 class APIHelper: ObservableObject {
     static let shared = APIHelper()
-    let baseURL = "https://go-app-g06d.onrender.com"
+    let baseURL = "https://go-app-96d3.onrender.com"
     var loginToken: String? = nil
     var verifyToken: String? = nil
     @Published var isLoggedIn = false

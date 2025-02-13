@@ -37,8 +37,8 @@ struct GamesRequest: Codable {
 
 struct Score: Codable {
     var order: Int
-    var score: Int
-    var teamId: Int
+    var team1Score: Int
+    var team2Score: Int
 }
 
 extension GamesRequest {
@@ -47,8 +47,7 @@ extension GamesRequest {
 
         for i in 0..<postHelper.games {
             var scores: [Score] = []
-            scores.append(Score(order: i*2, score: postHelper.firstPoint[i], teamId: postHelper.firstTeam[i].id))
-            scores.append(Score(order: i*2+1, score: postHelper.secondPoint[i], teamId: postHelper.secondTeam[i].id))
+            scores.append(Score(order: i, team1Score: postHelper.firstPoint[i], team2Score: postHelper.secondPoint[i]))
             games.append(GamesRequest(date: postHelper.date[i].toISOString(), scores: scores, team1Id: postHelper.firstTeam[i].id, team2Id: postHelper.secondTeam[i].id))
         }
         return games

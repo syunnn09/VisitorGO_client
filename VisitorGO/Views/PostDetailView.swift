@@ -15,6 +15,8 @@ struct PostDetailView: View {
     @State var isFavorite: Bool = false
     @State var favoriteCount: Int = 0
 
+    @State var selectedPhoto: String? = ""
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
@@ -26,8 +28,8 @@ struct PostDetailView: View {
 
                         Text(expeditionDetail?.memo ?? "")
 
-                        if let imagePath = expedition.images.first {
-                            AsyncImage(url: URL(string: imagePath)) { image in
+                        if let selectedPhoto = selectedPhoto {
+                            AsyncImage(url: URL(string: selectedPhoto)) { image in
                                 image.resizable()
                                     .scaledToFit()
                             } placeholder: {
@@ -39,10 +41,15 @@ struct PostDetailView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(expedition.images, id: \.self) { image in
-                                    AsyncImage(url: URL(string: image)) { image in
-                                        image.resizable()
+                                    AsyncImage(url: URL(string: image)) { photo in
+                                        photo.resizable()
                                             .scaledToFit()
                                             .clipShape(RoundedRectangle(cornerRadius: 10))
+                                            .onTapGesture {
+                                                withAnimation {
+                                                    selectedPhoto = image
+                                                }
+                                            }
                                     } placeholder: {
                                         ProgressView()
                                     }
@@ -142,6 +149,7 @@ struct PostDetailView: View {
                     self.expeditionDetail = data
                     self.isFavorite = data.isLiked
                     self.favoriteCount = data.likesCount
+                    self.selectedPhoto = data.expeditionImages?.first?.image ?? ""
                 }
             }
         }

@@ -290,7 +290,8 @@ struct CreatePostView: View {
 
     func uploadGame(_ result: Bool, _ urls: [String]?) {
         if let urls = urls, let stadium = stadium, result {
-            let game = Game(isPublic: isPublic, sportId: sports!.id, stadiumId: stadium.id, title: title, startDate: from.toISOString(), endDate: to.toISOString(), memo: memo, games: GamesRequest.convert(postHelper: postHelper), imageUrls: urls, payments: PaymentRequest.convert(payments: payments), visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
+//            let game = Game(isPublic: isPublic, sportId: sports!.id, stadiumId: stadium.id, title: title, startDate: from.toISOString(), endDate: to.toISOString(), memo: memo, games: GamesRequest.convert(postHelper: postHelper), imageUrls: urls, payments: PaymentRequest.convert(payments: payments), visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
+            let game = Game(isPublic: isPublic, sportId: sports!.id, stadiumId: stadium.id, title: title, startDate: from.toISOString(), endDate: to.toISOString(), memo: memo, games: [], imageUrls: urls, payments: PaymentRequest.convert(payments: payments), visitedFacilities: VisitedFacilityRequest.convert(locates: saveLocations))
             print(game)
             APIHelper.shared.createExpedition(game: game) { status in
                 isLoading = false
@@ -299,6 +300,7 @@ struct CreatePostView: View {
                 }
             }
         } else {
+            SnackBarManager.shared.error("投稿に失敗しました")
             isLoading = false
         }
     }

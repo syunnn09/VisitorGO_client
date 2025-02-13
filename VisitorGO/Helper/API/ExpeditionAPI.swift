@@ -30,12 +30,34 @@ extension APIHelper {
             if error != nil { self.onError(String(describing: error!), completion); return }
             self.printStatusCode(response: response)
 
-            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
 
-            if !decodeData.success {
-                print(decodeData.messages)
-                SnackBarManager.shared.error("投稿に失敗しました。")
-            }
+            if !decodeData.success { self.onError("投稿に失敗しました。\(decodeData.messages)", completion); return }
+
+            completion(decodeData.success)
+        }.resume()
+    }
+
+    func deleteExpedition(_ expeditionId: Int, completion: @escaping (Bool) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var messages: [String]
+        }
+
+        guard let token = loginToken else { print("token not found"); return }
+
+        let url = getURL("api/expedition/delete/\(expeditionId)")
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.onError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.onError("\(#function) decode error", completion); return }
+
+            if !decodeData.success { self.onError("削除に失敗しました。\(decodeData.messages)", completion); return }
 
             completion(decodeData.success)
         }.resume()

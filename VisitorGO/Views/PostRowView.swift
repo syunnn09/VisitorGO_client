@@ -75,6 +75,21 @@ struct PostRowView: View {
                         .foregroundStyle(.green)
 
                     Text(expedition.title).bold()
+
+                    if UserData.shared.userProfile?.id == expedition.userId {
+                        Spacer()
+
+                        Menu {
+                            Button("削除", role: .destructive) {
+                                APIHelper.shared.deleteExpedition(expedition.id) { result in
+                                    SnackBarManager.shared.show("投稿を削除しました", .success)
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                                .font(.system(size: 16))
+                        }
+                    }
                 }
                 .font(.system(size: 24))
 
