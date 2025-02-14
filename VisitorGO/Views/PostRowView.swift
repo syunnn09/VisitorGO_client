@@ -71,7 +71,7 @@ struct PostRowView: View {
         NavigationStack {
             VStack(alignment: .leading) {
                 HStack {
-                    Image(systemName: "baseball")
+                    Image(systemName: Sports.getSports(id: expedition.sportId).icon)
                         .foregroundStyle(.green)
 
                     Text(expedition.title).bold()
@@ -134,12 +134,14 @@ struct PostRowView: View {
                         }.foregroundStyle(.gray)
                     }
 
-                    HStack {
-                        Text(expedition.team1Name)
-                        Text("VS")
-                        Text(expedition.team2Name)
+                    if !expedition.team1Name.isEmpty, !expedition.team2Name.isEmpty {
+                        HStack {
+                            Text(expedition.team1Name)
+                            Text("VS")
+                            Text(expedition.team2Name)
+                        }
+                        .lineLimit(1)
                     }
-                    .lineLimit(1)
                 }
 
                 HStack(alignment: .center) {

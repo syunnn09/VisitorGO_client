@@ -31,3 +31,9 @@ enum Sports: String, CaseIterable {
         }
     }
 }
+
+extension Sports {
+    static func getSports(id: Int) -> Sports {
+        return Sports.allCases.first(where: { $0.id == id }) ?? .baseball
+    }
+}

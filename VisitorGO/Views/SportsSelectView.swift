@@ -13,15 +13,28 @@ struct SportsImage: View {
 
     let sports: Sports
     let name: String
+    var comingSoon = false
+
+    var text: String {
+        return comingSoon ? "Coming Soon..." : sports.rawValue
+    }
 
     var body: some View {
         Button {
-            selection = sports
-            selectSports = false
+            if !comingSoon {
+                selection = sports
+                selectSports = false
+            }
         } label: {
-            Image(name)
-                .resizable()
-                .scaledToFit()
+            ZStack(alignment: .center) {
+                Image(name)
+                    .resizable()
+                    .scaledToFit()
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+
+                Text(text)
+                    .foregroundStyle(.white)
+            }
         }
     }
 }
@@ -43,8 +56,8 @@ struct SportsSelectView: View {
                 }
 
                 HStack {
-                    SportsImage(selection: $selection, selectSports: $selectSports, sports: .basketball, name: "basketball")
-                    SportsImage(selection: $selection, selectSports: $selectSports, sports: .volleyball, name: "volleyball")
+                    SportsImage(selection: $selection, selectSports: $selectSports, sports: .basketball, name: "basketball", comingSoon: true)
+                    SportsImage(selection: $selection, selectSports: $selectSports, sports: .volleyball, name: "volleyball", comingSoon: true)
                 }
             }
             .padding()

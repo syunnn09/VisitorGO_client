@@ -70,7 +70,7 @@ struct PostDetailView: View {
                             }
                             .padding(.top, 20)
 
-                            if let visitedFacilities = expeditionDetail.visitedFacilities {
+                            if let visitedFacilities = expeditionDetail.visitedFacilities, !visitedFacilities.isEmpty {
                                 NavigationLink {
                                     Map {
                                         ForEach(visitedFacilities, id: \.self) { facility in

@@ -45,10 +45,11 @@ extension GamesRequest {
     static func convert(postHelper: PostHelper) -> [GamesRequest] {
         var games: [GamesRequest] = []
 
-        for i in 0..<postHelper.games {
+        for i in 1...postHelper.games {
             var scores: [Score] = []
-            scores.append(Score(order: i, team1Score: postHelper.firstPoint[i], team2Score: postHelper.secondPoint[i]))
-            games.append(GamesRequest(date: postHelper.date[i].toISOString(), scores: scores, team1Id: postHelper.firstTeam[i].id, team2Id: postHelper.secondTeam[i].id))
+            let pos = i - i
+            scores.append(Score(order: i, team1Score: postHelper.firstPoint[pos], team2Score: postHelper.secondPoint[pos]))
+            games.append(GamesRequest(date: postHelper.date[pos].toISOString(), scores: scores, team1Id: postHelper.firstTeam[pos].id, team2Id: postHelper.secondTeam[pos].id))
         }
         return games
     }

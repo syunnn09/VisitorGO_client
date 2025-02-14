@@ -54,17 +54,16 @@ struct Games: Codable, Hashable {
     var id: Int
     var scores: [Scores]
     var team1Id: Int
-    var team1Name: String
     var team2Id: Int
-    var team2Name: String
 }
 
 struct Scores: Codable, Hashable {
     var id: Int
     var order: Int
-    var score: Int
-    var teamId: Int
-    var teamName: String
+    var team1Score: Int
+    var team2Score: Int
+    var team1Name: String
+    var team2Name: String
 }
 
 struct ExpeditionImage: Codable, Hashable {
