@@ -165,11 +165,15 @@ struct StadiumView: View {
 struct AllView: View {
     @Binding var expeditions: [Expedition]?
 
+    func onDelete(_ expeditionId: Int) {
+        self.expeditions = self.expeditions?.filter({ $0.id != expeditionId })
+    }
+
     var body: some View {
         if let expeditions = expeditions {
             VStack(spacing: 20) {
                 ForEach(expeditions, id: \.self) { expedition in
-                    ExpeditionNavigationView(expedition: expedition, ignoreType: .stadium)
+                    ExpeditionNavigationView(expedition: expedition, ignoreType: .stadium, onDelete: self.onDelete)
                 }
             }
         }

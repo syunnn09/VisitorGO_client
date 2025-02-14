@@ -114,4 +114,36 @@ extension APIHelper {
 
         uploadImage([profileImage], completion: onUpload)
     }
+
+    func updatePassword(beforePassword: String, newPassword: String, completion: @escaping @MainActor (Bool, String) -> Void) {
+        struct Response: Codable {
+            var success: Bool
+            var messages: [String]
+        }
+
+        struct Request: Codable {
+            var afterPassword: String
+            var beforePassword: String
+        }
+
+        guard let token = loginToken else { print("token not found"); return }
+        let url = getURL("api/auth/updatePass")
+        let requestData = Request(afterPassword: newPassword, beforePassword: beforePassword)
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("\(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try? JSONEncoder().encode(requestData)
+
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if error != nil { self.mainActorOnError(String(describing: error!), completion); return }
+
+            guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.mainActorOnError("\(#function) decode error", completion); return }
+
+            Task {
+                await completion(decodeData.success, decodeData.messages.joined(separator: "\n"))
+            }
+        }.resume()
+    }
 }

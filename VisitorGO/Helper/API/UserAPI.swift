@@ -90,7 +90,7 @@ extension APIHelper {
         }.resume()
     }
 
-    @MainActor func updateProfile(username: String, name: String, bio: String, updateImage: Bool, image: UIImage?, favoriteTeams: [Int], completion: @escaping (Bool, String) -> Void) {
+    @MainActor func updateProfile(username: String, name: String, bio: String, updateImage: Bool, image: UIImage?, favoriteTeams: [Int], completion: @escaping @MainActor (Bool, String) -> Void) {
         struct Request: Encodable {
             var username: String
             var name: String
@@ -112,26 +112,28 @@ extension APIHelper {
             guard let images = images else { self.onError("\(#function) Error", completion); return }
             guard let image = images.first else { self.onError("image error", completion); return }
 
-            let url = getURL("api/user/update/\(profile.id)")
+            let url = getURL("api/user/update")
             var request = URLRequest(url: url)
             request.httpMethod = "PUT"
             request.addValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("\(token)", forHTTPHeaderField: "Authorization")
 
-            let body = Request(username: bio, name: name, description: image, profileImage: username, favoriteTeams: favoriteTeams)
+            let body = Request(username: username, name: name, description: bio, profileImage: image, favoriteTeams: favoriteTeams)
             request.httpBody = try? JSONEncoder().encode(body)
 
             URLSession.shared.dataTask(with: request) { data, response, error in
-                guard error == nil else { self.onError(String(describing: error), completion); return }
+                guard error == nil else { self.mainActorOnError(String(describing: error), completion); return }
 
-                guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { print("\(#function) decode error"); return }
+                guard let decodeData = try? JSONDecoder().decode(Response.self, from: data!) else { self.mainActorOnError("\(#function) decode error", completion); return }
                 DispatchQueue.main.async {
                     if let data = decodeData.data {
                         UserData.shared.userProfile = data
                     }
                 }
 
-                completion(decodeData.success, decodeData.messages.joined(separator: "\n"))
+                Task {
+                    await completion(decodeData.success, decodeData.messages.joined(separator: "\n"))
+                }
             }.resume()
         }
 

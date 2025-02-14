@@ -122,6 +122,13 @@ struct ProfileView: View {
                 }
             }
         }
+        .refreshable {
+            Task {
+                APIHelper.shared.getUserDataById(userId: userId) { success, data in
+                    profile = data
+                }
+            }
+        }
     }
 
     @ViewBuilder
@@ -173,9 +180,11 @@ struct ProfileView: View {
                                     .bold()
                                     .font(.title)
 
-                                Text("@\(profile?.username ?? "")")
-                                    .font(.caption)
-                                    .foregroundStyle(.gray)
+                                if let username = profile?.username {
+                                    Text("@\(username)")
+                                        .font(.caption)
+                                        .foregroundStyle(.gray)
+                                }
                             }
                             .padding(8)
                         }
@@ -189,6 +198,7 @@ struct ProfileView: View {
                                     userData.setProfile(success: true, profile: nil)
                                 })
                                 NavigationLink("プロフィール編集", destination: EditProfileView())
+                                NavigationLink("パスワード変更", destination: EditPasswordView())
                             } label: {
                                 Image(systemName: "ellipsis.circle")
                                     .imageScale(.large)
@@ -240,10 +250,14 @@ struct ProfileView: View {
 struct ExpeditionsListView: View {
     @Binding var expeditions: [Expedition]
 
+    func onDelete(_ expeditionId: Int) {
+        self.expeditions = self.expeditions.filter({ $0.id != expeditionId })
+    }
+
     var body: some View {
         VStack(spacing: 20) {
             ForEach(expeditions, id: \.self) { expedition in
-                ExpeditionNavigationView(expedition: expedition, ignoreType: .profile)
+                ExpeditionNavigationView(expedition: expedition, ignoreType: .profile, onDelete: self.onDelete)
             }
         }
     }

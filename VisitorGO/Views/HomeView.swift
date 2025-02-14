@@ -10,12 +10,16 @@ import SwiftUI
 struct HomeView: View {
     @State var expeditions: [Expedition] = []
 
+    func onDelete(_ expeditionId: Int) {
+        self.expeditions = self.expeditions.filter({ $0.id != expeditionId })
+    }
+
     var body: some View {
         NavigationStack {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 20) {
                     ForEach(expeditions, id: \.self) { expedition in
-                        ExpeditionNavigationView(expedition: expedition)
+                        ExpeditionNavigationView(expedition: expedition, onDelete: self.onDelete)
                     }
                 }
             }

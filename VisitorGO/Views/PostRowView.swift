@@ -15,12 +15,13 @@ enum IgnoreType: Equatable {
 struct ExpeditionNavigationView: View {
     var expedition: Expedition
     var ignoreType: IgnoreType?
+    var onDelete: (Int) -> Void
 
     var body: some View {
         NavigationLink {
             PostDetailView(expedition: expedition)
         } label: {
-            PostRowView(expedition: expedition, ignoreType: ignoreType)
+            PostRowView(expedition: expedition, ignoreType: ignoreType, onDelete: onDelete)
         }.buttonStyle(.plain)
     }
 }
@@ -28,6 +29,7 @@ struct ExpeditionNavigationView: View {
 struct PostRowView: View {
     var expedition: Expedition
     var ignoreType: IgnoreType?
+    var onDelete: (Int) -> Void
 
     @State var isFavorite: Bool
     @State var favoriteCount: Int
@@ -35,7 +37,7 @@ struct PostRowView: View {
     @State var isStadiumEnable: Bool
     @State var isProfileEnable: Bool
 
-    init(expedition: Expedition, ignoreType: IgnoreType?) {
+    init(expedition: Expedition, ignoreType: IgnoreType?, onDelete: @escaping (Int) -> Void) {
         self.expedition = expedition
         self.isFavorite = expedition.isLiked
         self.favoriteCount = expedition.likesCount
@@ -43,6 +45,8 @@ struct PostRowView: View {
         self.ignoreType = ignoreType
         self.isStadiumEnable = ignoreType == .stadium
         self.isProfileEnable = ignoreType == .profile
+
+        self.onDelete = onDelete
     }
 
     var profile: some View {
@@ -83,6 +87,9 @@ struct PostRowView: View {
                             Button("削除", role: .destructive) {
                                 APIHelper.shared.deleteExpedition(expedition.id) { result in
                                     SnackBarManager.shared.show("投稿を削除しました", .success)
+                                    withAnimation {
+                                        self.onDelete(expedition.id)
+                                    }
                                 }
                             }
                         } label: {

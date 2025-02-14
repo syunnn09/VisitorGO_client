@@ -29,6 +29,7 @@
 		FF87377F2D3F38CF00F4370F /* TeamAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF87377E2D3F38CF00F4370F /* TeamAPI.swift */; };
 		FF8737812D3F3F6C00F4370F /* Team.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF8737802D3F3F6C00F4370F /* Team.swift */; };
 		FFA2FF162D49CFC4002754D3 /* SelectStadiumView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA2FF152D49CFC4002754D3 /* SelectStadiumView.swift */; };
+		FFA494572D5EE19C002CEFD8 /* EditPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFA494562D5EE19B002CEFD8 /* EditPasswordView.swift */; };
 		FFB993852CF8240D003BFA15 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993842CF8240D003BFA15 /* Utils.swift */; };
 		FFB993872CF966AE003BFA15 /* Payment.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFB993862CF966AE003BFA15 /* Payment.swift */; };
 		FFBC47792D3E3944008D9EE5 /* PostDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */; };
@@ -79,6 +80,7 @@
 		FF87377E2D3F38CF00F4370F /* TeamAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamAPI.swift; sourceTree = "<group>"; };
 		FF8737802D3F3F6C00F4370F /* Team.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Team.swift; sourceTree = "<group>"; };
 		FFA2FF152D49CFC4002754D3 /* SelectStadiumView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectStadiumView.swift; sourceTree = "<group>"; };
+		FFA494562D5EE19B002CEFD8 /* EditPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPasswordView.swift; sourceTree = "<group>"; };
 		FFB993842CF8240D003BFA15 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		FFB993862CF966AE003BFA15 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostDetailView.swift; sourceTree = "<group>"; };
@@ -168,6 +170,7 @@
 				FF39EEE52CF5915F003EB0CF /* PaymentManageView.swift */,
 				FF4DF56C2CFF4E1400B8AA67 /* ProfileView.swift */,
 				FF4DF56A2CFF4DBD00B8AA67 /* EditProfileView.swift */,
+				FFA494562D5EE19B002CEFD8 /* EditPasswordView.swift */,
 				FF4DF56E2CFF4FC000B8AA67 /* EditFavoriteTeamView.swift */,
 				FFCF61242D081299007D9D14 /* PostRowView.swift */,
 				FFBC47782D3E3944008D9EE5 /* PostDetailView.swift */,
@@ -340,6 +343,7 @@
 				FFCF611E2D07D8F6007D9D14 /* RegistUserView.swift in Sources */,
 				FF4DB0312D407BCB008D201A /* StadiumAPI.swift in Sources */,
 				FFCACD8D2CEB728600334C38 /* CreatePostView.swift in Sources */,
+				FFA494572D5EE19C002CEFD8 /* EditPasswordView.swift in Sources */,
 				FF8737812D3F3F6C00F4370F /* Team.swift in Sources */,
 				FFCF611C2D0731EC007D9D14 /* LoginView.swift in Sources */,
 				FF1306982D30EB7F004AD13F /* Game.swift in Sources */,

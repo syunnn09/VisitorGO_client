@@ -64,6 +64,16 @@ class APIHelper: ObservableObject {
         completion(false, reason)
     }
 
+    func mainActorOnError(_ reason: String, _ completion: @escaping @MainActor (Bool, String) -> Void, _ showSnackBar: Bool = true) {
+        print(reason)
+        if showSnackBar {
+            SnackBarManager.shared.error("エラーが発生しました。\n\(reason)")
+        }
+        Task {
+            await completion(false, reason)
+        }
+    }
+
     func onError(_ reason: String, _ completion: @escaping (Bool, [String]) -> Void, _ showSnackBar: Bool = true) {
         print(reason)
         if showSnackBar {
